@@ -14,10 +14,10 @@ const Navbar = () => {
   //   return <div>Navbar</div>;
   const [nav, setNav] = useState(false)
   return (
-    <header className="navbar">
-      <img src={logo} width={200} alt="/" />
+    <header className="header">
+      <img src={logo} width="200vw" alt="/" />
       <nav>
-        <ul className={nav ? 'menu active' : 'menu'}>
+        <ul className={nav ? 'headerMenu active' : 'headerMenu'}>
           <input size={25} type="text" placeholder="Search" />
           <li>
             <AiOutlineSearch size={25} style={{ marginTop: '6px' }} />

@@ -5,7 +5,7 @@ import { getTopSale } from '../../apis/productControllerApi'
 
 const Slide = () => {
   const [slide, setslide] = useState([])
-  console.log(slide)
+
   useEffect(() => {
     const handleGetTopSale = async () => {
       const resp = await getTopSale()
@@ -23,7 +23,7 @@ const Slide = () => {
             <div className="slideContent">
               <img className="slideImage" src={item?.avatar} />
               <div className="slideText">
-                <div className="topSale">TOP SALE</div>
+                <div className="topSale">ON SALE</div>
                 <div className="name">{item?.name}</div>
                 <div className="description">{item?.description}</div>
               </div>

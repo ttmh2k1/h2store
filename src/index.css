@@ -1,7 +1,20 @@
+@font-face {
+  font-family: 'Muli';
+  src:url(./commons/font/Muli.ttf);
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Paytone';
+  src:url(./commons/font/PaytoneOne-Regular.ttf);
+  font-style: normal;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: 'Muli';
 }
 
 ul {
