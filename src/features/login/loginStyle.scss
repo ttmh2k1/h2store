@@ -1,0 +1,99 @@
+.loginPage {
+  background-color: #9eb2c7;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  .box-form {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, 20%);
+    display: flex;
+    padding: 2vh;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 0.8rem;
+    overflow: hidden;
+    justify-content: center;
+    box-shadow: 0 0 2rem 0.8rem #102a4285;
+    display: flex;
+    flex-direction: column !important;
+
+    @media (max-width: 980px) {
+      flex-flow: wrap;
+      text-align: center;
+      align-content: center;
+      align-items: center;
+    }
+
+    .title {
+      font-family: 'Paytone';
+      text-align: center;
+      color: #48647f;
+      font-weight: bold;
+      font-size: 2.4rem;
+      margin: 0;
+    }
+
+    .inputs {
+      padding-top: 1.2rem;
+      overflow: hidden;
+
+      .item {
+        padding-top: 0.4rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        .label {
+          color: #243a52;
+        }
+        .input {
+          height: 2rem;
+          width: 24rem;
+          border: none;
+          outline: none;
+          color: #243a52;
+          font-size: 1rem;
+          margin-top: 0.4rem;
+          text-indent: 0.4rem;
+          border-radius: 0.2rem;
+          background-color: #dae2ec;
+        }
+      }
+    }
+
+    .remember-me {
+      display: flex;
+      margin-top: 0.8rem;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      color: #243a52;
+
+      .checkbox {
+        cursor: pointer;
+        accent-color: #dae2ec;
+      }
+    }
+
+    .buttonLogin {
+      align-self: center;
+      background-color: #617d98;
+      width: 25%;
+      height: 2.4rem;
+      font-size: 1.2rem;
+      color: #fff;
+      border-radius: 0.4rem;
+      text-transform: none;
+      margin-top: 2rem;
+
+      &:hover {
+        background-color: #9eb2c7;
+      }
+    }
+  }
+}

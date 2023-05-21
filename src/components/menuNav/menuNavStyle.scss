@@ -1,0 +1,121 @@
+.menuNav {
+  .menuNav {
+    position: relative;
+  }
+
+  .navBar {
+    max-width: 100%;
+    height: 5vh;
+    padding: 0;
+    margin: 0.2vh;
+    display: flex;
+    background-color: #decdbb;
+
+    .navBarItem {
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 8vw;
+      display: flex;
+      justify-content: space-around;
+      letter-spacing: 0.1vw;
+      font-size: 1.2vw;
+      align-items: center;
+      position: relative;
+
+      .items {
+        box-sizing: border-box;
+        cursor: pointer;
+        align-items: center;
+        display: flex;
+        height: 90%;
+
+        &:hover {
+          color: #fff !important;
+          background-color: #ab9b92;
+        }
+
+        .item {
+          a {
+            font-weight: bold;
+            letter-spacing: 0.1vw;
+            color: #77675a;
+
+            &:hover {
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+  }
+  .menuBar,
+  .menu {
+    display: none;
+    top: 2vh;
+  }
+}
+
+// @media only screen and (min-device-width: 360px) {
+//   .subnav {
+//     display: none !important;
+//   }
+//   .navBar {
+//     display: none !important;
+//   }
+
+//   .navBarItem {
+//     display: none !important;
+//     position: relative;
+//   }
+
+//   .menu {
+//     display: flex;
+//     width: 100%;
+//     justify-content: flex-end;
+//     align-items: center;
+//     // margin-right: 2rem;
+//     // position: absolute;
+//     // top: -4.4rem;
+//     font-size: 1.2vw;
+//     right: -0.8rem;
+//   }
+
+//   .menuBar {
+//     display: none;
+//   }
+// }
+
+// @media only screen and (min-device-width: 768px) {
+//   .subnav {
+//     display: none !important;
+//   }
+//   .nav {
+//     display: flex !important;
+//     font-size: 1.2vw;
+//   }
+
+//   .navBar {
+//     display: flex !important;
+//     justify-content: space-between !important;
+//   }
+
+//   // .menu {
+//   //   display: none !important;
+//   // }
+// }
+
+// @media only screen and (min-device-width: 1280px) {
+//   .navBar {
+//     font-size: 1.2vw;
+//     display: flex !important;
+//   }
+
+//   .navBarItem {
+//     display: flex !important;
+//     justify-content: space-around !important;
+//   }
+
+//   .subnav {
+//     display: flex !important;
+//   }
+// }
