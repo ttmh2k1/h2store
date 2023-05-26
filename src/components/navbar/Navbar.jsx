@@ -9,13 +9,16 @@ import {
   AiOutlineBell,
 } from 'react-icons/ai'
 import logo from '../../commons/assets/brand.png'
+import { Link } from 'react-router-dom'
 
 const Navbar = () => {
   //   return <div>Navbar</div>;
   const [nav, setNav] = useState(false)
   return (
     <header className="header">
-      <img src={logo} width="200vw" alt="/" />
+      <Link to="/">
+        <img src={logo} width="200vw" alt="H2Store" />
+      </Link>
       <nav>
         <ul className={nav ? 'headerMenu active' : 'headerMenu'}>
           <input size={25} type="text" placeholder="Search" />

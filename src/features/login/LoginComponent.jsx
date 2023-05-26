@@ -1,10 +1,27 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { login as loginAction } from '../../actionCreators/UserCreator'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import './loginStyle.scss'
-import { Button } from 'antd'
 import { LoginService } from '../../apis/loginApi'
+import { Button } from 'antd'
+import { AiFillGoogleCircle } from 'react-icons/ai'
+import { toast } from 'react-toastify'
+import { useDispatch } from 'react-redux'
+import { currentUser } from '../../apis/userApi'
 
 const LoginComponent = () => {
+  const style = {
+    position: 'top-right',
+    autoClose: 1000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: false,
+    progress: undefined,
+    theme: 'light',
+  }
+
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   // Vô login, Kiểm token có chưa, có thì tự đăng nhập, null thì sẽ hiện ra login
   const handleLogin = async () => {
@@ -16,16 +33,42 @@ const LoginComponent = () => {
         localStorage.setItem('token', resp?.token)
         localStorage.setItem('role', resp?.userInfo?.role?.name)
         localStorage.setItem('fullname', resp?.userInfo?.fullname)
+        toast.success('Login success!', style)
         navigate('/')
       }
     } catch (e) {
-      throw new Error(e.message)
+      toast.error('Failed Login!', 'Try again!')
     }
   }
 
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const token = searchParams.get('token')
+
+  const getUser = async () => {
+    const result = await currentUser()
+    if (result) {
+      toast.success('Login success!', style)
+      localStorage.setItem('user', JSON.stringify(result))
+      dispatch(loginAction({ user: result, token: token }))
+    } else {
+      toast.error('Failed Login!', 'Try again!')
+    }
+  }
+
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem('token', token)
+      getUser()
+      toast.success('Login success!', style)
+      navigate('/')
+    }
+    return () => {}
+  }, [])
+
   return (
     <div className="loginPage">
-      <div className="box-form">
+      <div className="loginForm">
         <h2 className="title">LOGIN</h2>
         <div className="inputs">
           <div className="item">
@@ -41,7 +84,7 @@ const LoginComponent = () => {
             <input type="password" className="input" id="password" />
           </div>
         </div>
-        <div className="remember-me">
+        <div className="rememberPw">
           <span style={{ display: 'flex', alignItems: 'center' }}>
             <input type="checkbox" className="checkbox" id="checkbox" />
             <label for="checkbox">Remember me</label>
@@ -51,8 +94,18 @@ const LoginComponent = () => {
           </span>
         </div>
         <br />
-        <Button className="buttonLogin" onClick={() => handleLogin()}>
-          Login
+        <div className="button">
+          <Button className="buttonLogin" onClick={() => handleLogin()}>
+            Login
+          </Button>
+          <Button className="buttonRegister" href="/register">
+            Register
+          </Button>
+        </div>
+        <p>OR</p>
+        <Button className="buttonGoogle" href="http://localhost:8080/oauth2/authorization/google">
+          <AiFillGoogleCircle size="1.6vw" />
+          &nbsp; Login with Google
         </Button>
       </div>
     </div>
