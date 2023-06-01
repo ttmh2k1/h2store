@@ -1,0 +1,76 @@
+.homePage {
+  position: relative;
+  height: 100%;
+}
+
+.newArrival,
+.topSold,
+.topView {
+  margin: 1.6vw 8vw;
+  padding: 0;
+  border-radius: 0.4rem;
+
+  .title {
+    font-family: 'Paytone';
+    font-size: 2.8vw;
+    color: #2a2728;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    @media (max-width: 980px) {
+      font-size: 4vw;
+    }
+  }
+
+  .swiper {
+    width: 100%;
+    height: 100%;
+    padding: 0 2vw 1vw 2vw;
+
+    .slideText {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin: 0 1vw;
+      .name {
+        font-family: 'Paytone';
+        font-size: 1.2vw;
+        max-width: 16vw;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @media (max-width: 980px) {
+          max-width: 60vw;
+          font-size: 2.8vw;
+        }
+      }
+    }
+
+    .slideImage {
+      display: block;
+      width: 90%;
+      height: 90%;
+      object-fit: cover;
+      margin: 0 auto;
+      border-radius: 0.4vw;
+    }
+
+    .swiper-slide {
+      height: 20vw;
+      text-align: justify;
+      font-size: 0.8vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0.8vw 0;
+      @media (max-width: 980px) {
+        height: 82vw;
+        font-size: 2.4vw;
+      }
+      &:hover {
+        border-radius: 0.4vw;
+        background-color: #f3eee8;
+      }
+    }
+  }
+}

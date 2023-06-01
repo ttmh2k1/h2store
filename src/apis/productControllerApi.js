@@ -15,3 +15,7 @@ export function getTopSold() {
 export function getTopRating() {
   return api.GET(`${SERVICE}/api/product/high-rating`)
 }
+
+export function getLastedProduct() {
+  return api.GET(`${SERVICE}/api/product/lasted`)
+}
