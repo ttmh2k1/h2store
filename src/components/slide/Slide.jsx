@@ -4,13 +4,13 @@ import React, { useEffect, useState } from 'react'
 import { getTopSale } from '../../apis/productControllerApi'
 
 const Slide = () => {
-  const [slide, setslide] = useState([])
+  const [slide, setSlide] = useState([])
 
   useEffect(() => {
     const handleGetTopSale = async () => {
       const resp = await getTopSale()
       const data = resp?.data?.data
-      setslide(data)
+      setSlide(data)
     }
     handleGetTopSale()
   }, [])
@@ -18,7 +18,7 @@ const Slide = () => {
   return (
     <div className="slide">
       <div className="slideBackgroud">
-        <Carousel autoplay effect="fade">
+        <Carousel autoplay effect="fade" autoplaySpeed={1000}>
           {slide?.map((item) => (
             <div className="slideContent">
               <img className="slideImage" src={item?.avatar} />

@@ -1,4 +1,3 @@
-//import cookies from 'react-cookies';
 const initState = {
   user: localStorage.getItem('user'),
   token: localStorage.getItem('token'),

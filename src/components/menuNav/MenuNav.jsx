@@ -96,15 +96,15 @@ const MenuNav = () => {
     },
     {
       name: 'On sale',
-      href: '/sale',
+      href: '/onSale',
     },
     {
       name: 'New arrival',
-      href: '/new-arrival',
+      href: '/newArrival',
     },
     {
       name: 'Best seller',
-      href: '/best-seller',
+      href: '/bestSeller',
     },
     {
       name: 'Contact',
