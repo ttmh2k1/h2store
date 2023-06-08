@@ -24,6 +24,11 @@
   display: none;
 }
 
+.inputSearch {
+  min-width: 40vw !important;
+  height: 2vw !important;
+}
+
 @media screen and (max-width: 720px) {
   .mobile_btn {
     display: block;

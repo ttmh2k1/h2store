@@ -12,7 +12,6 @@ import logo from '../../commons/assets/brand.png'
 import { Link } from 'react-router-dom'
 
 const Navbar = () => {
-  //   return <div>Navbar</div>;
   const [nav, setNav] = useState(false)
   return (
     <header className="header">
@@ -21,7 +20,7 @@ const Navbar = () => {
       </Link>
       <nav>
         <ul className={nav ? 'headerMenu active' : 'headerMenu'}>
-          <input size={25} type="text" placeholder="Search" />
+          <input size={25} className="inputSearch" type="text" placeholder="Search" />
           <li>
             <AiOutlineSearch size={25} style={{ marginTop: '6px' }} />
           </li>

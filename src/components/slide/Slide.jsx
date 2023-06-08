@@ -17,7 +17,7 @@ const Slide = () => {
 
   return (
     <div className="slide">
-      <div className="slideBackgroud">
+      <div className="slideBackground">
         <Carousel autoplay effect="fade" autoplaySpeed={1000}>
           {slide?.map((item) => (
             <div className="slideContent">

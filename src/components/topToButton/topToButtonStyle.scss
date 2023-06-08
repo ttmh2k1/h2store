@@ -1,0 +1,52 @@
+.top-to-btm {
+  position: relative;
+}
+.icon-position {
+  position: fixed;
+  bottom: 2vw;
+  right: 2vw;
+  z-index: 20;
+}
+.icon-style {
+  background-color: #ab9b92;
+  border: 0.2vw solid #e4e7e8;
+  border-radius: 50%;
+  height: 2.8vw;
+  width: 2.8vw;
+  color: #e4e7e8;
+  cursor: pointer;
+  animation: movebtn 2s ease-in-out infinite;
+  transition: all 0.2s ease-in-out;
+  @media (max-width: 980px) {
+    height: 4.8vw;
+    width: 4.8vw;
+    border: 0.4vw solid #e4e7e8;
+  }
+}
+.icon-style:hover {
+  animation: none;
+  background: #e4e7e8;
+  color: #ab9b92;
+  border: 0.2vw solid #ab9b92;
+  @media (max-width: 980px) {
+    border: 0.4vw solid #ab9b92;
+  }
+}
+
+@keyframes movebtn {
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(1.6vw);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

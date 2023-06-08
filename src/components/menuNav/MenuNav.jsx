@@ -88,11 +88,11 @@ const MenuNav = () => {
     },
     {
       name: category[0]?.name,
-      href: '/1',
+      href: '/category/1',
     },
     {
       name: category[1]?.name,
-      href: '/2',
+      href: '/category/2',
     },
     {
       name: 'On sale',
@@ -160,7 +160,7 @@ const MenuNav = () => {
                         state={{
                           isShow: state.subnav1,
                           list: categoryItem[0],
-                          href: '/',
+                          href: '/category',
                         }}
                       ></SubNavbar>
                     )}
@@ -171,7 +171,7 @@ const MenuNav = () => {
                         state={{
                           isShow: state.subnav2,
                           list: categoryItem[1],
-                          href: '/',
+                          href: '/category',
                         }}
                       ></SubNavbar>
                     )}
