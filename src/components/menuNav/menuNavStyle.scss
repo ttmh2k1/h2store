@@ -31,8 +31,8 @@
 
         &:hover {
           padding: 0 2vw;
-          color: #fff !important;
-          background-color: #ab9b92;
+          color: #2a2728 !important;
+          background-color: #f3eee8;
         }
 
         .item {
@@ -42,7 +42,7 @@
             color: #77675a;
 
             &:hover {
-              color: #fff;
+              color: #2a2728;
             }
           }
         }
@@ -55,68 +55,3 @@
     top: 2vh;
   }
 }
-
-// @media only screen and (min-device-width: 360px) {
-//   .subnav {
-//     display: none !important;
-//   }
-//   .navBar {
-//     display: none !important;
-//   }
-
-//   .navBarItem {
-//     display: none !important;
-//     position: relative;
-//   }
-
-//   .menu {
-//     display: flex;
-//     width: 100%;
-//     justify-content: flex-end;
-//     align-items: center;
-//     // margin-right: 2rem;
-//     // position: absolute;
-//     // top: -4.4rem;
-//     font-size: 1.2vw;
-//     right: -0.8rem;
-//   }
-
-//   .menuBar {
-//     display: none;
-//   }
-// }
-
-// @media only screen and (min-device-width: 768px) {
-//   .subnav {
-//     display: none !important;
-//   }
-//   .nav {
-//     display: flex !important;
-//     font-size: 1.2vw;
-//   }
-
-//   .navBar {
-//     display: flex !important;
-//     justify-content: space-between !important;
-//   }
-
-//   // .menu {
-//   //   display: none !important;
-//   // }
-// }
-
-// @media only screen and (min-device-width: 1280px) {
-//   .navBar {
-//     font-size: 1.2vw;
-//     display: flex !important;
-//   }
-
-//   .navBarItem {
-//     display: flex !important;
-//     justify-content: space-around !important;
-//   }
-
-//   .subnav {
-//     display: flex !important;
-//   }
-// }

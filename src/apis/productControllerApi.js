@@ -1,4 +1,10 @@
+import { combineQueriesUrl } from '../utils/functionHelper'
 import api, { SERVICE } from './api'
+
+export function getListProduct(req) {
+  const queries = combineQueriesUrl({ ...req })
+  return api.GET(`${SERVICE}/api/product${queries}`)
+}
 
 export function getTopView() {
   return api.GET(`${SERVICE}/api/product/most-viewed`)

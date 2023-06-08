@@ -1,22 +1,37 @@
 import './subNavStyle.scss'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function SubNavbar({ state }) {
+  const navigate = useNavigate()
   return (
     <div className="subNav">
       <ul className={state.isShow ? 'subNavActive' : 'subNavHidden'}>
         {state.list?.map((category, index) => {
           return (
             <ul className="category" key={index}>
-              <Link className="categoryName" to={state.href + category.id}>
+              <div
+                className="categoryName"
+                onClick={() =>
+                  navigate({
+                    pathname: state.href + '/' + category.id,
+                  })
+                }
+              >
                 {category.name}
-              </Link>{' '}
+              </div>
               {category?.listCategory?.map((item, index) => {
                 return (
                   <li className="categoryItem" key={index}>
-                    <Link className="categoryName" to={state.href + item.id}>
+                    <div
+                      className="categoryName"
+                      onClick={() =>
+                        navigate({
+                          pathname: state.href + '/' + item.id,
+                        })
+                      }
+                    >
                       {item.name}
-                    </Link>
+                    </div>
                   </li>
                 )
               })}

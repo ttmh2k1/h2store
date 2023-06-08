@@ -17,7 +17,7 @@
     box-sizing: border-box;
     margin-top: 1.2vw;
     padding: 0.8vw;
-    background-color: #decdbb;
+    background-color: #f3eee8;
 
     .categoryItem {
       font-size: 1.2vw;
@@ -25,12 +25,13 @@
     }
 
     .categoryName {
-      color: #fff;
+      color: #77675a;
       text-decoration: none;
 
       &:hover {
         cursor: pointer;
-        color: #fff !important;
+        color: #2a2728;
+        font-weight: bold;
       }
     }
   }

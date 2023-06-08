@@ -6,9 +6,11 @@ import MenuNav from './components/menuNav/MenuNav'
 import LoginPage from './pages/login/LoginPage'
 import RegisterPage from './pages/register/RegisterPage'
 import Home from './pages/home'
+import CategoryPage from './pages/CategoryPage'
 import BestSellerPage from './pages/BestSellerPage'
 import NewArrivalPage from './pages/NewArrivalPage'
 import OnSalePage from './pages/OnSalePage'
+import ScrollToTop from './components/topToButton/topToButton'
 // import SearchResultPage from './pages/SearchResultPage'
 
 function App() {
@@ -17,14 +19,18 @@ function App() {
       <BrowserRouter>
         <div>
           <Navbar />
-          <Slide />
+          {/* <Slide /> */}
           <MenuNav />
+          <ScrollToTop />
         </div>
         <Routes>
           <Route path="/">
             <Route index element={<Home />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
+            <Route path="category">
+              <Route path=":categoryId" element={<CategoryPage />} />
+            </Route>
             <Route path="bestSeller" element={<BestSellerPage />} />
             <Route path="newArrival" element={<NewArrivalPage />} />
             <Route path="onSale" element={<OnSalePage />} />
