@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { getListProduct } from '../../../apis/productControllerApi'
 import { formatMoney } from '../../../utils/functionHelper'
 import { getCategory } from '../../../apis/categoryController'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const CategoryComponent = (props) => {
   const [category, setCategory] = useState([])
@@ -59,14 +59,21 @@ const CategoryComponent = (props) => {
             dataSource={listProduct}
             renderItem={(item) => (
               <div className="itemCategory">
-                <List.Item className="listItem" key={item.name}>
-                  <a href={'/product/' + `${item?.id}`}>
-                    <img className="imageCategory" src={item?.avatar} />
-                    <div className="textCategory">
-                      <div className="name">{item?.name}</div>
-                      <div className="price">Price: {formatMoney(item?.minPrice)}</div>
-                    </div>
-                  </a>
+                <List.Item
+                  className="listItem"
+                  key={item.name}
+                  onClick={() =>
+                    navigate({
+                      pathname: '/product/' + `${item?.id}`,
+                    })
+                  }
+                >
+                  <img className="imageCategory" src={item?.avatar} />
+                  <div className="textCategory">
+                    <div className="name">{item?.name}</div>
+                    <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                  </div>
+                  {/* </a> */}
                 </List.Item>
               </div>
             )}

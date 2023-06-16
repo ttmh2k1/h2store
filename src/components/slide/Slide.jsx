@@ -28,7 +28,9 @@ const Slide = () => {
                 <div className="description">{item?.description}</div>
               </div>
               <div className="slideButton">
-                <Button className="detailButton">Detail</Button>
+                <Button className="detailButton" href={'/product/' + item?.id}>
+                  Detail
+                </Button>
                 <Button className="buyButton">Buy now</Button>
               </div>
             </div>

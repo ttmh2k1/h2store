@@ -7,6 +7,7 @@ import LoginPage from './pages/login/LoginPage'
 import RegisterPage from './pages/register/RegisterPage'
 import Home from './pages/home'
 import CategoryPage from './pages/CategoryPage'
+import ProductPage from './pages/product/ProductPage'
 import BestSellerPage from './pages/BestSellerPage'
 import NewArrivalPage from './pages/NewArrivalPage'
 import OnSalePage from './pages/OnSalePage'
@@ -30,6 +31,9 @@ function App() {
             <Route path="register" element={<RegisterPage />} />
             <Route path="category">
               <Route path=":categoryId" element={<CategoryPage />} />
+            </Route>
+            <Route path="product">
+              <Route path=":productId" element={<ProductPage />} />
             </Route>
             <Route path="bestSeller" element={<BestSellerPage />} />
             <Route path="newArrival" element={<NewArrivalPage />} />

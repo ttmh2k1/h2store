@@ -6,6 +6,10 @@ export function getListProduct(req) {
   return api.GET(`${SERVICE}/api/product${queries}`)
 }
 
+export function getProduct(id) {
+  return api.GET(`${SERVICE}/api/product/${id}`)
+}
+
 export function getTopView() {
   return api.GET(`${SERVICE}/api/product/most-viewed`)
 }

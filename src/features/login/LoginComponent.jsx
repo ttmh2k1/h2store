@@ -48,7 +48,6 @@ const LoginComponent = () => {
   const getUser = async () => {
     const result = await currentUser()
     if (result) {
-      toast.success('Login success!', style)
       localStorage.setItem('user', JSON.stringify(result))
       dispatch(loginAction({ user: result, token: token }))
     } else {

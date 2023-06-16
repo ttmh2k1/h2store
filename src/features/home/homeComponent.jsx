@@ -7,11 +7,13 @@ import { useEffect, useState } from 'react'
 import { getLastedProduct, getTopSold, getTopView } from '../../apis/productControllerApi'
 import { formatMoney } from '../../utils/functionHelper'
 import Slide from '../../components/slide/Slide'
+import { useNavigate } from 'react-router-dom'
 
 const HomeComponent = () => {
   const [newArrival, setNewArrival] = useState([])
   const [topView, setTopView] = useState([])
   const [topSold, setTopSold] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleGetLastedProduct = async () => {
@@ -80,8 +82,15 @@ const HomeComponent = () => {
           >
             {newArrival?.map((item) => (
               <SwiperSlide>
-                <div className="slideContent">
-                  <img className="slideImage" src={item?.avatar} />
+                <div
+                  className="slideContent"
+                  onClick={() =>
+                    navigate({
+                      pathname: '/product/' + `${item?.id}`,
+                    })
+                  }
+                >
+                  <img className="slideImage" src={item?.avatar} alt="" />
                   <div className="slideText">
                     <div className="name">{item?.name}</div>
                     <div className="price">Price: {formatMoney(item?.minPrice)}</div>
@@ -127,8 +136,15 @@ const HomeComponent = () => {
           >
             {topSold?.map((item) => (
               <SwiperSlide>
-                <div className="slideContent">
-                  <img className="slideImage" src={item?.avatar} />
+                <div
+                  className="slideContent"
+                  onClick={() =>
+                    navigate({
+                      pathname: '/product/' + `${item?.id}`,
+                    })
+                  }
+                >
+                  <img className="slideImage" src={item?.avatar} alt="" />
                   <div className="slideText">
                     <div className="name">{item?.name}</div>
                     <div className="price">Price: {formatMoney(item?.minPrice)}</div>
@@ -174,8 +190,15 @@ const HomeComponent = () => {
           >
             {topView?.map((item) => (
               <SwiperSlide>
-                <div className="slideContent">
-                  <img className="slideImage" src={item?.avatar} />
+                <div
+                  className="slideContent"
+                  onClick={() =>
+                    navigate({
+                      pathname: '/product/' + `${item?.id}`,
+                    })
+                  }
+                >
+                  <img className="slideImage" src={item?.avatar} alt="" />
                   <div className="slideText">
                     <div className="name">{item?.name}</div>
                     <div className="price">Price: {formatMoney(item?.minPrice)}</div>
