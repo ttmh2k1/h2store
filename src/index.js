@@ -27,6 +27,7 @@ root.render(
         draggable={false}
         pauseOnHover
         theme="light"
+        style={{ fontSize: '1vw', height: '2vw' }}
       />
     </React.StrictMode>
   </Provider>,
