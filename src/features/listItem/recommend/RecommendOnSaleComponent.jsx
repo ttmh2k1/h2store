@@ -50,11 +50,7 @@ const RecommendComponent = () => {
               <List.Item
                 className="listItem"
                 key={item.name}
-                onClick={() =>
-                  navigate({
-                    pathname: '/product/' + `${item?.id}`,
-                  })
-                }
+                onClick={() => navigate({ pathname: '/product/' + item?.id })}
               >
                 <Tooltip title={item?.name} color="#decdbb">
                   <img className="imageRecommend" src={item?.avatar} alt="" />

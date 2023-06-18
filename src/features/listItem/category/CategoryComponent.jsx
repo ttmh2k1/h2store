@@ -68,11 +68,7 @@ const CategoryComponent = (props) => {
                 <List.Item
                   className="listItem"
                   key={item.name}
-                  onClick={() =>
-                    navigate({
-                      pathname: '/product/' + `${item?.id}`,
-                    })
-                  }
+                  onClick={() => navigate({ pathname: '/product/' + item?.id })}
                 >
                   <Tooltip title={item?.name} color="#decdbb">
                     <img className="imageCategory" src={item?.avatar} alt="" />
