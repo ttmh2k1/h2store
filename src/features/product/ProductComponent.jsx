@@ -1,15 +1,16 @@
+import './productStyle.scss'
 import React from 'react'
 import { useEffect, useState } from 'react'
-import './productStyle.scss'
 import { importCart } from '../../apis/cartApi'
-import { getProduct } from '../../apis/productControllerApi'
+import { getProduct, getRecommendProduct } from '../../apis/productControllerApi'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import { Autoplay, Navigation, Pagination } from 'swiper'
-import { Button, Col, Image, InputNumber, Radio, Row } from 'antd'
+import { Button, Col, Image, InputNumber, Radio, Row, Tooltip } from 'antd'
 import { formatMoney } from '../../utils/functionHelper'
 import { toast } from 'react-toastify'
+import { Link, useNavigate } from 'react-router-dom'
 
 const ProductComponent = (props) => {
   const style = {
@@ -22,12 +23,13 @@ const ProductComponent = (props) => {
     progress: undefined,
     theme: 'light',
   }
+  const navigate = useNavigate()
   const [product, setProduct] = useState([])
-  // const [options, setOptions] = useState([])
   const [variations, setVariations] = useState([])
   const [choose, setChoose] = useState('')
   const [value, setValue] = useState('')
   const [quantity, setQuantity] = useState(1)
+  const [recommendProduct, setRecommendProduct] = useState([])
   const [state, setState] = useState({
     key: -1,
     id: -1,
@@ -39,39 +41,42 @@ const ProductComponent = (props) => {
 
   useEffect(() => {
     const handleGetProduct = async () => {
-      const resp = await getProduct(props.id)
+      const resp = await getProduct(props?.id)
       const data = resp?.data?.data
       setProduct(data)
     }
     handleGetProduct()
-  }, [props.id])
-
-  // useEffect(() => {
-  //   const handleGetOptions = async () => {
-  //     const resp = await getProduct(props.id)
-  //     const data = resp?.data?.data
-  //     setOptions(data.options)
-  //   }
-  //   handleGetOptions()
-  // }, [props.id])
+  }, [props?.id])
 
   useEffect(() => {
     const handleGetVariations = async () => {
-      const resp = await getProduct(props.id)
+      const resp = await getProduct(props?.id)
       const data = resp?.data?.data
       setVariations(data.variations)
     }
     handleGetVariations()
-  }, [props.id])
+  }, [props?.id])
 
   useEffect(() => {
     const handleGetInfos = async () => {
-      const resp = await getProduct(props.id)
+      const resp = await getProduct(props?.id)
       const data = resp?.data?.data
       setChoose(data.variations[state.key])
     }
     handleGetInfos()
-  }, [props.id, state])
+  }, [props?.id, state])
+
+  useEffect(() => {
+    const handleGetRecommendProduct = async () => {
+      const resp = await getRecommendProduct({
+        sessionId: localStorage?.getItem('sessionId'),
+        isExplicit: localStorage?.getItem('token') ? true : false,
+      })
+      const data = resp?.data?.data
+      setRecommendProduct(data)
+    }
+    handleGetRecommendProduct()
+  }, [])
 
   const handleImport = async () => {
     try {
@@ -114,7 +119,8 @@ const ProductComponent = (props) => {
           <div className="name">{product?.name}</div>
           <div className="productRating">
             <div className="averageRating">
-              {product?.averageRating} <i data-star={product?.averageRating}></i>
+              {parseFloat(product?.averageRating).toFixed(1)}
+              <i data-star={parseFloat(product?.averageRating).toFixed(1)}></i>
             </div>
             <hr className="line" width="1" size="30" />
             <div className="reviews">{product?.totalRatingTimes} reviews</div>
@@ -124,9 +130,9 @@ const ProductComponent = (props) => {
           <div className="productPrice">
             <div className="oldPrice">
               {!choose
-                ? product?.minPrice === product?.maxPrice
-                  ? formatMoney(product?.minPrice)
-                  : formatMoney(product?.minPrice) + ' - ' + formatMoney(product?.maxPrice)
+                ? product?.minOrgPrice === product?.maxOrgPrice
+                  ? formatMoney(product?.minOrgPrice)
+                  : formatMoney(product?.minOrgPrice) + ' - ' + formatMoney(product?.maxOrgPrice)
                 : formatMoney(choose?.price)}
             </div>
             <div className="price">
@@ -138,15 +144,17 @@ const ProductComponent = (props) => {
             </div>
             {product?.maxDiscount > 0 ? (
               <div className="onSale">
-                {choose?.discount > 0 ? (
-                  <div className="discount">Discount - {choose?.discount}%</div>
-                ) : null}
+                <div className="discount">
+                  {choose?.discount > 0
+                    ? 'Discount - ' + choose?.discount + '%'
+                    : 'Discount - ' + product?.maxDiscount + '%'}
+                </div>
               </div>
             ) : null}
           </div>
           <div className="variation">
             <>
-              <div className="title">Variations:</div>
+              <div className="title">Variations</div>
               <Row
                 style={{ padding: '0' }}
                 gutter={{
@@ -159,23 +167,25 @@ const ProductComponent = (props) => {
                 {variations?.map((item, index) => (
                   <Col className="gutter-row" xs={6} xl={4}>
                     <Radio.Group value={value} onChange={() => setValue(item?.id)}>
-                      <Radio.Button
-                        className="variationOption"
-                        value={item?.id}
-                        disabled={item?.availableQuantity === 0}
-                        onClick={() =>
-                          setState(
-                            state.key === index
-                              ? {
-                                  key: -1,
-                                  id: -1,
-                                }
-                              : { key: index, id: item.id },
-                          )
-                        }
-                      >
-                        {item?.name}
-                      </Radio.Button>
+                      <Tooltip title={item?.name} color="#decdbb">
+                        <Radio.Button
+                          className="variationOption"
+                          value={item?.id}
+                          disabled={item?.availableQuantity === 0}
+                          onClick={() =>
+                            setState(
+                              state.key === index
+                                ? {
+                                    key: -1,
+                                    id: -1,
+                                  }
+                                : { key: index, id: item.id },
+                            )
+                          }
+                        >
+                          <div className="name"> {item?.name}</div>
+                        </Radio.Button>
+                      </Tooltip>
                     </Radio.Group>
                   </Col>
                 ))}
@@ -196,7 +206,7 @@ const ProductComponent = (props) => {
             </Radio.Group> */}
           </div>
           <div className="quantity">
-            Number:
+            Number
             <div className="number">
               <InputNumber
                 className="inputNumber"
@@ -219,8 +229,126 @@ const ProductComponent = (props) => {
         </div>
       </div>
       <div className="productDescription">
-        <div className="title">Description:</div>
+        <div className="title">Description</div>
         <div className="description"> {product?.description}</div>
+      </div>
+      <div className="relativeProduct">
+        <div className="title">
+          Relative products <Link to={'/category/' + product?.category?.id}>See more</Link>
+        </div>
+        <div className="listProduct">
+          <Swiper
+            autoplay={{
+              delay: 1000,
+              disableOnInteraction: false,
+            }}
+            modules={[Autoplay, Pagination, Navigation]}
+            slidesPerView={1}
+            spaceBetween={10}
+            pagination={{
+              clickable: true,
+            }}
+            navigation={true}
+            breakpoints={{
+              '@0.00': {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
+              '@0.75': {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              '@1.00': {
+                slidesPerView: 3,
+                spaceBetween: 40,
+              },
+              '@1.50': {
+                slidesPerView: 4,
+                spaceBetween: 50,
+              },
+            }}
+            className="swiper"
+          >
+            {product?.relatedProducts?.map((item) => (
+              <SwiperSlide>
+                <div
+                  className="slideContent"
+                  onClick={() =>
+                    navigate({
+                      pathname: '/product/' + `${item?.id}`,
+                    })
+                  }
+                >
+                  <img className="slideImage" src={item?.avatar} alt="" />
+                  <div className="slideText">
+                    <div className="name">{item?.name}</div>
+                    <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </div>
+      <div className="recommendProduct">
+        <div className="title">
+          Recommend products <Link to={'/recommend'}>See more</Link>
+        </div>
+        <div className="listProduct">
+          <Swiper
+            autoplay={{
+              delay: 2000,
+              disableOnInteraction: false,
+            }}
+            modules={[Autoplay, Pagination, Navigation]}
+            slidesPerView={1}
+            spaceBetween={10}
+            pagination={{
+              clickable: true,
+            }}
+            navigation={true}
+            breakpoints={{
+              '@0.00': {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
+              '@0.75': {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              '@1.00': {
+                slidesPerView: 3,
+                spaceBetween: 40,
+              },
+              '@1.50': {
+                slidesPerView: 4,
+                spaceBetween: 50,
+              },
+            }}
+            className="swiper"
+          >
+            {recommendProduct?.map((item) => (
+              <SwiperSlide>
+                <div
+                  className="slideContent"
+                  onClick={() =>
+                    navigate({
+                      pathname: '/product/' + `${item?.id}`,
+                    })
+                  }
+                >
+                  <Tooltip title={item?.name} color="#decdbb">
+                    <img className="slideImage" src={item?.avatar} alt="" />
+                    <div className="slideText">
+                      <div className="name">{item?.name}</div>
+                      <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                    </div>
+                  </Tooltip>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
       </div>
     </div>
   )

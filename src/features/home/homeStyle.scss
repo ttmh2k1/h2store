@@ -22,6 +22,20 @@
       font-size: 4vw;
     }
   }
+  .seeAll {
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 0.2vw 0;
+    font-size: 1.2vw;
+    @media (max-width: 980px) {
+      font-size: 2.4vw;
+    }
+    &:hover {
+      cursor: pointer;
+      color: #2a2728;
+      font-weight: bold;
+    }
+  }
 
   .swiper {
     width: 100%;

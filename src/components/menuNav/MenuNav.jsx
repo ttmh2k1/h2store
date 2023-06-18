@@ -123,7 +123,7 @@ const MenuNav = () => {
               setTimeout(() => {
                 menuBar.current.style.transform = 'translateX(0)'
                 menuBar.current.style.opacity = '1'
-                menuBar.current.style.zIndex = '6'
+                menuBar.current.style.zIndex = '1'
               }, 100)
             } else {
               menuBar.current.style.transform = 'translateX(2%)'
@@ -153,7 +153,6 @@ const MenuNav = () => {
               <div key={index} className="items" onMouseOver={() => handleHover(index)}>
                 <li key={index} className="item">
                   <Link to={item.href}>{item.name}</Link>
-
                   <div className="subnav">
                     {categoryItem && index === 1 && (
                       <SubNavbar

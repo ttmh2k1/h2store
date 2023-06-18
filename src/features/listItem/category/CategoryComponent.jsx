@@ -1,5 +1,5 @@
 import './categoryStyle.scss'
-import { List } from 'antd'
+import { List, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { getListProduct } from '../../../apis/productControllerApi'
 import { formatMoney } from '../../../utils/functionHelper'
@@ -22,13 +22,22 @@ const CategoryComponent = (props) => {
   }, [props.id])
 
   useEffect(() => {
+    const handleGetPage = async () => {
+      const resp = await getListProduct({ idCategory: props.id })
+      const data = resp?.data
+      setPageSize(data?.totalElement)
+    }
+    handleGetPage()
+  }, [props.id])
+
+  useEffect(() => {
     const handleGetListProduct = async () => {
       const resp = await getListProduct({ idCategory: props.id, size: pageSize })
       const data = resp?.data?.data
       setListProduct(data)
     }
     handleGetListProduct()
-  }, [props.id, pageSize])
+  }, [props.id])
 
   return (
     <>
@@ -52,9 +61,6 @@ const CategoryComponent = (props) => {
               showSizeChanger: true,
               pageSizeOptions: ['8', '20', '50', '100'],
               defaultPageSize: 8,
-              onChange: (page, pageSize) => {
-                setPageSize(pageSize)
-              },
             }}
             dataSource={listProduct}
             renderItem={(item) => (
@@ -68,12 +74,13 @@ const CategoryComponent = (props) => {
                     })
                   }
                 >
-                  <img className="imageCategory" src={item?.avatar} />
-                  <div className="textCategory">
-                    <div className="name">{item?.name}</div>
-                    <div className="price">Price: {formatMoney(item?.minPrice)}</div>
-                  </div>
-                  {/* </a> */}
+                  <Tooltip title={item?.name} color="#decdbb">
+                    <img className="imageCategory" src={item?.avatar} alt="" />
+                    <div className="textCategory">
+                      <div className="name">{item?.name}</div>
+                      <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                    </div>
+                  </Tooltip>
                 </List.Item>
               </div>
             )}

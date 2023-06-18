@@ -27,14 +27,18 @@
 .inputSearch {
   min-width: 20vw !important;
   height: 2vw !important;
+  @media (max-width: 980px) {
+    height: 4vw !important;
+  }
 }
 
-@media screen and (max-width: 720px) {
+@media (max-width: 980px) {
   .mobile_btn {
     display: block;
     position: absolute;
     right: 1rem;
     cursor: pointer;
+    z-index: 2;
   }
 
   .headerMenu {
@@ -47,9 +51,9 @@
     top: 0;
     bottom: 0;
     width: 100%;
-    height: 100vh;
     background-color: #f8f8f8;
     transition: left 1s;
+    z-index: 2;
   }
 
   .active {
@@ -58,5 +62,9 @@
 
   .header a {
     font-size: 1.2rem;
+  }
+
+  .image {
+    z-index: 2;
   }
 }

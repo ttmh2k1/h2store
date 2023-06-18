@@ -7,7 +7,8 @@ import { useEffect, useState } from 'react'
 import { getLastedProduct, getTopSold, getTopView } from '../../apis/productControllerApi'
 import { formatMoney } from '../../utils/functionHelper'
 import Slide from '../../components/slide/Slide'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { Tooltip } from 'antd'
 
 const HomeComponent = () => {
   const [newArrival, setNewArrival] = useState([])
@@ -48,9 +49,12 @@ const HomeComponent = () => {
       <div className="homePage">
         <div className="newArrival">
           <div className="title">NEW ARRIVAL</div>
+          <Link className="seeAll" to="/newArrival">
+            See more
+          </Link>
           <Swiper
             autoplay={{
-              delay: 1000,
+              delay: 2000,
               disableOnInteraction: false,
             }}
             modules={[Autoplay, Pagination, Navigation]}
@@ -90,11 +94,13 @@ const HomeComponent = () => {
                     })
                   }
                 >
-                  <img className="slideImage" src={item?.avatar} alt="" />
-                  <div className="slideText">
-                    <div className="name">{item?.name}</div>
-                    <div className="price">Price: {formatMoney(item?.minPrice)}</div>
-                  </div>
+                  <Tooltip title={item?.name} color="#decdbb">
+                    <img className="slideImage" src={item?.avatar} alt="" />
+                    <div className="slideText">
+                      <div className="name">{item?.name}</div>
+                      <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                    </div>
+                  </Tooltip>
                 </div>
               </SwiperSlide>
             ))}
@@ -102,9 +108,12 @@ const HomeComponent = () => {
         </div>
         <div className="topSold">
           <div className="title">BEST SELLER</div>
+          <Link className="seeAll" to="/newArrival">
+            See more
+          </Link>
           <Swiper
             autoplay={{
-              delay: 1000,
+              delay: 2000,
               disableOnInteraction: false,
             }}
             modules={[Autoplay, Pagination, Navigation]}
@@ -144,11 +153,13 @@ const HomeComponent = () => {
                     })
                   }
                 >
-                  <img className="slideImage" src={item?.avatar} alt="" />
-                  <div className="slideText">
-                    <div className="name">{item?.name}</div>
-                    <div className="price">Price: {formatMoney(item?.minPrice)}</div>
-                  </div>
+                  <Tooltip title={item?.name} color="#decdbb">
+                    <img className="slideImage" src={item?.avatar} alt="" />
+                    <div className="slideText">
+                      <div className="name">{item?.name}</div>
+                      <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                    </div>
+                  </Tooltip>
                 </div>
               </SwiperSlide>
             ))}
@@ -156,9 +167,12 @@ const HomeComponent = () => {
         </div>
         <div className="topView">
           <div className="title">TOP VIEW</div>
+          <Link className="seeAll" to="/newArrival">
+            See more
+          </Link>
           <Swiper
             autoplay={{
-              delay: 1000,
+              delay: 2000,
               disableOnInteraction: false,
             }}
             modules={[Autoplay, Pagination, Navigation]}
@@ -198,11 +212,13 @@ const HomeComponent = () => {
                     })
                   }
                 >
-                  <img className="slideImage" src={item?.avatar} alt="" />
-                  <div className="slideText">
-                    <div className="name">{item?.name}</div>
-                    <div className="price">Price: {formatMoney(item?.minPrice)}</div>
-                  </div>
+                  <Tooltip title={item?.name} color="#decdbb">
+                    <img className="slideImage" src={item?.avatar} alt="" />
+                    <div className="slideText">
+                      <div className="name">{item?.name}</div>
+                      <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                    </div>
+                  </Tooltip>
                 </div>
               </SwiperSlide>
             ))}

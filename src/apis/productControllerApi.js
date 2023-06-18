@@ -7,25 +7,38 @@ export function getListProduct(req) {
 }
 
 export function getProduct(id) {
-  return api.GET(`${SERVICE}/api/product/${id}`)
+  const sessionId = localStorage.getItem('sessionId')
+  if (sessionId) {
+    return api.GET(`${SERVICE}/api/product/${id}?sessionId=${sessionId}`)
+  } else return api.GET(`${SERVICE}/api/product/${id}`)
 }
 
-export function getTopView() {
-  return api.GET(`${SERVICE}/api/product/most-viewed`)
+export function getTopView(req) {
+  const queries = combineQueriesUrl({ ...req })
+  return api.GET(`${SERVICE}/api/product/most-viewed${queries}`)
 }
 
-export function getTopSale() {
-  return api.GET(`${SERVICE}/api/product/sale`)
+export function getTopSale(req) {
+  const queries = combineQueriesUrl({ ...req })
+  return api.GET(`${SERVICE}/api/product/top-sale${queries}`)
 }
 
-export function getTopSold() {
-  return api.GET(`${SERVICE}/api/product/most-sold`)
+export function getTopSold(req) {
+  const queries = combineQueriesUrl({ ...req })
+  return api.GET(`${SERVICE}/api/product/most-sold${queries}`)
 }
 
-export function getTopRating() {
-  return api.GET(`${SERVICE}/api/product/high-rating`)
+export function getTopRating(req) {
+  const queries = combineQueriesUrl({ ...req })
+  return api.GET(`${SERVICE}/api/product/high-rating${queries}`)
 }
 
-export function getLastedProduct() {
-  return api.GET(`${SERVICE}/api/product/lasted`)
+export function getLastedProduct(req) {
+  const queries = combineQueriesUrl({ ...req })
+  return api.GET(`${SERVICE}/api/product/lasted${queries}`)
+}
+
+export function getRecommendProduct(req) {
+  const queries = combineQueriesUrl({ ...req })
+  return api.GET(`${SERVICE}/api/product/recommend${queries}`)
 }
