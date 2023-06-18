@@ -46,11 +46,7 @@ const OnSaleComponent = () => {
               <List.Item
                 className="listItem"
                 key={item.name}
-                onClick={() =>
-                  navigate({
-                    pathname: '/product/' + `${item?.id}`,
-                  })
-                }
+                onClick={() => navigate({ pathname: '/product/' + item?.id })}
               >
                 <Tooltip title={item?.name} color="#decdbb">
                   <img className="imageOnSale" src={item?.avatar} alt="" />

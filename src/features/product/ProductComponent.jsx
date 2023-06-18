@@ -331,11 +331,7 @@ const ProductComponent = (props) => {
               <SwiperSlide>
                 <div
                   className="slideContent"
-                  onClick={() =>
-                    navigate({
-                      pathname: '/product/' + `${item?.id}`,
-                    })
-                  }
+                  onClick={() => navigate({ pathname: '/product/' + item?.id })}
                 >
                   <Tooltip title={item?.name} color="#decdbb">
                     <img className="slideImage" src={item?.avatar} alt="" />
