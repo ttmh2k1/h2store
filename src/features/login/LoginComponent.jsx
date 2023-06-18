@@ -103,7 +103,7 @@ const LoginComponent = () => {
         </div>
         <p>OR</p>
         <Button className="buttonGoogle" href="http://localhost:8080/oauth2/authorization/google">
-          <AiFillGoogleCircle size="1.6vw" />
+          <AiFillGoogleCircle size="2vw" />
           &nbsp; Login with Google
         </Button>
       </div>

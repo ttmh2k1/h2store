@@ -1,15 +1,17 @@
 import './onSaleStyle.scss'
-import { List } from 'antd'
+import { List, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { getTopSale } from '../../../apis/productControllerApi'
 import { formatMoney } from '../../../utils/functionHelper'
+import { useNavigate } from 'react-router-dom'
 
 const OnSaleComponent = () => {
   const [onSale, setOnSale] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleGetOnSale = async () => {
-      const resp = await getTopSale()
+      const resp = await getTopSale({ size: 100 })
       const data = resp?.data?.data
       setOnSale(data)
     }
@@ -33,16 +35,30 @@ const OnSaleComponent = () => {
           }}
           size="large"
           itemLayout="vertical"
-          pagination={{ pageSize: 8 }}
+          pagination={{
+            showSizeChanger: true,
+            pageSizeOptions: ['8', '20', '50', '100'],
+            defaultPageSize: 8,
+          }}
           dataSource={onSale}
           renderItem={(item) => (
             <div className="itemOnSale">
-              <List.Item className="listItem" key={item.name}>
-                <img className="imageOnSale" src={item?.avatar} />
-                <div className="textOnSale">
-                  <div className="name">{item?.name}</div>
-                  <div className="price">Price: {formatMoney(item?.minPrice)}</div>
-                </div>
+              <List.Item
+                className="listItem"
+                key={item.name}
+                onClick={() =>
+                  navigate({
+                    pathname: '/product/' + `${item?.id}`,
+                  })
+                }
+              >
+                <Tooltip title={item?.name} color="#decdbb">
+                  <img className="imageOnSale" src={item?.avatar} alt="" />
+                  <div className="textOnSale">
+                    <div className="name">{item?.name}</div>
+                    <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                  </div>
+                </Tooltip>
               </List.Item>
             </div>
           )}

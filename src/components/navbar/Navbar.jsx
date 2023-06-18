@@ -15,7 +15,7 @@ const Navbar = () => {
   const [nav, setNav] = useState(false)
   return (
     <header className="header">
-      <Link to="/">
+      <Link className="image" to="/">
         <img src={logo} width="200vw" alt="H2Store" />
       </Link>
       <nav>

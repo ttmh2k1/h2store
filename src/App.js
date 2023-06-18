@@ -11,8 +11,15 @@ import ProductPage from './pages/product/ProductPage'
 import BestSellerPage from './pages/BestSellerPage'
 import NewArrivalPage from './pages/NewArrivalPage'
 import OnSalePage from './pages/OnSalePage'
+import RecommendProductPage from './pages/RecommendProductPage'
 import ScrollToTop from './components/topToButton/topToButton'
 // import SearchResultPage from './pages/SearchResultPage'
+import { v4 as uuidv4 } from 'uuid'
+
+const token = localStorage.getItem('token')
+if (!token) {
+  localStorage.setItem('sessionId', uuidv4())
+}
 
 function App() {
   return (
@@ -38,6 +45,7 @@ function App() {
             <Route path="bestSeller" element={<BestSellerPage />} />
             <Route path="newArrival" element={<NewArrivalPage />} />
             <Route path="onSale" element={<OnSalePage />} />
+            <Route path="recommend" element={<RecommendProductPage />} />
             {/* <Route path="searchResult" element={<SearchResultPage />} /> */}
           </Route>
         </Routes>

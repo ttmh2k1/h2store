@@ -99,6 +99,9 @@
 }
 .ant-pagination .ant-pagination-item a {
   color: #2a2728;
+  @media (max-width: 980px) {
+    font-size: 1.6vw;
+  }
   &:hover {
     color: #fff;
     background-color: #decdbb;

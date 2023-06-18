@@ -1,15 +1,17 @@
 import './bestSellerStyle.scss'
-import { List } from 'antd'
+import { List, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { getTopSold } from '../../../apis/productControllerApi'
 import { formatMoney } from '../../../utils/functionHelper'
+import { useNavigate } from 'react-router-dom'
 
 const BestSellerComponent = () => {
   const [bestSeller, setBestSeller] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleGetBestSeller = async () => {
-      const resp = await getTopSold()
+      const resp = await getTopSold({ size: 100 })
       const data = resp?.data?.data
       setBestSeller(data)
     }
@@ -33,16 +35,30 @@ const BestSellerComponent = () => {
           }}
           size="large"
           itemLayout="vertical"
-          pagination={{ pageSize: 8 }}
+          pagination={{
+            showSizeChanger: true,
+            pageSizeOptions: ['8', '20', '50', '100'],
+            defaultPageSize: 8,
+          }}
           dataSource={bestSeller}
           renderItem={(item) => (
             <div className="itemBestSeller">
-              <List.Item className="listItem" key={item.name}>
-                <img className="imageBestSeller" src={item?.avatar} />
-                <div className="textBestSeller">
-                  <div className="name">{item?.name}</div>
-                  <div className="price">Price: {formatMoney(item?.minPrice)}</div>
-                </div>
+              <List.Item
+                className="listItem"
+                key={item.name}
+                onClick={() =>
+                  navigate({
+                    pathname: '/product/' + `${item?.id}`,
+                  })
+                }
+              >
+                <Tooltip title={item?.name} color="#decdbb">
+                  <img className="imageBestSeller" src={item?.avatar} />
+                  <div className="textBestSeller">
+                    <div className="name">{item?.name}</div>
+                    <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                  </div>
+                </Tooltip>
               </List.Item>
             </div>
           )}

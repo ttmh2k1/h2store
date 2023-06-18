@@ -4,22 +4,31 @@
   .productDetail {
     display: flex;
     flex-direction: row;
+    @media (max-width: 980px) {
+      flex-direction: column;
+    }
 
     .productImage {
       display: flex;
       flex-direction: column;
       width: 32vw;
       margin-right: 2vw;
-
+      @media (max-width: 980px) {
+        width: 80vw;
+        margin-right: 20vw;
+      }
       .productAvatar {
         width: 32vw;
+        @media (max-width: 980px) {
+          width: 80vw;
+        }
       }
 
       .swiper {
-        width: 90%;
+        width: 100%;
         padding: 1vw 0 2vw 0;
         @media (max-width: 980px) {
-          padding: 1vw 0 2.8vw 0;
+          padding: 1vw 0 4vw 0;
         }
       }
 
@@ -29,6 +38,7 @@
         border-radius: 0.4vw;
         @media (max-width: 980px) {
           border-radius: 0.8vw;
+          width: 16vw;
         }
       }
 
@@ -39,6 +49,7 @@
         border-radius: 0.4vw;
         @media (max-width: 980px) {
           border-radius: 0.8vw;
+          padding: 1vw 0;
         }
       }
     }
@@ -51,7 +62,7 @@
         display: flex;
         text-align: justify;
         @media (max-width: 980px) {
-          font-size: 2vw;
+          font-size: 3.2vw;
         }
       }
 
@@ -61,9 +72,15 @@
         align-items: center;
         margin: 0.8vw 0;
         font-size: 1.2vw;
+        @media (max-width: 980px) {
+          font-size: 2.4vw;
+        }
         .line {
           margin: 0 1.2vw 0 2vw;
           height: 1.6vw;
+          @media (max-width: 980px) {
+            height: 3.2vw;
+          }
         }
       }
 
@@ -73,17 +90,27 @@
         align-items: center;
         align-self: center;
         margin: 0.4vw 0;
+        @media (max-width: 980px) {
+          margin: 1.6vw 0;
+        }
 
         .oldPrice {
           text-decoration: line-through;
           font-size: 1.2vw;
-          color: #e4e7e8;
+          color: #ab9b92;
           margin-right: 1.2vw;
+          @media (max-width: 980px) {
+            font-size: 2.8vw;
+          }
         }
+
         .price {
           color: red;
           font-size: 2vw;
           margin-right: 1.2vw;
+          @media (max-width: 980px) {
+            font-size: 2.8vw;
+          }
         }
 
         .onSale {
@@ -93,6 +120,10 @@
           align-items: center;
           justify-content: center;
           padding-top: 0.2vw;
+          @media (max-width: 980px) {
+            width: 20vw;
+            padding-top: 0.8vw;
+          }
 
           .discount {
             display: flex;
@@ -104,38 +135,50 @@
             background: red;
             color: #fff;
             font-size: 1vw;
+            @media (max-width: 980px) {
+              padding: 0.4vw 0.8vw;
+              height: 2.8vw;
+              border-radius: 0.8vw;
+              font-size: 2vw;
+            }
           }
         }
       }
 
       .variation {
-        font-size: 1.2vw;
-        text-align: justify;
-
         .title {
           font-family: 'Paytone';
           font-size: 1.2vw;
+          @media (max-width: 980px) {
+            font-size: 2vw;
+          }
         }
 
         .variationOption {
-          margin: 0.2vw;
-          width: 7.6vw;
+          margin: 0.2vw 0;
           height: 2vw;
           display: flex;
           align-items: center;
           align-self: center;
-          color: #2a2728;
-          font-size: 0.6vw;
-          max-width: 16vw;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-
           @media (max-width: 980px) {
-            width: 11.4vw;
+            height: 4vw;
+            width: 20vw;
             border-radius: 0.4vw;
-            font-size: 0.8vw;
             overflow: visible;
+          }
+
+          .name {
+            font-family: 'Muli';
+            color: #2a2728;
+            font-size: 0.8vw;
+            width: 7.2vw;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            @media (max-width: 980px) {
+              font-size: 1.6vw;
+              width: 16vw;
+            }
           }
 
           .ant-radio-button-checked {
@@ -148,13 +191,28 @@
         font-family: 'Paytone';
         font-size: 1.2vw;
         margin: 0.4vw 0;
+        @media (max-width: 980px) {
+          font-size: 2vw;
+          margin: 0.8vw 0;
+        }
+
         .number {
           display: flex;
           align-items: center;
           font-size: 0.8vw;
+          @media (max-width: 980px) {
+            font-size: 2vw;
+          }
+
           .inputNumber {
+            display: flex;
+            align-items: center;
             width: 8vw;
             margin-right: 1.2vw;
+            @media (max-width: 980px) {
+              width: 20vw;
+              height: 6vw;
+            }
           }
         }
       }
@@ -164,6 +222,10 @@
           background: #decdbb;
           color: #2a2728;
           margin: 1vw 1vw 1vw 0;
+          @media (max-width: 980px) {
+            font-size: 1.6vw;
+            height: 4vw;
+          }
           &:hover {
             background: #ab9b92;
             color: #fff;
@@ -175,6 +237,10 @@
           background: #ab9b92;
           color: #fff;
           margin: 1vw 1vw 1vw 0;
+          @media (max-width: 980px) {
+            font-size: 1.6vw;
+            height: 4vw;
+          }
           &:hover {
             background: #decdbb;
             color: #2a2728;
@@ -189,9 +255,222 @@
     .title {
       font-family: 'Paytone';
       font-size: 1.2vw;
+      @media (max-width: 980px) {
+        font-size: 2vw;
+      }
+    }
+
+    .description {
+      display: flex;
+      text-align: justify;
+      font-size: 1vw;
+      @media (max-width: 980px) {
+        font-size: 2vw;
+      }
+    }
+  }
+
+  .relativeProduct {
+    margin: 2vw 0;
+    .title {
+      font-family: 'Paytone';
+      font-size: 1.2vw;
+      display: flex;
+      justify-content: space-between;
+      @media (max-width: 980px) {
+        font-size: 2vw;
+      }
+    }
+
+    .listProduct {
+      margin: 1.2vw 0;
+      padding: 0;
+      border-radius: 0.4rem;
+
+      .title {
+        font-family: 'Paytone';
+        font-size: 2.8vw;
+        text-transform: uppercase;
+        color: #2a2728;
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        @media (max-width: 980px) {
+          font-size: 4vw;
+        }
+      }
+
+      .swiper {
+        width: 100%;
+        height: 100%;
+        padding: 0 2vw 1vw 2vw;
+
+        .slideText {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          margin: 0 1vw;
+          @media (max-width: 980px) {
+            margin: 0 2vw;
+          }
+
+          .name {
+            font-family: 'Paytone';
+            font-size: 1.2vw;
+            max-width: 16vw;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            @media (max-width: 980px) {
+              max-width: 68vw;
+              font-size: 2.8vw;
+            }
+          }
+
+          .price {
+            font-size: 0.8vw;
+            @media (max-width: 980px) {
+              font-size: 2vw;
+            }
+          }
+        }
+
+        .slideImage {
+          display: block;
+          width: 90%;
+          height: 90%;
+          object-fit: cover;
+          margin: 0 auto;
+          border-radius: 0.4vw;
+          @media (max-width: 980px) {
+            border-radius: 0.8vw;
+          }
+        }
+
+        .swiper-slide {
+          width: 100%;
+          height: 100%;
+          padding: 1vw 0.4vw;
+          margin-bottom: 1.6vw;
+          border-radius: 0.4vw;
+          background-color: #decdbb;
+          box-shadow: 0.2vw 0.2vw #ab9b92;
+          @media (max-width: 980px) {
+            padding: 2.4vw 0.4vw;
+            border-radius: 0.8vw;
+            margin-bottom: 4vw;
+          }
+          &:hover {
+            background-color: #ab9b92;
+            color: #fff;
+            box-shadow: none;
+          }
+        }
+      }
+    }
+  }
+
+  .recommendProduct {
+    margin: 2vw 0;
+    .title {
+      font-family: 'Paytone';
+      font-size: 1.2vw;
+      display: flex;
+      justify-content: space-between;
+      @media (max-width: 980px) {
+        font-size: 2vw;
+      }
+    }
+
+    .listProduct {
+      margin: 1.2vw 0;
+      padding: 0;
+      border-radius: 0.4rem;
+
+      .title {
+        font-family: 'Paytone';
+        font-size: 2.8vw;
+        text-transform: uppercase;
+        color: #2a2728;
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        @media (max-width: 980px) {
+          font-size: 4vw;
+        }
+      }
+
+      .swiper {
+        width: 100%;
+        height: 100%;
+        padding: 0 2vw 1vw 2vw;
+
+        .slideText {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          margin: 0 1vw;
+          @media (max-width: 980px) {
+            margin: 0 2vw;
+          }
+
+          .name {
+            font-family: 'Paytone';
+            font-size: 1.2vw;
+            max-width: 16vw;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            @media (max-width: 980px) {
+              max-width: 68vw;
+              font-size: 2.8vw;
+            }
+          }
+
+          .price {
+            font-size: 0.8vw;
+            @media (max-width: 980px) {
+              font-size: 2vw;
+            }
+          }
+        }
+
+        .slideImage {
+          display: block;
+          width: 90%;
+          height: 90%;
+          object-fit: cover;
+          margin: 0 auto;
+          border-radius: 0.4vw;
+          @media (max-width: 980px) {
+            border-radius: 0.8vw;
+          }
+        }
+
+        .swiper-slide {
+          width: 100%;
+          height: 100%;
+          padding: 1vw 0.4vw;
+          margin-bottom: 1.6vw;
+          border-radius: 0.4vw;
+          background-color: #decdbb;
+          box-shadow: 0.2vw 0.2vw #ab9b92;
+          @media (max-width: 980px) {
+            padding: 2.4vw 0.4vw;
+            border-radius: 0.8vw;
+            margin-bottom: 4vw;
+          }
+          &:hover {
+            background-color: #ab9b92;
+            color: #fff;
+            box-shadow: none;
+          }
+        }
+      }
     }
   }
 }
+
 .ant-radio-button-wrapper {
   display: flex;
   text-align: center;

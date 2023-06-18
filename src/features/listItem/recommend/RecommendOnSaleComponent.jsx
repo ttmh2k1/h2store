@@ -1,29 +1,33 @@
-import './newArrivalStyle.scss'
+import './recommendStyle.scss'
 import { List, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
-import { getLastedProduct } from '../../../apis/productControllerApi'
+import { getRecommendProduct } from '../../../apis/productControllerApi'
 import { formatMoney } from '../../../utils/functionHelper'
 import { useNavigate } from 'react-router-dom'
 
-const NewArrivalComponent = () => {
-  const [newArrival, setNewArrival] = useState([])
+const RecommendComponent = () => {
+  const [recommend, setRecommend] = useState([])
   const navigate = useNavigate()
 
   useEffect(() => {
-    const handleGetNewArrival = async () => {
-      const resp = await getLastedProduct({ size: 100 })
+    const handleGetRecommend = async () => {
+      const resp = await getRecommendProduct({
+        sessionId: localStorage?.getItem('sessionId'),
+        isExplicit: localStorage?.getItem('token') ? true : false,
+        size: 100,
+      })
       const data = resp?.data?.data
-      setNewArrival(data)
+      setRecommend(data)
     }
-    handleGetNewArrival()
+    handleGetRecommend()
   }, [])
 
   return (
-    <div className="newArrival">
-      <div className="productNewArrival">
-        <div className="title">NEW ARRIVAL</div>
+    <div className="recommend">
+      <div className="productRecommend">
+        <div className="title">RECOMMEND PRODUCT</div>
         <List
-          className="listNewArrival"
+          className="listRecommend"
           grid={{
             gutter: 12,
             xs: 1,
@@ -40,9 +44,9 @@ const NewArrivalComponent = () => {
             pageSizeOptions: ['8', '20', '50', '100'],
             defaultPageSize: 8,
           }}
-          dataSource={newArrival}
+          dataSource={recommend}
           renderItem={(item) => (
-            <div className="itemNewArrival">
+            <div className="itemRecommend">
               <List.Item
                 className="listItem"
                 key={item.name}
@@ -53,8 +57,8 @@ const NewArrivalComponent = () => {
                 }
               >
                 <Tooltip title={item?.name} color="#decdbb">
-                  <img className="imageNewArrival" src={item?.avatar} alt="" />
-                  <div className="textNewArrival">
+                  <img className="imageRecommend" src={item?.avatar} alt="" />
+                  <div className="textRecommend">
                     <div className="name">{item?.name}</div>
                     <div className="price">Price: {formatMoney(item?.minPrice)}</div>
                   </div>
@@ -68,4 +72,4 @@ const NewArrivalComponent = () => {
   )
 }
 
-export default NewArrivalComponent
+export default RecommendComponent
