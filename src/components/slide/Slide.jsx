@@ -21,7 +21,7 @@ const Slide = () => {
         <Carousel autoplay effect="fade" autoplaySpeed={1000}>
           {slide?.map((item) => (
             <div className="slideContent">
-              <img className="slideImage" src={item?.avatar} />
+              <img className="slideImage" src={item?.avatar} alt="" />
               <div className="slideText">
                 <div className="topSale">ON SALE</div>
                 <div className="name">{item?.name}</div>
