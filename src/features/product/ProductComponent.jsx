@@ -8,7 +8,7 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import { Autoplay, Navigation, Pagination } from 'swiper'
 import { Button, Col, Image, InputNumber, Radio, Row, Tooltip } from 'antd'
-import { formatMoney } from '../../utils/functionHelper'
+import { formatMoney, formatNumber } from '../../utils/functionHelper'
 import { toast } from 'react-toastify'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -76,7 +76,7 @@ const ProductComponent = (props) => {
       setRecommendProduct(data)
     }
     handleGetRecommendProduct()
-  }, [])
+  }, [props?.id])
 
   const handleImport = async () => {
     try {
@@ -217,7 +217,7 @@ const ProductComponent = (props) => {
                 onChange={onChange}
                 stringMode
               />
-              Available quantity: {choose?.availableQuantity}
+              {choose ? 'Available quantity: ' + formatNumber(choose?.availableQuantity) : null}
             </div>
           </div>
           <div className="button">
