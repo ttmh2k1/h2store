@@ -25,15 +25,87 @@ const ProductComponent = (props) => {
   }
   const navigate = useNavigate()
   const [product, setProduct] = useState([])
-  const [variations, setVariations] = useState([])
-  const [choose, setChoose] = useState('')
-  const [value, setValue] = useState('')
+  const [chosenVariation, setChosenVariation] = useState(null)
   const [quantity, setQuantity] = useState(1)
   const [recommendProduct, setRecommendProduct] = useState([])
-  const [state, setState] = useState({
-    key: -1,
-    id: -1,
-  })
+  const [selectedOptions, setSelectedOptions] = useState({}) // {productOptionId: productOptionValueId}, currently selected options
+  const [productOptions, setProductOptions] = useState({}) // {productOptionId: {productOptionValueId: disabled}}, 'disabled' indicates whether the option value is disabled or not when other options are selected
+
+  /**
+   * Compare content of two arrays
+   * @param {*} a the first array to compare
+   * @param {*} b the second array to compare
+   * @returns true if two arrays contain same elements, false otherwise
+   */
+  const arraysContainSame = (a, b) => {
+    a = Array.isArray(a) ? a : [];
+    b = Array.isArray(b) ? b : [];
+    return a.length === b.length && a.every(el => b.includes(el));
+  }
+
+  const updateSelectedOptions = (selectedOptionId, newOptionValue) => {
+    let updatedSelectedOptions = {...selectedOptions, [selectedOptionId] : newOptionValue};
+    let selectedProductOptionIds = Object.keys(updatedSelectedOptions);
+    
+    if (selectedProductOptionIds.length == 0) { // no option are selected => enable all option values
+      let tmp = productOptions;
+      for (const k1 of Object.keys(productOptions)) {
+        for (const k2 of Object.keys(productOptions[k1])) {
+          tmp[k1][k2] = false; // enable all option values
+        }
+      }
+      setProductOptions(tmp);
+    }
+    else {
+      let productOptionIds = Object.keys(productOptions)
+      let selectedOptionValueIds = Object.values(updatedSelectedOptions)
+
+      if (selectedProductOptionIds.length == productOptionIds.length) { // all options are selected
+        let found = false;
+        for (let i = 0; i < product.variations.length; i++) {
+          if (arraysContainSame(product.variations[i].optionValues, selectedOptionValueIds) && product.variations[i].availableQuantity > 0) {
+            setChosenVariation(product.variations[i]);
+            found = true;
+            break;
+          }
+        };
+
+        if (!found) { // variation is out of stock or variation is not found (deleted)
+          updatedSelectedOptions = {[selectedOptionId] : newOptionValue}; // discard other selection
+          selectedProductOptionIds = Object.keys(updatedSelectedOptions);
+          selectedOptionValueIds = Object.values(updatedSelectedOptions);
+          setChosenVariation(null);
+        }
+      }
+
+      if (selectedProductOptionIds.length < productOptionIds.length) { // partial options are selected
+        let remainProductOptionIds = productOptionIds.filter(k => !selectedProductOptionIds.includes(k));
+        let tmp = productOptions;
+
+        remainProductOptionIds.forEach(productOptionId => {
+          for (const productOptionValueId of Object.keys(productOptions[productOptionId])) {
+            let found = false;
+            for (let i = 0; i < product.variations.length; i++) {
+              if (selectedOptionValueIds.every(el => product.variations[i].optionValues.includes(el))) {
+                if (product.variations[i].optionValues.includes(parseInt(productOptionValueId)) && product.variations[i].availableQuantity > 0) {
+                  tmp = {...tmp, [productOptionId]: {...tmp[productOptionId], [productOptionValueId]: false}};
+                  found = true;
+                  break;
+                }
+              }
+            };
+
+            if (!found) {
+              tmp = {...tmp, [productOptionId]: {...tmp[productOptionId], [productOptionValueId]: true}};
+            }
+          }
+        });
+        setProductOptions(tmp);
+      }
+    }
+
+    setSelectedOptions(updatedSelectedOptions);
+  }
 
   const onChange = (value) => {
     setQuantity(value)
@@ -44,27 +116,19 @@ const ProductComponent = (props) => {
       const resp = await getProduct(props?.id)
       const data = resp?.data?.data
       setProduct(data)
+
+      let tmp = {}
+      data?.options.forEach(productOption => {
+        let po = {}
+        productOption.optionValues.forEach(productOptionValue => {
+          po = {...po, [productOptionValue.id]: false} // enable all
+        });
+        tmp = {...tmp, [productOption.id]: po}
+      });
+      setProductOptions(tmp)
     }
     handleGetProduct()
   }, [props?.id])
-
-  useEffect(() => {
-    const handleGetVariations = async () => {
-      const resp = await getProduct(props?.id)
-      const data = resp?.data?.data
-      setVariations(data.variations)
-    }
-    handleGetVariations()
-  }, [props?.id])
-
-  useEffect(() => {
-    const handleGetInfos = async () => {
-      const resp = await getProduct(props?.id)
-      const data = resp?.data?.data
-      setChoose(data.variations[state.key])
-    }
-    handleGetInfos()
-  }, [props?.id, state])
 
   useEffect(() => {
     const handleGetRecommendProduct = async () => {
@@ -80,7 +144,7 @@ const ProductComponent = (props) => {
 
   const handleImport = async () => {
     try {
-      await importCart({ idProductVariation: choose?.id, quantity: +quantity })
+      await importCart({ idProductVariation: chosenVariation?.id, quantity: +quantity })
       toast.success('Product was added to cart!', style)
     } catch (error) {
       toast.error("Can't add product to cart!", style)
@@ -129,81 +193,61 @@ const ProductComponent = (props) => {
           </div>
           <div className="productPrice">
             <div className="oldPrice">
-              {!choose
+              {!chosenVariation
                 ? product?.minOrgPrice === product?.maxOrgPrice
                   ? formatMoney(product?.minOrgPrice)
                   : formatMoney(product?.minOrgPrice) + ' - ' + formatMoney(product?.maxOrgPrice)
-                : formatMoney(choose?.price)}
+                : formatMoney(chosenVariation?.price)}
             </div>
             <div className="price">
-              {!choose
+              {!chosenVariation
                 ? product?.minPrice === product?.maxPrice
                   ? formatMoney(product?.minPrice)
                   : formatMoney(product?.minPrice) + ' - ' + formatMoney(product?.maxPrice)
-                : formatMoney(choose?.priceAfterDiscount)}
+                : formatMoney(chosenVariation?.priceAfterDiscount)}
             </div>
             {product?.maxDiscount > 0 ? (
               <div className="onSale">
                 <div className="discount">
-                  {choose?.discount > 0
-                    ? 'Discount - ' + choose?.discount + '%'
+                  {chosenVariation?.discount > 0
+                    ? 'Discount - ' + chosenVariation?.discount + '%'
                     : 'Discount - ' + product?.maxDiscount + '%'}
                 </div>
               </div>
             ) : null}
           </div>
           <div className="variation">
-            <>
-              <div className="title">Variations</div>
-              <Row
-                style={{ padding: '0' }}
-                gutter={{
-                  xs: 4,
-                  sm: 8,
-                  md: 16,
-                  lg: 24,
-                }}
-              >
-                {variations?.map((item, index) => (
-                  <Col className="gutter-row" xs={6} xl={4}>
-                    <Radio.Group value={value} onChange={() => setValue(item?.id)}>
-                      <Tooltip title={item?.name} color="#decdbb">
-                        <Radio.Button
-                          className="variationOption"
-                          value={item?.id}
-                          disabled={item?.availableQuantity === 0}
-                          onClick={() =>
-                            setState(
-                              state.key === index
-                                ? {
-                                    key: -1,
-                                    id: -1,
-                                  }
-                                : { key: index, id: item.id },
-                            )
-                          }
-                        >
-                          <div className="name"> {item?.name}</div>
-                        </Radio.Button>
-                      </Tooltip>
-                    </Radio.Group>
-                  </Col>
-                ))}
-              </Row>
-            </>
 
-            {/* <div className="optionName">{options[0]?.optionName}</div>
-            <Radio.Group>
-              {options[0]?.optionValues?.map((value) => (
-                <Radio.Button value={value?.value}>{value?.value}</Radio.Button>
-              ))}
-            </Radio.Group>
-            <div className="optionName">{options[1]?.optionName}</div>
-            <Radio.Group>
-              {options[1]?.optionValues?.map((value) => (
-                <Radio.Button value={value?.value}>{value?.value}</Radio.Button>
-              ))}
-            </Radio.Group> */}
+            {product?.options?.map((productOption, index) => (
+              <div>
+                <div className="title">{productOption.optionName}</div>
+                <Row
+                  style={{ padding: '0' }}
+                  gutter={{
+                    xs: 4,
+                    sm: 8,
+                    md: 16,
+                    lg: 24,
+                  }}
+                >
+                  <Radio.Group onChange={(event) => updateSelectedOptions(productOption.id, event.target.value)} value={selectedOptions[productOption.id]}>
+                    {productOption.optionValues.map((productOptionValue, index) => (
+                      <Col className="gutter-row" xs={6} xl={4}>
+                          <Tooltip title={productOptionValue.value} color="#decdbb">
+                            <Radio.Button 
+                              className="variationOption" 
+                              value={productOptionValue?.id}
+                              disabled={productOptions[productOption.id][productOptionValue.id]}
+                            >
+                              <div className="name">{productOptionValue?.value}</div>
+                            </Radio.Button>
+                          </Tooltip>
+                      </Col>
+                    ))}
+                  </Radio.Group>
+                </Row>
+              </div>
+            ))}
           </div>
           <div className="quantity">
             Number
@@ -212,12 +256,12 @@ const ProductComponent = (props) => {
                 className="inputNumber"
                 defaultValue="1"
                 min="1"
-                max={choose?.availableQuantity}
+                max={chosenVariation?.availableQuantity}
                 step="1"
                 onChange={onChange}
                 stringMode
               />
-              {choose ? 'Available quantity: ' + formatNumber(choose?.availableQuantity) : null}
+              {chosenVariation ? 'Available quantity: ' + formatNumber(chosenVariation?.availableQuantity) : null}
             </div>
           </div>
           <div className="button">
