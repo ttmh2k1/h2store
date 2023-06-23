@@ -1,5 +1,5 @@
 import './navbarStyle.scss'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   AiOutlineMenu,
   AiOutlineClose,
@@ -10,9 +10,27 @@ import {
 } from 'react-icons/ai'
 import logo from '../../commons/assets/brand.png'
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { countCart } from '../../apis/cartApi'
+import { updateCount } from '../../actionCreators/CartCreator'
 
 const Navbar = () => {
+  const dispatch = useDispatch()
+  const count = useSelector((state) => state?.cart?.count)
   const [nav, setNav] = useState(false)
+
+  const getCountCart = async () => {
+    if (localStorage.getItem('token')) {
+      const result = await countCart()
+      if (result) {
+        dispatch(updateCount(result?.data?.data))
+      }
+    }
+  }
+  useEffect(() => {
+    getCountCart()
+  }, [])
+
   return (
     <header className="header">
       <Link className="image" to="/">
@@ -25,8 +43,9 @@ const Navbar = () => {
             <AiOutlineSearch size={25} style={{ marginTop: '6px' }} />
           </li>
           <li>
-            <a href="/cart">
+            <a href="/cart" className="cart">
               <AiOutlineShoppingCart size={25} style={{ marginTop: '6px' }} />
+              {count > 0 && <span className="count"> {count}</span>}
             </a>
           </li>
           <li>
