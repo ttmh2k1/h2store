@@ -1,7 +1,7 @@
 import './productStyle.scss'
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { importCart } from '../../apis/cartApi'
+import { importCart, countCart, getCart } from '../../apis/cartApi'
 import { getProduct, getRecommendProduct } from '../../apis/productControllerApi'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
@@ -11,8 +11,12 @@ import { Button, Col, Image, InputNumber, Radio, Row, Tooltip } from 'antd'
 import { formatMoney, formatNumber } from '../../utils/functionHelper'
 import { toast } from 'react-toastify'
 import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { updateCart, updateCount } from '../../actionCreators/CartCreator'
 
 const ProductComponent = (props) => {
+  const cart = useSelector((state) => state.cart.cart)
+
   const style = {
     position: 'top-right',
     autoClose: 1000,
@@ -34,6 +38,7 @@ const ProductComponent = (props) => {
     key: -1,
     id: -1,
   })
+  const dispatch = useDispatch()
 
   const onChange = (value) => {
     setQuantity(value)
@@ -78,13 +83,110 @@ const ProductComponent = (props) => {
     handleGetRecommendProduct()
   }, [props?.id])
 
+  // const handleImport = async () => {
+  //   try {
+  //     await importCart({ idProductVariation: choose?.id, quantity: +quantity })
+  //     toast.success('Product was added to cart!', style)
+  //   } catch (error) {
+  //     toast.error("Can't add product to cart!", style)
+  //   }
+  // }
+
+  const getCountCart = async () => {
+    const result = await countCart()
+    if (result) {
+      dispatch(updateCount(result?.data?.data))
+    }
+  }
+
+  const getCartInfo = async () => {
+    const result = await getCart()
+    if (result) {
+      dispatch(updateCart(result?.data?.data))
+    }
+  }
+
+  useEffect(() => {
+    getCountCart()
+    getCartInfo()
+  }, [])
+
   const handleImport = async () => {
-    try {
-      await importCart({ idProductVariation: choose?.id, quantity: +quantity })
+    let tmp = Number(quantity)
+    if (cart?.filter((item) => item?.productVariation?.id === choose?.id)[0]?.quantity) {
+      tmp =
+        Number(quantity) +
+        Number(cart?.filter((item) => item?.productVariation?.id === choose?.id)[0]?.quantity)
+    }
+    const result = await importCart({
+      idProductVariation: choose?.id,
+      quantity: +tmp,
+    })
+
+    dispatch(
+      updateCart(
+        cart?.map((item) =>
+          item?.productVariation?.id === choose?.id
+            ? {
+                ...item,
+                quantity:
+                  Number(quantity) +
+                  Number(
+                    cart?.filter((item) => item?.productVariation?.id === choose?.id)[0]?.quantity,
+                  ),
+              }
+            : item,
+        ),
+      ),
+    )
+    if (result) {
       toast.success('Product was added to cart!', style)
-    } catch (error) {
+      getCountCart()
+      getCartInfo()
+    } else {
       toast.error("Can't add product to cart!", style)
     }
+  }
+
+  const handleBuyNow = async () => {
+    let tmp = Number(quantity)
+    if (cart?.filter((item) => item?.productVariation?.id === choose?.id)[0]?.quantity) {
+      tmp =
+        Number(quantity) +
+        Number(cart?.filter((item) => item?.productVariation?.id === choose?.id)[0]?.quantity)
+    }
+    const result = await importCart({
+      idProductVariation: choose?.id,
+      quantity: +tmp,
+    })
+
+    dispatch(
+      updateCart(
+        cart?.map((item) =>
+          item?.productVariation?.id === choose?.id
+            ? {
+                ...item,
+                quantity:
+                  Number(quantity) +
+                  Number(
+                    cart?.filter((item) => item?.productVariation?.id === choose?.id)[0]?.quantity,
+                  ),
+              }
+            : item,
+        ),
+      ),
+    )
+    if (result) {
+      toast.success('Product was added to cart!', style)
+      getCountCart()
+    } else {
+      toast.error("Can't add product to cart!", style)
+    }
+    setTimeout(() => {
+      navigate({
+        pathname: '/cart',
+      })
+    }, 3000)
   }
 
   return (
@@ -191,19 +293,6 @@ const ProductComponent = (props) => {
                 ))}
               </Row>
             </>
-
-            {/* <div className="optionName">{options[0]?.optionName}</div>
-            <Radio.Group>
-              {options[0]?.optionValues?.map((value) => (
-                <Radio.Button value={value?.value}>{value?.value}</Radio.Button>
-              ))}
-            </Radio.Group>
-            <div className="optionName">{options[1]?.optionName}</div>
-            <Radio.Group>
-              {options[1]?.optionValues?.map((value) => (
-                <Radio.Button value={value?.value}>{value?.value}</Radio.Button>
-              ))}
-            </Radio.Group> */}
           </div>
           <div className="quantity">
             Number
@@ -221,10 +310,20 @@ const ProductComponent = (props) => {
             </div>
           </div>
           <div className="button">
-            <Button className="addToCart" onClick={() => handleImport()}>
+            <Button
+              className="addToCart"
+              onClick={() => handleImport()}
+              disabled={choose ? false : true}
+            >
               Add to cart
             </Button>
-            <Button className="buyNow">Buy now</Button>
+            <Button
+              className="buyNow"
+              onClick={() => handleBuyNow()}
+              disabled={choose ? false : true}
+            >
+              Buy now
+            </Button>
           </div>
         </div>
       </div>

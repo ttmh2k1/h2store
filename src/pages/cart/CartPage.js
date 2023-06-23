@@ -1,8 +1,12 @@
 import React from 'react'
 import CartComponent from '../../features/cart/CartComponent'
+import { Navigate } from 'react-router-dom'
 
 function Cart() {
-  return <CartComponent />
+  if (localStorage.getItem('token')) {
+    return <CartComponent />
+  }
+  return <Navigate to="/login" />
 }
 
 export default Cart

@@ -32,6 +32,26 @@
   }
 }
 
+.cart {
+  .count {
+    display: flex;
+    color: #fff;
+    background-color: red;
+    border-radius: 40%;
+    padding: 0.3vw;
+    text-align: center;
+    font-size: 0.6vw;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.2;
+    width: 1vw;
+    height: 1vw;
+    position: absolute;
+    top: 0.8vw;
+    right: 13.2vw;
+  }
+}
+
 @media (max-width: 980px) {
   .mobile_btn {
     display: block;
