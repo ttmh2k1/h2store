@@ -87,7 +87,7 @@ const CartComponent = () => {
       )
     }
     handleGetOnSale()
-  }, [])
+  }, [cart])
 
   const handleDeleteItem = async (id) => {
     await deleteCart(id)
@@ -95,7 +95,7 @@ const CartComponent = () => {
     toast.success('Product removed from cart successfully', style)
     setTimeout(() => {
       window.location.reload()
-    }, 1000)
+    }, 500)
   }
 
   useEffect(() => {
@@ -224,7 +224,15 @@ const CartComponent = () => {
       <div className="cartContent">
         <div className="title">CART</div>
         <div className="listCart">
-          <Table dataSource={listCart} columns={columns} />
+          <Table
+            dataSource={listCart}
+            columns={columns}
+            pagination={{
+              showSizeChanger: true,
+              pageSizeOptions: ['8', '20', '50', '100'],
+              defaultPageSize: 8,
+            }}
+          />
         </div>
       </div>
     </div>

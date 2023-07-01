@@ -7,17 +7,32 @@ import {
   AiOutlineSearch,
   AiOutlineShoppingCart,
   AiOutlineBell,
+  AiOutlineLogout,
 } from 'react-icons/ai'
 import logo from '../../commons/assets/brand.png'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { countCart } from '../../apis/cartApi'
 import { updateCount } from '../../actionCreators/CartCreator'
+import { update } from '../../actionCreators/UserCreator'
+import { currentUser } from '../../apis/userApi'
+import { logout as logoutAction } from '../../actionCreators/UserCreator'
+import Avatar from 'react-avatar'
 
 const Navbar = () => {
   const dispatch = useDispatch()
   const count = useSelector((state) => state?.cart?.count)
+  const account = useSelector((state) => state.user.user)
   const [nav, setNav] = useState(false)
+  const [state, setState] = useState(false)
+
+  const navigate = useNavigate()
+  const logout = (e) => {
+    e.preventDefault()
+    localStorage.clear()
+    dispatch(logoutAction())
+    navigate('/login')
+  }
 
   const getCountCart = async () => {
     if (localStorage.getItem('token')) {
@@ -27,8 +42,19 @@ const Navbar = () => {
       }
     }
   }
+
+  const getUserInfo = async () => {
+    if (localStorage.getItem('token')) {
+      const user = await currentUser()
+      if (user) {
+        dispatch(update(user?.data?.data))
+      }
+    }
+  }
+
   useEffect(() => {
     getCountCart()
+    getUserInfo()
   }, [])
 
   return (
@@ -44,8 +70,10 @@ const Navbar = () => {
           </li>
           <li>
             <a href="/cart" className="cart">
+              {account
+                ? count > 0 && <span className="countUser"> {count}</span>
+                : count > 0 && <span className="count"> {count}</span>}
               <AiOutlineShoppingCart size={25} style={{ marginTop: '6px' }} />
-              {count > 0 && <span className="count"> {count}</span>}
             </a>
           </li>
           <li>
@@ -53,15 +81,52 @@ const Navbar = () => {
               <AiOutlineBell size={25} style={{ marginTop: '6px' }} />
             </a>
           </li>
-          {/* <li>
-            <AiOutlineUser size={25} style={{ marginTop: '6px' }} />
-          </li> */}
-          <li>
-            <a href="/login">Log in</a>
-          </li>
-          <li>
-            <a href="/register">Sign up</a>
-          </li>
+          {account ? (
+            <>
+              <div className="account">
+                <Avatar
+                  alt=""
+                  className="avatar"
+                  name={account?.fullname}
+                  onClick={() => {
+                    setState(!state)
+                  }}
+                />
+                <div className={state ? 'userMenu' : 'userMenu-hidden'}>
+                  <div className="listMenu">
+                    <ul className="menuItem">
+                      <Link to="/profile" onClick={() => setState(!state)}>
+                        <li className="button">
+                          <AiOutlineUser size={25} />
+                          <span className="text">Profile</span>
+                        </li>
+                      </Link>
+                      <div
+                        onClick={(e) => {
+                          logout(e)
+                        }}
+                      >
+                        <li className="button">
+                          <AiOutlineLogout size={25} />
+                          <span className="text">Log out</span>
+                        </li>
+                      </div>
+                    </ul>
+                  </div>
+                </div>
+                {/* )} */}
+              </div>
+            </>
+          ) : (
+            <>
+              <li>
+                <a href="/login">Log in</a>
+              </li>
+              <li>
+                <a href="/register">Sign up</a>
+              </li>
+            </>
+          )}
         </ul>
       </nav>
       <div onClick={() => setNav(!nav)} className="mobile_btn">

@@ -1,0 +1,49 @@
+.notificaionPage {
+  position: relative;
+  height: 100%;
+
+  .notificationContent {
+    margin: 1.6vw 12vw;
+    padding: 0;
+    border-radius: 0.4rem;
+
+    .notificationTitle {
+      font-family: 'Paytone';
+      font-size: 2.8vw;
+      text-transform: uppercase;
+      color: #2a2728;
+      display: flex;
+      justify-content: center;
+      margin: 0;
+      @media (max-width: 980px) {
+        font-size: 4vw;
+      }
+    }
+
+    .notificationList {
+      margin-top: 0.8vw;
+      background: #decdbb1f;
+
+      .notification {
+        margin: 0 2vw;
+
+        .item {
+          .title {
+            color: #2a2728;
+            font-weight: bold;
+            font-size: 1.2vw;
+          }
+
+          .content {
+            font-size: 1vw;
+          }
+
+          .time {
+            color: #ab9b92;
+            font-size: 0.8vw;
+          }
+        }
+      }
+    }
+  }
+}

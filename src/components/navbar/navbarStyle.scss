@@ -33,7 +33,7 @@
 }
 
 .cart {
-  .count {
+  .countUser {
     display: flex;
     color: #fff;
     background-color: red;
@@ -47,8 +47,83 @@
     width: 1vw;
     height: 1vw;
     position: absolute;
-    top: 0.8vw;
-    right: 13.2vw;
+    top: 1vw;
+    right: 6.8vw;
+    z-index: 20;
+  }
+}
+
+.account {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  user-select: none;
+  cursor: pointer;
+  position: relative;
+  align-items: center;
+
+  .avatar {
+    width: 2vw !important;
+    height: 2vw !important;
+    border-radius: 50%;
+    z-index: 6;
+  }
+
+  .userMenu {
+    border-radius: 0.4vw;
+    box-shadow: 0 1.6vw 2.4vw #0000004c, 0 0.8vw 0.8vw #00000033;
+    background-color: #fff;
+    z-index: 4;
+    position: absolute;
+    top: 3.2vw;
+    right: 0rem;
+
+    .listMenu {
+      display: flex;
+      flex-direction: row;
+
+      .menuItem {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        border-top-left-radius: 0.4vw;
+        border-top-right-radius: 0.4vw;
+        color: #aaa;
+
+        .button {
+          width: 8vw;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          &:hover {
+            background-color: #ab9b92;
+            color: #000;
+          }
+          .text {
+            font-size: 1.2vw;
+          }
+        }
+
+        + .menuItem {
+          border-top-left-radius: 0;
+          border-top-right-radius: 0;
+          border-top-left-radius: 0.4vw;
+          border-top-right-radius: 0.4vw;
+        }
+
+        a {
+          color: #aaa !important;
+        }
+
+        &:hover a {
+          color: #000 !important;
+        }
+      }
+    }
+  }
+
+  .userMenu-hidden {
+    display: none;
   }
 }
 

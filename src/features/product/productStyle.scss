@@ -82,6 +82,11 @@
             height: 3.2vw;
           }
         }
+        .favoriteTag {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+        }
       }
 
       .productPrice {
