@@ -10,8 +10,12 @@ import CategoryPage from './pages/CategoryPage'
 import ProductPage from './pages/product/ProductPage'
 import BestSellerPage from './pages/BestSellerPage'
 import NewArrivalPage from './pages/NewArrivalPage'
+import FavoritePage from './pages/FavoritePage'
 import OnSalePage from './pages/OnSalePage'
 import RecommendProductPage from './pages/RecommendProductPage'
+import ProfilePage from './pages/profile/ProfilePage'
+import AddressPage from './pages/profile/AddressPage'
+import NotificationPage from './pages/notification/NotificationPage'
 import CartPage from './pages/cart/CartPage'
 import ScrollToTop from './components/topToButton/topToButton'
 // import SearchResultPage from './pages/SearchResultPage'
@@ -45,9 +49,13 @@ function App() {
             </Route>
             <Route path="bestSeller" element={<BestSellerPage />} />
             <Route path="newArrival" element={<NewArrivalPage />} />
+            <Route path="favoriteProduct" element={<FavoritePage />} />
             <Route path="onSale" element={<OnSalePage />} />
             <Route path="recommend" element={<RecommendProductPage />} />
             <Route path="cart" element={<CartPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="notification" element={<NotificationPage />} />
+            <Route path="address" element={<AddressPage />} />
             {/* <Route path="searchResult" element={<SearchResultPage />} /> */}
           </Route>
         </Routes>

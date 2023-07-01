@@ -13,10 +13,12 @@ import { toast } from 'react-toastify'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateCart, updateCount } from '../../actionCreators/CartCreator'
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
+import { addFavoriteProduct, deleteFavoriteProduct, getFavoriteProduct } from '../../apis/favorite'
 
 const ProductComponent = (props) => {
-  const cart = useSelector((state) => state.cart.cart)
-
+  const user = useSelector((state) => state?.user?.user)
+  const cart = useSelector((state) => state?.cart?.cart)
   const style = {
     position: 'top-right',
     autoClose: 1000,
@@ -29,6 +31,8 @@ const ProductComponent = (props) => {
   }
   const navigate = useNavigate()
   const [product, setProduct] = useState([])
+  const [favorite, setFavorite] = useState([])
+  const [isFavorite, setIsFavorite] = useState()
   const [variations, setVariations] = useState([])
   const [choose, setChoose] = useState('')
   const [value, setValue] = useState('')
@@ -83,26 +87,36 @@ const ProductComponent = (props) => {
     handleGetRecommendProduct()
   }, [props?.id])
 
-  // const handleImport = async () => {
-  //   try {
-  //     await importCart({ idProductVariation: choose?.id, quantity: +quantity })
-  //     toast.success('Product was added to cart!', style)
-  //   } catch (error) {
-  //     toast.error("Can't add product to cart!", style)
-  //   }
-  // }
+  useEffect(() => {
+    const handleGetFavorite = async () => {
+      const resp = await getFavoriteProduct({ size: 100 })
+      const data = resp?.data?.data
+      setFavorite(data)
+      const tmp = data?.filter((item) => item?.product?.id === Number(props?.id))
+      if (tmp.length > 0) {
+        setIsFavorite(true)
+      } else setIsFavorite(false)
+    }
+    if (user) {
+      handleGetFavorite()
+    }
+  }, [props?.id])
 
   const getCountCart = async () => {
-    const result = await countCart()
-    if (result) {
-      dispatch(updateCount(result?.data?.data))
+    if (user) {
+      const result = await countCart()
+      if (result) {
+        dispatch(updateCount(result?.data?.data))
+      }
     }
   }
 
   const getCartInfo = async () => {
-    const result = await getCart()
-    if (result) {
-      dispatch(updateCart(result?.data?.data))
+    if (user) {
+      const result = await getCart()
+      if (result) {
+        dispatch(updateCart(result?.data?.data))
+      }
     }
   }
 
@@ -186,7 +200,19 @@ const ProductComponent = (props) => {
       navigate({
         pathname: '/cart',
       })
-    }, 3000)
+    }, 1000)
+  }
+
+  const handleAddFavorite = async () => {
+    setIsFavorite(!isFavorite)
+    await addFavoriteProduct(props?.id)
+    toast.success('Product was added to favorite products!', style)
+  }
+
+  const handleRemoveFavorite = async () => {
+    setIsFavorite(!isFavorite)
+    await deleteFavoriteProduct(props?.id)
+    toast.success('Product removed from favorite products', style)
   }
 
   return (
@@ -228,6 +254,21 @@ const ProductComponent = (props) => {
             <div className="reviews">{product?.totalRatingTimes} reviews</div>
             <hr className="line" width="1" size="30" />
             <div className="sold">{product?.nsold} sold</div>
+            <hr className="line" width="1" size="30" />
+            <div className="favoriteTag">
+              {isFavorite === true ? (
+                <AiFillHeart
+                  onClick={() => handleRemoveFavorite()}
+                  style={{ color: 'red', marginRight: '0.2vw' }}
+                />
+              ) : (
+                <AiOutlineHeart
+                  onClick={() => handleAddFavorite()}
+                  style={{ color: 'red', marginRight: '0.2vw' }}
+                />
+              )}
+              Favorite
+            </div>
           </div>
           <div className="productPrice">
             <div className="oldPrice">
@@ -372,11 +413,7 @@ const ProductComponent = (props) => {
               <SwiperSlide>
                 <div
                   className="slideContent"
-                  onClick={() =>
-                    navigate({
-                      pathname: '/product/' + `${item?.id}`,
-                    })
-                  }
+                  onClick={() => navigate({ pathname: '/product/' + item?.id })}
                 >
                   <img className="slideImage" src={item?.avatar} alt="" />
                   <div className="slideText">
