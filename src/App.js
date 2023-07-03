@@ -15,8 +15,12 @@ import OnSalePage from './pages/OnSalePage'
 import RecommendProductPage from './pages/RecommendProductPage'
 import ProfilePage from './pages/profile/ProfilePage'
 import AddressPage from './pages/profile/AddressPage'
+import OrderHistoryPage from './pages/orderHistory/OrderHistoryPage'
+import OrderDetailPage from './pages/orderHistory/OrderDetailPage'
+import ChangePasswordPage from './pages/profile/ChangePasswordPage'
 import NotificationPage from './pages/notification/NotificationPage'
 import CartPage from './pages/cart/CartPage'
+import CheckoutPage from './pages/cart/checkout/CheckoutPage'
 import ScrollToTop from './components/topToButton/topToButton'
 // import SearchResultPage from './pages/SearchResultPage'
 import { v4 as uuidv4 } from 'uuid'
@@ -53,9 +57,15 @@ function App() {
             <Route path="onSale" element={<OnSalePage />} />
             <Route path="recommend" element={<RecommendProductPage />} />
             <Route path="cart" element={<CartPage />} />
+            <Route path="checkout" element={<CheckoutPage />} />
             <Route path="profile" element={<ProfilePage />} />
-            <Route path="notification" element={<NotificationPage />} />
             <Route path="address" element={<AddressPage />} />
+            <Route path="orderHistory" element={<OrderHistoryPage />} />
+            <Route path="order">
+              <Route path=":orderId" element={<OrderDetailPage />} />
+            </Route>
+            <Route path="changePassword" element={<ChangePasswordPage />} />
+            <Route path="notification" element={<NotificationPage />} />
             {/* <Route path="searchResult" element={<SearchResultPage />} /> */}
           </Route>
         </Routes>

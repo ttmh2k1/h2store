@@ -199,7 +199,7 @@ const CartComponent = () => {
       align: 'center',
       render: (variationId) => {
         return (
-          <div className="flex justify-center">
+          <div className="action flex justify-center">
             <Button
               onlyIcon
               onClick={() => handleDeleteItem(variationId)}
@@ -227,12 +227,22 @@ const CartComponent = () => {
           <Table
             dataSource={listCart}
             columns={columns}
+            scroll={{ y: 560 }}
             pagination={{
               showSizeChanger: true,
               pageSizeOptions: ['8', '20', '50', '100'],
               defaultPageSize: 8,
             }}
           />
+        </div>
+        <div className="order">
+          <Button
+            className="orderButton"
+            disabled={listCart.length < 1}
+            onClick={() => navigate({ pathname: '/checkout' })}
+          >
+            ORDER
+          </Button>
         </div>
       </div>
     </div>
