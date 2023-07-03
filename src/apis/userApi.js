@@ -1,4 +1,3 @@
-import { eventWrapper } from '@testing-library/user-event/dist/utils'
 import api, { SERVICE } from './api'
 
 // User API

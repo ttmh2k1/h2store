@@ -22,7 +22,7 @@ const FavoriteComponent = () => {
   }
   const user = useSelector((state) => state?.user?.user)
   const [favorite, setFavorite] = useState([])
-  const [state, setState] = useState(true)
+  const [state, setState] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {

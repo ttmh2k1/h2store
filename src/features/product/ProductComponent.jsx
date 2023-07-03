@@ -91,7 +91,6 @@ const ProductComponent = (props) => {
     const handleGetFavorite = async () => {
       const resp = await getFavoriteProduct({ size: 100 })
       const data = resp?.data?.data
-      setFavorite(data)
       const tmp = data?.filter((item) => item?.product?.id === Number(props?.id))
       if (tmp.length > 0) {
         setIsFavorite(true)
@@ -193,6 +192,7 @@ const ProductComponent = (props) => {
     if (result) {
       toast.success('Product was added to cart!', style)
       getCountCart()
+      getCartInfo()
     } else {
       toast.error("Can't add product to cart!", style)
     }

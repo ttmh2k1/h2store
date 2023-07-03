@@ -152,6 +152,7 @@
 
         .saveButton {
           margin-left: 3.2vw;
+          margin-bottom: 2vw;
           width: 4vw;
           height: 2vw;
           color: #77675a;
@@ -191,6 +192,7 @@
         }
 
         .uploadAvt {
+          font-size: 1vw;
           width: 5.6vw;
           max-width: 100%;
           height: 2.4vw;
@@ -198,6 +200,7 @@
           color: #77675a;
           cursor: pointer;
           @media (max-width: 980px) {
+            width: 8vw;
             padding: 0.4vw 0.8vw;
           }
         }

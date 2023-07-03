@@ -330,6 +330,7 @@ const AddressComponent = () => {
               setModalNew(false)
             }}
             width={'40vw'}
+            destroyOnClose={true}
           >
             <div
               className="info"
