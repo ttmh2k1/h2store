@@ -259,7 +259,7 @@ const CheckoutComponent = () => {
 
   useEffect(() => {
     const getListTotalPrice = async () => {
-      const resp = await getListCart({ size: 100 })
+      const resp = await getListCart({ size: cart?.length })
       const data = resp?.data?.data
       setListTotalPrice(
         data?.map((item) => ({
@@ -449,11 +449,10 @@ const CheckoutComponent = () => {
                     user?.defaultAddress?.addressWard?.district?.name +
                     ', ' +
                     user?.defaultAddress?.addressWard?.district?.provinceCity?.name}
+                {chooseAddress === user?.defaultAddress?.id ? (
+                  <div className="default">Default</div>
+                ) : null}
               </div>
-
-              {chooseAddress === user?.defaultAddress?.id ? (
-                <div className="default">Default</div>
-              ) : null}
             </div>
             <div
               className="changeAddress"

@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 const CategoryComponent = (props) => {
   const [category, setCategory] = useState([])
   const [listProduct, setListProduct] = useState([])
-  const [pageSize, setPageSize] = useState([])
+  const [pageSize, setPageSize] = useState(100)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const CategoryComponent = (props) => {
       setListProduct(data)
     }
     handleGetListProduct()
-  }, [props.id])
+  }, [props.id, pageSize])
 
   return (
     <>

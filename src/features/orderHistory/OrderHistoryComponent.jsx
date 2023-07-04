@@ -14,7 +14,7 @@ const OrderHistoryComponent = () => {
   const user = useSelector((state) => state?.user?.user)
   const [state, setState] = useState(false)
   const [listOrder, setListOrder] = useState()
-  const [pageSize, setPageSize] = useState([])
+  const [pageSize, setPageSize] = useState(100)
   const navigate = useNavigate()
 
   useEffect(() => {

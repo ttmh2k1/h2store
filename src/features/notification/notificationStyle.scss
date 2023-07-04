@@ -24,23 +24,30 @@
       margin-top: 0.8vw;
       background: #decdbb1f;
 
-      .notification {
-        margin: 0 2vw;
+      .tab {
+        display: flex;
+        width: 100%;
 
-        .item {
-          .title {
-            color: #2a2728;
-            font-weight: bold;
-            font-size: 1.2vw;
-          }
+        .notificaionTab {
+          .notification {
+            padding: 0 0 1.2vw;
 
-          .content {
-            font-size: 1vw;
-          }
+            .item {
+              .title {
+                color: #2a2728;
+                font-weight: bold;
+                font-size: 1.2vw;
+              }
 
-          .time {
-            color: #ab9b92;
-            font-size: 0.8vw;
+              .content {
+                font-size: 1vw;
+              }
+
+              .time {
+                color: #ab9b92;
+                font-size: 0.8vw;
+              }
+            }
           }
         }
       }
