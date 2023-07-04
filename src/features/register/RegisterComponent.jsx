@@ -1,4 +1,4 @@
-import { Button } from 'antd'
+import { Button, Input } from 'antd'
 import './registerStyle.scss'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -106,7 +106,7 @@ const RegisterComponent = () => {
             </div>
           </div>
           <div className="item">
-            <label className="label" htmlFor="password">
+            <label className="label" htmlFor="email">
               Email
             </label>
             <input
@@ -123,7 +123,7 @@ const RegisterComponent = () => {
             <label className="label" htmlFor="password">
               Password
             </label>
-            <input
+            <Input.Password
               type="password"
               className="input"
               id="password"
@@ -137,7 +137,7 @@ const RegisterComponent = () => {
             <label className="label" htmlFor="confirmPassword">
               Confirm password
             </label>
-            <input
+            <Input.Password
               type="password"
               className="input"
               id="confirmPassword"

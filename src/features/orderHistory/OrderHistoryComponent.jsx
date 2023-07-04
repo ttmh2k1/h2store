@@ -4,24 +4,13 @@ import TabPane from 'antd/es/tabs/TabPane'
 import { useEffect, useState } from 'react'
 import Avatar from 'react-avatar'
 import { AiOutlineEdit } from 'react-icons/ai'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { getOrderHistory } from '../../apis/orderApi'
 import moment from 'moment'
 import { formatMoney } from '../../utils/functionHelper'
 
 const OrderHistoryComponent = () => {
-  const style = {
-    position: 'top-right',
-    autoClose: 1000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: false,
-    progress: undefined,
-    theme: 'light',
-  }
-
   const user = useSelector((state) => state?.user?.user)
   const [state, setState] = useState(false)
   const [listOrder, setListOrder] = useState()
@@ -136,6 +125,16 @@ const OrderHistoryComponent = () => {
           >
             Favorite product
           </div>
+          <div
+            className="viewedProduct"
+            onClick={() =>
+              navigate({
+                pathname: '/viewedProduct',
+              })
+            }
+          >
+            Viewed product
+          </div>
         </div>
       </div>
       <div className="orderHistoryContent">
@@ -144,7 +143,6 @@ const OrderHistoryComponent = () => {
           <Tabs
             className="tab"
             defaultActiveKey="ALL"
-            // onChange={onChange}
             style={{ display: 'flex', width: '60vw', justifyContent: 'space-between' }}
           >
             <TabPane className="order" tab="All" key="ALL" onTabScroll="right">
@@ -163,7 +161,7 @@ const OrderHistoryComponent = () => {
                         <div className="orderID">
                           Order ID: {item?.id} ({moment(item?.createTime).format('LLL')})
                         </div>
-                        <div className="orderStatus">{item?.status}</div>
+                        <div className="orderStatus">{item?.status.replace(/_/g, ' ')}</div>
                       </div>
                       <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
                       {item?.orderDetails?.map((tmp) => (
@@ -212,89 +210,474 @@ const OrderHistoryComponent = () => {
                 )}
               ></List>
             </TabPane>
-            <TabPane tab="Wait for payment" key="WAIT_FOR_PAYMENT">
-              {listOrder
-                ?.filter((item) => item?.status === 'WAIT_FOR_PAYMENT')
-                ?.map((tmp) => (
-                  <div className="header">
-                    <div className="orderID">
-                      Order ID: {tmp?.id} ({moment(tmp?.createTime).format('LLL')})
+            <TabPane className="order" tab="Wait for payment" key="WAIT_FOR_PAYMENT">
+              <List
+                onTabScroll
+                dataSource={listOrder?.filter((item) => item?.status === 'WAIT_FOR_PAYMENT')}
+                pagination={
+                  listOrder?.filter((item) => item?.status === 'WAIT_FOR_PAYMENT')?.length > 0 && {
+                    showSizeChanger: true,
+                    pageSizeOptions: ['5', '10', '20', '50', '100'],
+                    defaultPageSize: 5,
+                  }
+                }
+                renderItem={(item) => (
+                  <List.Item style={{ padding: '0' }}>
+                    <div className="orderDetail">
+                      <div className="header">
+                        <div className="orderID">
+                          Order ID: {item?.id} ({moment(item?.createTime).format('LLL')})
+                        </div>
+                        <div className="orderStatus">{item?.status.replace(/_/g, ' ')}</div>
+                      </div>
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      {item?.orderDetails?.map((tmp) => (
+                        <div className="listProduct">
+                          <div className="product">
+                            <img
+                              className="avatar"
+                              src={tmp?.variation?.product?.avatar}
+                              alt={tmp?.variation?.product?.name}
+                            />
+                            <div className="productInfo">
+                              <div className="productName">{tmp?.variation?.product?.name}</div>
+                              <div className="productVariation">{tmp?.variation?.name}</div>
+                              <div className="quantity">x{tmp?.quantity}</div>
+                            </div>
+                          </div>
+                          <div className="price">
+                            {tmp?.variation?.price !== tmp?.variation?.priceAfterDiscount && (
+                              <div className="originalPrice">
+                                {formatMoney(tmp?.variation?.price)}
+                              </div>
+                            )}
+                            <div className="priceAfterDiscount">
+                              {formatMoney(tmp?.variation?.priceAfterDiscount)}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      <div className="total">
+                        <div className="totalTitle">Total payment:</div>
+                        <div className="totalPrice">{formatMoney(item?.totalPrice)}</div>
+                      </div>
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      <div className="action">
+                        <Button className="commentButton">Comment</Button>
+                        <Button
+                          className="detailButton"
+                          onClick={() => navigate({ pathname: '/order/' + item?.id })}
+                        >
+                          Detail
+                        </Button>
+                      </div>
                     </div>
-                    <div className="orderStatus"></div>
-                  </div>
-                ))}
+                  </List.Item>
+                )}
+              ></List>
             </TabPane>
-            <TabPane tab="Wait for confirm" key="WAIT_FOR_CONFIRM">
-              {listOrder
-                ?.filter((item) => item?.status === 'WAIT_FOR_CONFIRM')
-                ?.map((tmp) => (
-                  <div className="header">
-                    <div className="orderID">
-                      Order ID: {tmp?.id} ({moment(tmp?.createTime).format('LLL')})
+            <TabPane className="order" tab="Wait for confirm" key="WAIT_FOR_CONFIRM">
+              <List
+                onTabScroll
+                dataSource={listOrder?.filter((item) => item?.status === 'WAIT_FOR_CONFIRM')}
+                pagination={
+                  listOrder?.filter((item) => item?.status === 'WAIT_FOR_CONFIRM')?.length > 0 && {
+                    showSizeChanger: true,
+                    pageSizeOptions: ['5', '10', '20', '50', '100'],
+                    defaultPageSize: 5,
+                  }
+                }
+                renderItem={(item) => (
+                  <List.Item style={{ padding: '0' }}>
+                    <div className="orderDetail">
+                      <div className="header">
+                        <div className="orderID">
+                          Order ID: {item?.id} ({moment(item?.createTime).format('LLL')})
+                        </div>
+                        <div className="orderStatus">{item?.status.replace(/_/g, ' ')}</div>
+                      </div>
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      {item?.orderDetails?.map((tmp) => (
+                        <div className="listProduct">
+                          <div className="product">
+                            <img
+                              className="avatar"
+                              src={tmp?.variation?.product?.avatar}
+                              alt={tmp?.variation?.product?.name}
+                            />
+                            <div className="productInfo">
+                              <div className="productName">{tmp?.variation?.product?.name}</div>
+                              <div className="productVariation">{tmp?.variation?.name}</div>
+                              <div className="quantity">x{tmp?.quantity}</div>
+                            </div>
+                          </div>
+                          <div className="price">
+                            {tmp?.variation?.price !== tmp?.variation?.priceAfterDiscount && (
+                              <div className="originalPrice">
+                                {formatMoney(tmp?.variation?.price)}
+                              </div>
+                            )}
+                            <div className="priceAfterDiscount">
+                              {formatMoney(tmp?.variation?.priceAfterDiscount)}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      <div className="total">
+                        <div className="totalTitle">Total payment:</div>
+                        <div className="totalPrice">{formatMoney(item?.totalPrice)}</div>
+                      </div>
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      <div className="action">
+                        <Button className="commentButton">Comment</Button>
+                        <Button
+                          className="detailButton"
+                          onClick={() => navigate({ pathname: '/order/' + item?.id })}
+                        >
+                          Detail
+                        </Button>
+                      </div>
                     </div>
-                    <div className="orderStatus"></div>
-                  </div>
-                ))}
+                  </List.Item>
+                )}
+              ></List>
             </TabPane>
-            <TabPane tab="Wait for send" key="WAIT_FOR_SEND">
-              {listOrder
-                ?.filter((item) => item?.status === 'WAIT_FOR_SEND')
-                ?.map((tmp) => (
-                  <div className="header">
-                    <div className="orderID">
-                      Order ID: {tmp?.id} ({moment(tmp?.createTime).format('LLL')})
+            <TabPane className="order" tab="Wait for send" key="WAIT_FOR_SEND">
+              <List
+                onTabScroll
+                dataSource={listOrder?.filter((item) => item?.status === 'WAIT_FOR_SEND')}
+                pagination={
+                  listOrder?.filter((item) => item?.status === 'WAIT_FOR_SEND')?.length > 0 && {
+                    showSizeChanger: true,
+                    pageSizeOptions: ['5', '10', '20', '50', '100'],
+                    defaultPageSize: 5,
+                  }
+                }
+                renderItem={(item) => (
+                  <List.Item style={{ padding: '0' }}>
+                    <div className="orderDetail">
+                      <div className="header">
+                        <div className="orderID">
+                          Order ID: {item?.id} ({moment(item?.createTime).format('LLL')})
+                        </div>
+                        <div className="orderStatus">{item?.status.replace(/_/g, ' ')}</div>
+                      </div>
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      {item?.orderDetails?.map((tmp) => (
+                        <div className="listProduct">
+                          <div className="product">
+                            <img
+                              className="avatar"
+                              src={tmp?.variation?.product?.avatar}
+                              alt={tmp?.variation?.product?.name}
+                            />
+                            <div className="productInfo">
+                              <div className="productName">{tmp?.variation?.product?.name}</div>
+                              <div className="productVariation">{tmp?.variation?.name}</div>
+                              <div className="quantity">x{tmp?.quantity}</div>
+                            </div>
+                          </div>
+                          <div className="price">
+                            {tmp?.variation?.price !== tmp?.variation?.priceAfterDiscount && (
+                              <div className="originalPrice">
+                                {formatMoney(tmp?.variation?.price)}
+                              </div>
+                            )}
+                            <div className="priceAfterDiscount">
+                              {formatMoney(tmp?.variation?.priceAfterDiscount)}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      <div className="total">
+                        <div className="totalTitle">Total payment:</div>
+                        <div className="totalPrice">{formatMoney(item?.totalPrice)}</div>
+                      </div>
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      <div className="action">
+                        <Button className="commentButton">Comment</Button>
+                        <Button
+                          className="detailButton"
+                          onClick={() => navigate({ pathname: '/order/' + item?.id })}
+                        >
+                          Detail
+                        </Button>
+                      </div>
                     </div>
-                    <div className="orderStatus"></div>
-                  </div>
-                ))}
+                  </List.Item>
+                )}
+              ></List>
             </TabPane>
-            <TabPane tab="Delivering" key="DELIVERING">
-              {listOrder
-                ?.filter((item) => item?.status === 'DELIVERING')
-                ?.map((tmp) => (
-                  <div className="header">
-                    <div className="orderID">
-                      Order ID: {tmp?.id} ({moment(tmp?.createTime).format('LLL')})
+            <TabPane className="order" tab="Delivering" key="DELIVERING">
+              <List
+                onTabScroll
+                dataSource={listOrder?.filter((item) => item?.status === 'DELIVERING')}
+                pagination={
+                  listOrder?.filter((item) => item?.status === 'DELIVERING')?.length > 0 && {
+                    showSizeChanger: true,
+                    pageSizeOptions: ['5', '10', '20', '50', '100'],
+                    defaultPageSize: 5,
+                  }
+                }
+                renderItem={(item) => (
+                  <List.Item style={{ padding: '0' }}>
+                    <div className="orderDetail">
+                      <div className="header">
+                        <div className="orderID">
+                          Order ID: {item?.id} ({moment(item?.createTime).format('LLL')})
+                        </div>
+                        <div className="orderStatus">{item?.status.replace(/_/g, ' ')}</div>
+                      </div>
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      {item?.orderDetails?.map((tmp) => (
+                        <div className="listProduct">
+                          <div className="product">
+                            <img
+                              className="avatar"
+                              src={tmp?.variation?.product?.avatar}
+                              alt={tmp?.variation?.product?.name}
+                            />
+                            <div className="productInfo">
+                              <div className="productName">{tmp?.variation?.product?.name}</div>
+                              <div className="productVariation">{tmp?.variation?.name}</div>
+                              <div className="quantity">x{tmp?.quantity}</div>
+                            </div>
+                          </div>
+                          <div className="price">
+                            {tmp?.variation?.price !== tmp?.variation?.priceAfterDiscount && (
+                              <div className="originalPrice">
+                                {formatMoney(tmp?.variation?.price)}
+                              </div>
+                            )}
+                            <div className="priceAfterDiscount">
+                              {formatMoney(tmp?.variation?.priceAfterDiscount)}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      <div className="total">
+                        <div className="totalTitle">Total payment:</div>
+                        <div className="totalPrice">{formatMoney(item?.totalPrice)}</div>
+                      </div>
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      <div className="action">
+                        <Button className="commentButton">Comment</Button>
+                        <Button
+                          className="detailButton"
+                          onClick={() => navigate({ pathname: '/order/' + item?.id })}
+                        >
+                          Detail
+                        </Button>
+                      </div>
                     </div>
-                    <div className="orderStatus"></div>
-                  </div>
-                ))}
+                  </List.Item>
+                )}
+              ></List>
             </TabPane>
-            <TabPane tab="Delivered" key="DELIVERED">
-              {listOrder
-                ?.filter((item) => item?.status === 'DELIVERED')
-                ?.map((tmp) => (
-                  <div className="header">
-                    <div className="orderID">
-                      Order ID: {tmp?.id} ({moment(tmp?.createTime).format('LLL')})
+            <TabPane className="order" tab="Delivered" key="DELIVERED">
+              <List
+                onTabScroll
+                dataSource={listOrder?.filter((item) => item?.status === 'DELIVERED')}
+                pagination={
+                  listOrder?.filter((item) => item?.status === 'DELIVERED')?.length > 0 && {
+                    showSizeChanger: true,
+                    pageSizeOptions: ['5', '10', '20', '50', '100'],
+                    defaultPageSize: 5,
+                  }
+                }
+                renderItem={(item) => (
+                  <List.Item style={{ padding: '0' }}>
+                    <div className="orderDetail">
+                      <div className="header">
+                        <div className="orderID">
+                          Order ID: {item?.id} ({moment(item?.createTime).format('LLL')})
+                        </div>
+                        <div className="orderStatus">{item?.status.replace(/_/g, ' ')}</div>
+                      </div>
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      {item?.orderDetails?.map((tmp) => (
+                        <div className="listProduct">
+                          <div className="product">
+                            <img
+                              className="avatar"
+                              src={tmp?.variation?.product?.avatar}
+                              alt={tmp?.variation?.product?.name}
+                            />
+                            <div className="productInfo">
+                              <div className="productName">{tmp?.variation?.product?.name}</div>
+                              <div className="productVariation">{tmp?.variation?.name}</div>
+                              <div className="quantity">x{tmp?.quantity}</div>
+                            </div>
+                          </div>
+                          <div className="price">
+                            {tmp?.variation?.price !== tmp?.variation?.priceAfterDiscount && (
+                              <div className="originalPrice">
+                                {formatMoney(tmp?.variation?.price)}
+                              </div>
+                            )}
+                            <div className="priceAfterDiscount">
+                              {formatMoney(tmp?.variation?.priceAfterDiscount)}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      <div className="total">
+                        <div className="totalTitle">Total payment:</div>
+                        <div className="totalPrice">{formatMoney(item?.totalPrice)}</div>
+                      </div>
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      <div className="action">
+                        <Button className="commentButton">Comment</Button>
+                        <Button
+                          className="detailButton"
+                          onClick={() => navigate({ pathname: '/order/' + item?.id })}
+                        >
+                          Detail
+                        </Button>
+                      </div>
                     </div>
-                    <div className="orderStatus"></div>
-                  </div>
-                ))}
+                  </List.Item>
+                )}
+              ></List>
             </TabPane>
-            <TabPane tab="Completed" key="COMPLETED">
-              {listOrder
-                ?.filter((item) => item?.status === 'COMPLETED')
-                ?.map((tmp) => (
-                  <div className="header">
-                    <div className="orderID">
-                      Order ID: {tmp?.id} ({moment(tmp?.createTime).format('LLL')})
+            <TabPane className="order" tab="Completed" key="COMPLETED">
+              <List
+                onTabScroll
+                dataSource={listOrder?.filter((item) => item?.status === 'COMPLETED')}
+                pagination={
+                  listOrder?.filter((item) => item?.status === 'COMPLETED')?.length > 0 && {
+                    showSizeChanger: true,
+                    pageSizeOptions: ['5', '10', '20', '50', '100'],
+                    defaultPageSize: 5,
+                  }
+                }
+                renderItem={(item) => (
+                  <List.Item style={{ padding: '0' }}>
+                    <div className="orderDetail">
+                      <div className="header">
+                        <div className="orderID">
+                          Order ID: {item?.id} ({moment(item?.createTime).format('LLL')})
+                        </div>
+                        <div className="orderStatus">{item?.status.replace(/_/g, ' ')}</div>
+                      </div>
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      {item?.orderDetails?.map((tmp) => (
+                        <div className="listProduct">
+                          <div className="product">
+                            <img
+                              className="avatar"
+                              src={tmp?.variation?.product?.avatar}
+                              alt={tmp?.variation?.product?.name}
+                            />
+                            <div className="productInfo">
+                              <div className="productName">{tmp?.variation?.product?.name}</div>
+                              <div className="productVariation">{tmp?.variation?.name}</div>
+                              <div className="quantity">x{tmp?.quantity}</div>
+                            </div>
+                          </div>
+                          <div className="price">
+                            {tmp?.variation?.price !== tmp?.variation?.priceAfterDiscount && (
+                              <div className="originalPrice">
+                                {formatMoney(tmp?.variation?.price)}
+                              </div>
+                            )}
+                            <div className="priceAfterDiscount">
+                              {formatMoney(tmp?.variation?.priceAfterDiscount)}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      <div className="total">
+                        <div className="totalTitle">Total payment:</div>
+                        <div className="totalPrice">{formatMoney(item?.totalPrice)}</div>
+                      </div>
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      <div className="action">
+                        <Button className="commentButton">Comment</Button>
+                        <Button
+                          className="detailButton"
+                          onClick={() => navigate({ pathname: '/order/' + item?.id })}
+                        >
+                          Detail
+                        </Button>
+                      </div>
                     </div>
-                    <div className="orderStatus"></div>
-                  </div>
-                ))}
+                  </List.Item>
+                )}
+              ></List>
             </TabPane>
-            <TabPane tab="Canceled" key="CANCELED">
-              {listOrder
-                ?.filter((item) => item?.status === 'CANCELED')
-                ?.map((tmp) => (
-                  <div className="header">
-                    <div className="orderID">
-                      Order ID: {tmp?.id} ({moment(tmp?.createTime).format('LLL')})
+            <TabPane className="order" tab="Canceled" key="CANCELED">
+              <List
+                onTabScroll
+                dataSource={listOrder?.filter((item) => item?.status === 'CANCELED')}
+                pagination={
+                  listOrder?.filter((item) => item?.status === 'CANCELED')?.length > 0 && {
+                    showSizeChanger: true,
+                    pageSizeOptions: ['5', '10', '20', '50', '100'],
+                    defaultPageSize: 5,
+                  }
+                }
+                renderItem={(item) => (
+                  <List.Item style={{ padding: '0' }}>
+                    <div className="orderDetail">
+                      <div className="header">
+                        <div className="orderID">
+                          Order ID: {item?.id} ({moment(item?.createTime).format('LLL')})
+                        </div>
+                        <div className="orderStatus">{item?.status.replace(/_/g, ' ')}</div>
+                      </div>
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      {item?.orderDetails?.map((tmp) => (
+                        <div className="listProduct">
+                          <div className="product">
+                            <img
+                              className="avatar"
+                              src={tmp?.variation?.product?.avatar}
+                              alt={tmp?.variation?.product?.name}
+                            />
+                            <div className="productInfo">
+                              <div className="productName">{tmp?.variation?.product?.name}</div>
+                              <div className="productVariation">{tmp?.variation?.name}</div>
+                              <div className="quantity">x{tmp?.quantity}</div>
+                            </div>
+                          </div>
+                          <div className="price">
+                            {tmp?.variation?.price !== tmp?.variation?.priceAfterDiscount && (
+                              <div className="originalPrice">
+                                {formatMoney(tmp?.variation?.price)}
+                              </div>
+                            )}
+                            <div className="priceAfterDiscount">
+                              {formatMoney(tmp?.variation?.priceAfterDiscount)}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      <div className="total">
+                        <div className="totalTitle">Total payment:</div>
+                        <div className="totalPrice">{formatMoney(item?.totalPrice)}</div>
+                      </div>
+                      <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
+                      <div className="action">
+                        <Button className="commentButton">Comment</Button>
+                        <Button
+                          className="detailButton"
+                          onClick={() => navigate({ pathname: '/order/' + item?.id })}
+                        >
+                          Detail
+                        </Button>
+                      </div>
                     </div>
-                    <div className="orderStatus"></div>
-                  </div>
-                ))}
+                  </List.Item>
+                )}
+              ></List>
             </TabPane>
           </Tabs>
         </div>

@@ -1,33 +1,44 @@
-import './recommendStyle.scss'
+import './viewedStyle.scss'
 import { List, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
-import { getRecommendProduct } from '../../../apis/productControllerApi'
+import { getViewedProduct } from '../../../apis/productControllerApi'
 import { formatMoney } from '../../../utils/functionHelper'
 import { useNavigate } from 'react-router-dom'
 
-const RecommendComponent = () => {
-  const [recommend, setRecommend] = useState([])
+const ViewedComponent = () => {
+  const [viewed, setViewed] = useState([])
+  const [pageSize, setPageSize] = useState(100)
   const navigate = useNavigate()
 
   useEffect(() => {
-    const handleGetRecommend = async () => {
-      const resp = await getRecommendProduct({
+    const handleGetPage = async () => {
+      const resp = await getViewedProduct({
         sessionId: localStorage?.getItem('sessionId'),
-        isExplicit: localStorage?.getItem('token') ? true : false,
-        size: 100,
+      })
+      const data = resp?.data
+      setPageSize(data?.totalElement)
+    }
+    handleGetPage()
+  }, [])
+
+  useEffect(() => {
+    const handleGetViewed = async () => {
+      const resp = await getViewedProduct({
+        sessionId: localStorage?.getItem('sessionId'),
+        size: pageSize,
       })
       const data = resp?.data?.data
-      setRecommend(data)
+      setViewed(data)
     }
-    handleGetRecommend()
+    handleGetViewed()
   }, [])
 
   return (
-    <div className="recommend">
-      <div className="productRecommend">
-        <div className="title">RECOMMEND PRODUCTS</div>
+    <div className="viewedPage">
+      <div className="viewedProductList">
+        <div className="title">VIEWED PRODUCTS</div>
         <List
-          className="listRecommend"
+          className="listViewed"
           grid={{
             gutter: 12,
             xs: 1,
@@ -44,17 +55,17 @@ const RecommendComponent = () => {
             pageSizeOptions: ['8', '20', '50', '100'],
             defaultPageSize: 8,
           }}
-          dataSource={recommend}
+          dataSource={viewed}
           renderItem={(item) => (
-            <div className="itemRecommend">
+            <div className="itemViewed">
               <List.Item
                 className="listItem"
                 key={item.name}
                 onClick={() => navigate({ pathname: '/product/' + item?.id })}
               >
                 <Tooltip title={item?.name} color="#decdbb">
-                  <img className="imageRecommend" src={item?.avatar} alt="" />
-                  <div className="textRecommend">
+                  <img className="imageViewed" src={item?.avatar} alt="" />
+                  <div className="textViewed">
                     <div className="name">{item?.name}</div>
                     <div className="price">Price: {formatMoney(item?.minPrice)}</div>
                   </div>
@@ -68,4 +79,4 @@ const RecommendComponent = () => {
   )
 }
 
-export default RecommendComponent
+export default ViewedComponent

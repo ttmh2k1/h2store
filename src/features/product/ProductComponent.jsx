@@ -2,7 +2,7 @@ import './productStyle.scss'
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { importCart, countCart, getCart } from '../../apis/cartApi'
-import { getProduct, getRecommendProduct } from '../../apis/productControllerApi'
+import { getProduct, getRecommendProduct, getViewedProduct } from '../../apis/productControllerApi'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -31,13 +31,13 @@ const ProductComponent = (props) => {
   }
   const navigate = useNavigate()
   const [product, setProduct] = useState([])
-  const [favorite, setFavorite] = useState([])
   const [isFavorite, setIsFavorite] = useState()
   const [variations, setVariations] = useState([])
   const [choose, setChoose] = useState('')
   const [value, setValue] = useState('')
   const [quantity, setQuantity] = useState(1)
   const [recommendProduct, setRecommendProduct] = useState([])
+  const [viewedProduct, setViewedProduct] = useState([])
   const [state, setState] = useState({
     key: -1,
     id: -1,
@@ -85,6 +85,17 @@ const ProductComponent = (props) => {
       setRecommendProduct(data)
     }
     handleGetRecommendProduct()
+  }, [props?.id])
+
+  useEffect(() => {
+    const handleGetViewedProduct = async () => {
+      const resp = await getViewedProduct({
+        sessionId: localStorage?.getItem('sessionId'),
+      })
+      const data = resp?.data?.data
+      setViewedProduct(data)
+    }
+    handleGetViewedProduct()
   }, [props?.id])
 
   useEffect(() => {
@@ -482,6 +493,64 @@ const ProductComponent = (props) => {
           </Swiper>
         </div>
       </div>
+      {viewedProduct?.length > 0 && (
+        <div className="viewedProduct">
+          <div className="title">
+            Viewed products <Link to={'/viewed'}>See more</Link>
+          </div>
+          <div className="listProduct">
+            <Swiper
+              autoplay={{
+                delay: 2000,
+                disableOnInteraction: false,
+              }}
+              modules={[Autoplay, Pagination, Navigation]}
+              slidesPerView={1}
+              spaceBetween={10}
+              pagination={{
+                clickable: true,
+              }}
+              navigation={true}
+              breakpoints={{
+                '@0.00': {
+                  slidesPerView: 1,
+                  spaceBetween: 20,
+                },
+                '@0.75': {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                '@1.00': {
+                  slidesPerView: 3,
+                  spaceBetween: 40,
+                },
+                '@1.50': {
+                  slidesPerView: 4,
+                  spaceBetween: 50,
+                },
+              }}
+              className="swiper"
+            >
+              {viewedProduct?.map((item) => (
+                <SwiperSlide>
+                  <div
+                    className="slideContent"
+                    onClick={() => navigate({ pathname: '/product/' + item?.id })}
+                  >
+                    <Tooltip title={item?.name} color="#decdbb">
+                      <img className="slideImage" src={item?.avatar} alt="" />
+                      <div className="slideText">
+                        <div className="name">{item?.name}</div>
+                        <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                      </div>
+                    </Tooltip>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
