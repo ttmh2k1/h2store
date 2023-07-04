@@ -1,13 +1,17 @@
 import './notificationStyle.scss'
-import { List } from 'antd'
+import { Button, List, Tabs } from 'antd'
+import TabPane from 'antd/es/tabs/TabPane'
 import { useEffect, useState } from 'react'
-import { getNotification } from '../../apis/notification'
+import { getNotification, markAsRead } from '../../apis/notification'
+import moment from 'moment/moment'
 
 const NotificationComponent = () => {
+  const [pageSize, setPageSize] = useState(100)
+  const [seenSize, setSeenSize] = useState(100)
+  const [notSeenSize, setNotSeenSize] = useState(100)
   const [notify, setNotify] = useState([])
-  const [pageSize, setPageSize] = useState([])
-  const [read, setRead] = useState([])
-  const [notSeen, setNotSeen] = useState([])
+  const [seen, setSeen] = useState([])
+  const [unread, setUnread] = useState([])
 
   useEffect(() => {
     const handleGetPage = async () => {
@@ -19,40 +23,153 @@ const NotificationComponent = () => {
   }, [])
 
   useEffect(() => {
+    const handleGetSeenPage = async () => {
+      const resp = await getNotification({ isSeen: true })
+      const data = resp?.data
+      setSeenSize(data?.totalElement)
+    }
+    handleGetSeenPage()
+  }, [])
+
+  useEffect(() => {
+    const handleGetNotSeenPage = async () => {
+      const resp = await getNotification({ isSeen: false })
+      const data = resp?.data
+      setNotSeenSize(data?.totalElement)
+    }
+    handleGetNotSeenPage()
+  }, [])
+
+  useEffect(() => {
     const handleGetNotification = async () => {
       const resp = await getNotification({ size: pageSize, sortByOldest: false })
       const data = resp?.data?.data
       setNotify(data)
-      setRead(data?.filter((item) => item?.seen === 'true'))
     }
     handleGetNotification()
-  }, [])
+  }, [pageSize])
+
+  useEffect(() => {
+    const handleSeenNotification = async () => {
+      const resp = await getNotification({
+        isSeen: true,
+        size: seenSize ? seenSize : '',
+        sortByOldest: false,
+      })
+      const data = resp?.data?.data
+      setSeen(data)
+    }
+    handleSeenNotification()
+  }, [seenSize])
+
+  useEffect(() => {
+    const handleNotSeenNotification = async () => {
+      const resp = await getNotification({
+        isSeen: false,
+        size: notSeenSize ? notSeenSize : '',
+        sortByOldest: false,
+      })
+      const data = resp?.data?.data
+      setUnread(data)
+    }
+    handleNotSeenNotification()
+  }, [notSeenSize])
+
+  const handleMarkAsRead = async () => {
+    await markAsRead()
+    window.location.reload()
+  }
 
   return (
     <div className="notificaionPage">
       <div className="notificationContent">
         <div className="notificationTitle">NOTIFICATIONS</div>
         <div className="notificationList">
-          <List
-            className="notification"
-            pagination={{
-              showSizeChanger: true,
-              pageSizeOptions: ['8', '20', '50', '100'],
-              defaultPageSize: 8,
+          <Tabs
+            className="tab"
+            defaultActiveKey="ALL"
+            tabBarExtraContent={
+              <Button
+                style={{ background: '#decdbb', color: '#2a2728', border: '1px solid #2a2728' }}
+                onClick={() => handleMarkAsRead()}
+              >
+                Mark as read
+              </Button>
+            }
+            style={{
+              display: 'flex',
+              width: '94%',
+              justifyContent: 'space-between',
+              margin: '0 2vw',
             }}
-            dataSource={notify}
-            renderItem={(item) => (
-              <>
-                <List.Item>
-                  <div className="item">
-                    <div className="title">{item?.title}</div>
-                    <div className="content">{item?.content}</div>
-                    <div className="time">{item?.time}</div>
-                  </div>
-                </List.Item>
-              </>
-            )}
-          />
+          >
+            <TabPane className="notificaionTab" tab="All" key="ALL" onTabScroll="right">
+              <List
+                className="notification"
+                pagination={{
+                  showSizeChanger: true,
+                  pageSizeOptions: ['8', '20', '50', '100'],
+                  defaultPageSize: 8,
+                }}
+                dataSource={notify}
+                renderItem={(item) => (
+                  <>
+                    <List.Item style={{ padding: '0.4vw 0' }}>
+                      <div className="item">
+                        <div className="title">{item?.title}</div>
+                        <div className="content">{item?.content}</div>
+                        <div className="time">{moment(item?.time).format('LLL')}</div>
+                      </div>
+                    </List.Item>
+                  </>
+                )}
+              />
+            </TabPane>
+            <TabPane className="notificaionTab" tab="Unread" key="UNREAD" onTabScroll="right">
+              <List
+                className="notification"
+                pagination={{
+                  showSizeChanger: true,
+                  pageSizeOptions: ['8', '20', '50', '100'],
+                  defaultPageSize: 8,
+                }}
+                dataSource={unread}
+                renderItem={(item) => (
+                  <>
+                    <List.Item style={{ padding: '0.4vw 0' }}>
+                      <div className="item">
+                        <div className="title">{item?.title}</div>
+                        <div className="content">{item?.content}</div>
+                        <div className="time">{moment(item?.time).format('LLL')}</div>
+                      </div>
+                    </List.Item>
+                  </>
+                )}
+              />
+            </TabPane>
+            <TabPane className="notificaionTab" tab="Read" key="READ" onTabScroll="right">
+              <List
+                className="notification"
+                pagination={{
+                  showSizeChanger: true,
+                  pageSizeOptions: ['8', '20', '50', '100'],
+                  defaultPageSize: 8,
+                }}
+                dataSource={seen}
+                renderItem={(item) => (
+                  <>
+                    <List.Item style={{ padding: '0.4vw 0' }}>
+                      <div className="item">
+                        <div className="title">{item?.title}</div>
+                        <div className="content">{item?.content}</div>
+                        <div className="time">{moment(item?.time).format('LLL')}</div>
+                      </div>
+                    </List.Item>
+                  </>
+                )}
+              />
+            </TabPane>
+          </Tabs>
         </div>
       </div>
     </div>
