@@ -11,8 +11,10 @@ import ProductPage from './pages/product/ProductPage'
 import BestSellerPage from './pages/BestSellerPage'
 import NewArrivalPage from './pages/NewArrivalPage'
 import FavoritePage from './pages/FavoritePage'
+import ViewedHistoryPage from './pages/ViewedHistoryPage'
 import OnSalePage from './pages/OnSalePage'
 import RecommendProductPage from './pages/RecommendProductPage'
+import ViewedProductPage from './pages/ViewedProductPage'
 import ProfilePage from './pages/profile/ProfilePage'
 import AddressPage from './pages/profile/AddressPage'
 import OrderHistoryPage from './pages/orderHistory/OrderHistoryPage'
@@ -54,8 +56,10 @@ function App() {
             <Route path="bestSeller" element={<BestSellerPage />} />
             <Route path="newArrival" element={<NewArrivalPage />} />
             <Route path="favoriteProduct" element={<FavoritePage />} />
+            <Route path="viewedProduct" element={<ViewedHistoryPage />} />
             <Route path="onSale" element={<OnSalePage />} />
             <Route path="recommend" element={<RecommendProductPage />} />
+            <Route path="viewed" element={<ViewedProductPage />} />
             <Route path="cart" element={<CartPage />} />
             <Route path="checkout" element={<CheckoutPage />} />
             <Route path="profile" element={<ProfilePage />} />

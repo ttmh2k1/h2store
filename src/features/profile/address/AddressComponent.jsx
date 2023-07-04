@@ -308,6 +308,16 @@ const AddressComponent = () => {
           >
             Favorite product
           </div>
+          <div
+            className="viewedProduct"
+            onClick={() =>
+              navigate({
+                pathname: '/viewedProduct',
+              })
+            }
+          >
+            Viewed product
+          </div>
         </div>
       </div>
       <div className="addressContent">

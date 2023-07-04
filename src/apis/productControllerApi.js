@@ -42,3 +42,11 @@ export function getRecommendProduct(req) {
   const queries = combineQueriesUrl({ ...req })
   return api.GET(`${SERVICE}/api/product/recommend${queries}`)
 }
+
+export function getViewedProduct(req) {
+  const queries = combineQueriesUrl({ ...req })
+  if (queries) {
+    return api.GET(`${SERVICE}/api/view-history${queries}`)
+  }
+  return api.GET(`${SERVICE}/api/view-history`)
+}

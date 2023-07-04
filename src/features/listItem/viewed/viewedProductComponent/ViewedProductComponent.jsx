@@ -1,47 +1,46 @@
-import './favoriteStyle.scss'
-import { Button, Image, List, Tooltip } from 'antd'
+import './viewedProductStyle.scss'
+import { Image, List, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
-import { formatMoney } from '../../../utils/functionHelper'
 import { useNavigate } from 'react-router-dom'
-import { deleteFavoriteProduct, getFavoriteProduct } from '../../../apis/favorite'
-import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
 import { AiOutlineEdit } from 'react-icons/ai'
 import Avatar from 'react-avatar'
+import { formatMoney } from '../../../../utils/functionHelper'
+import { getViewedProduct } from '../../../../apis/productControllerApi'
 
-const FavoriteComponent = () => {
-  const style = {
-    position: 'top-right',
-    autoClose: 1000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: false,
-    progress: undefined,
-    theme: 'light',
-  }
+const ViewedProductComponent = () => {
   const user = useSelector((state) => state?.user?.user)
-  const [favorite, setFavorite] = useState([])
   const [state, setState] = useState(false)
+  const [viewedProduct, setViewedProduct] = useState([])
+  const [pageSize, setPageSize] = useState(100)
   const navigate = useNavigate()
 
   useEffect(() => {
-    const handleGetFavorite = async () => {
-      const resp = await getFavoriteProduct({ size: 100 })
-      const data = resp?.data?.data
-      setFavorite(data)
+    const handleGetPage = async () => {
+      const resp = await getViewedProduct({
+        sessionId: localStorage?.getItem('sessionId'),
+      })
+      const data = resp?.data
+      setPageSize(data?.totalElement)
     }
-    handleGetFavorite()
-  }, [favorite])
+    handleGetPage()
+  }, [])
 
-  const handleDeleteFavorite = async (id) => {
-    await deleteFavoriteProduct(id)
-    toast.success('Product removed from favorite products', style)
-  }
+  useEffect(() => {
+    const handleGetViewedProduct = async () => {
+      const resp = await getViewedProduct({
+        sessionId: localStorage?.getItem('sessionId'),
+        size: pageSize,
+      })
+      const data = resp?.data?.data
+      setViewedProduct(data)
+    }
+    handleGetViewedProduct()
+  }, [])
 
   return (
-    <div className="favorite">
-      <div className="favoriteMenu">
+    <div className="viewed">
+      <div className="viewedMenu">
         <div className="avatar">
           {user?.avatar !== null ? (
             <Image className="avatarImg" src={user?.avatar} alt="" />
@@ -120,7 +119,6 @@ const FavoriteComponent = () => {
           </div>
           <div
             className="favoriteProduct"
-            style={{ fontWeight: 'bold' }}
             onClick={() =>
               navigate({
                 pathname: '/favoriteProduct',
@@ -131,6 +129,7 @@ const FavoriteComponent = () => {
           </div>
           <div
             className="viewedProduct"
+            style={{ fontWeight: 'bold' }}
             onClick={() =>
               navigate({
                 pathname: '/viewedProduct',
@@ -141,10 +140,10 @@ const FavoriteComponent = () => {
           </div>
         </div>
       </div>
-      <div className="favoriteContent">
-        <div className="title">FAVORITE PRODUCTS</div>
+      <div className="viewedContent">
+        <div className="title">VIEWED PRODUCTS</div>
         <List
-          className="listFavorite"
+          className="listViewed"
           grid={{
             gutter: 12,
             xs: 1,
@@ -161,31 +160,23 @@ const FavoriteComponent = () => {
             pageSizeOptions: ['8', '20', '50', '100'],
             defaultPageSize: 8,
           }}
-          dataSource={favorite}
+          dataSource={viewedProduct}
           renderItem={(item) => (
-            <div className="itemFavorite">
-              <List.Item className="listItem" key={item.product?.name}>
-                <Tooltip title={item?.product?.name} color="#decdbb">
+            <div className="itemViewed">
+              <List.Item className="listItem" key={item?.name}>
+                <Tooltip title={item?.name} color="#decdbb">
                   <img
-                    className="imageFavorite"
-                    src={item?.product?.avatar}
+                    className="imageViewed"
+                    src={item?.avatar}
                     alt=""
-                    onClick={() => navigate({ pathname: '/product/' + item?.product?.id })}
+                    onClick={() => navigate({ pathname: '/product/' + item?.id })}
                   />
                   <div
-                    className="textFavorite"
-                    onClick={() => navigate({ pathname: '/product/' + item?.product?.id })}
+                    className="textViewed"
+                    onClick={() => navigate({ pathname: '/product/' + item?.id })}
                   >
-                    <div className="name">{item?.product?.name}</div>
-                    <div className="price">Price: {formatMoney(item?.product?.minPrice)}</div>
-                  </div>
-                  <div className="button">
-                    <Button
-                      className="delete"
-                      onClick={() => handleDeleteFavorite(item?.product?.id)}
-                    >
-                      Delete product
-                    </Button>
+                    <div className="name">{item?.name}</div>
+                    <div className="price">Price: {formatMoney(item?.minPrice)}</div>
                   </div>
                 </Tooltip>
               </List.Item>
@@ -197,4 +188,4 @@ const FavoriteComponent = () => {
   )
 }
 
-export default FavoriteComponent
+export default ViewedProductComponent

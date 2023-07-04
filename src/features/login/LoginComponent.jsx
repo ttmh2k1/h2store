@@ -3,7 +3,7 @@ import { login as loginAction } from '../../actionCreators/UserCreator'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import './loginStyle.scss'
 import { LoginService } from '../../apis/loginApi'
-import { Button } from 'antd'
+import { Button, Input } from 'antd'
 import { AiFillGoogleCircle } from 'react-icons/ai'
 import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
@@ -80,7 +80,7 @@ const LoginComponent = () => {
             <label className="label" htmlFor="password">
               Password
             </label>
-            <input type="password" className="input" id="password" />
+            <Input.Password type="password" className="input" id="password" />
           </div>
         </div>
         <div className="rememberPw">

@@ -5,15 +5,28 @@ import { getNotification } from '../../apis/notification'
 
 const NotificationComponent = () => {
   const [notify, setNotify] = useState([])
+  const [pageSize, setPageSize] = useState([])
+  const [read, setRead] = useState([])
+  const [notSeen, setNotSeen] = useState([])
+
+  useEffect(() => {
+    const handleGetPage = async () => {
+      const resp = await getNotification()
+      const data = resp?.data
+      setPageSize(data?.totalElement)
+    }
+    handleGetPage()
+  }, [])
 
   useEffect(() => {
     const handleGetNotification = async () => {
-      const resp = await getNotification({ size: 100 })
+      const resp = await getNotification({ size: pageSize, sortByOldest: false })
       const data = resp?.data?.data
       setNotify(data)
+      setRead(data?.filter((item) => item?.seen === 'true'))
     }
     handleGetNotification()
-  }, [notify])
+  }, [])
 
   return (
     <div className="notificaionPage">

@@ -1,12 +1,14 @@
 .top-to-btm {
   position: relative;
 }
+
 .icon-position {
   position: fixed;
   bottom: 2vw;
-  right: 2vw;
+  left: 2vw;
   z-index: 1;
 }
+
 .icon-style {
   background-color: #ab9b92;
   border: 0.2vw solid #e4e7e8;
@@ -23,6 +25,7 @@
     border: 0.4vw solid #e4e7e8;
   }
 }
+
 .icon-style:hover {
   animation: none;
   background: #e4e7e8;
