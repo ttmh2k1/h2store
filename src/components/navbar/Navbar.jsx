@@ -84,14 +84,25 @@ const Navbar = () => {
           {account ? (
             <>
               <div className="account">
-                <Avatar
-                  alt=""
-                  className="avatar"
-                  name={account?.fullname}
-                  onClick={() => {
-                    setState(!state)
-                  }}
-                />
+                {account?.avatar ? (
+                  <img
+                    alt=""
+                    className="avatar"
+                    src={account?.avatar}
+                    onClick={() => {
+                      setState(!state)
+                    }}
+                  />
+                ) : (
+                  <Avatar
+                    alt=""
+                    className="avatar"
+                    name={account?.fullname}
+                    onClick={() => {
+                      setState(!state)
+                    }}
+                  />
+                )}
                 <div className={state ? 'userMenu' : 'userMenu-hidden'}>
                   <div className="listMenu">
                     <ul className="menuItem">

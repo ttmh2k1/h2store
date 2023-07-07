@@ -197,7 +197,14 @@ const OrderHistoryComponent = () => {
                       </div>
                       <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
                       <div className="action">
-                        <Button className="commentButton">Comment</Button>
+                        {item?.status === 'DELIVERED' && (
+                          <Button
+                            className="commentButton"
+                            onClick={() => navigate({ pathname: '/order/review/' + item?.id })}
+                          >
+                            Comment
+                          </Button>
+                        )}
                         <Button
                           className="detailButton"
                           onClick={() => navigate({ pathname: '/order/' + item?.id })}
@@ -264,7 +271,6 @@ const OrderHistoryComponent = () => {
                       </div>
                       <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
                       <div className="action">
-                        <Button className="commentButton">Comment</Button>
                         <Button
                           className="detailButton"
                           onClick={() => navigate({ pathname: '/order/' + item?.id })}
@@ -331,7 +337,6 @@ const OrderHistoryComponent = () => {
                       </div>
                       <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
                       <div className="action">
-                        <Button className="commentButton">Comment</Button>
                         <Button
                           className="detailButton"
                           onClick={() => navigate({ pathname: '/order/' + item?.id })}
@@ -398,7 +403,6 @@ const OrderHistoryComponent = () => {
                       </div>
                       <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
                       <div className="action">
-                        <Button className="commentButton">Comment</Button>
                         <Button
                           className="detailButton"
                           onClick={() => navigate({ pathname: '/order/' + item?.id })}
@@ -465,7 +469,6 @@ const OrderHistoryComponent = () => {
                       </div>
                       <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
                       <div className="action">
-                        <Button className="commentButton">Comment</Button>
                         <Button
                           className="detailButton"
                           onClick={() => navigate({ pathname: '/order/' + item?.id })}
@@ -532,7 +535,12 @@ const OrderHistoryComponent = () => {
                       </div>
                       <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
                       <div className="action">
-                        <Button className="commentButton">Comment</Button>
+                        <Button
+                          className="commentButton"
+                          onClick={() => navigate({ pathname: '/order/review/' + item?.id })}
+                        >
+                          Comment
+                        </Button>
                         <Button
                           className="detailButton"
                           onClick={() => navigate({ pathname: '/order/' + item?.id })}
@@ -599,7 +607,12 @@ const OrderHistoryComponent = () => {
                       </div>
                       <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
                       <div className="action">
-                        <Button className="commentButton">Comment</Button>
+                        <Button
+                          className="commentButton"
+                          onClick={() => navigate({ pathname: '/order/review/' + item?.id })}
+                        >
+                          Comment
+                        </Button>{' '}
                         <Button
                           className="detailButton"
                           onClick={() => navigate({ pathname: '/order/' + item?.id })}
@@ -666,7 +679,6 @@ const OrderHistoryComponent = () => {
                       </div>
                       <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
                       <div className="action">
-                        <Button className="commentButton">Comment</Button>
                         <Button
                           className="detailButton"
                           onClick={() => navigate({ pathname: '/order/' + item?.id })}

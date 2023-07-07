@@ -19,6 +19,7 @@ import ProfilePage from './pages/profile/ProfilePage'
 import AddressPage from './pages/profile/AddressPage'
 import OrderHistoryPage from './pages/orderHistory/OrderHistoryPage'
 import OrderDetailPage from './pages/orderHistory/OrderDetailPage'
+import ReviewProductPage from './pages/orderHistory/ReviewProductPage'
 import ChangePasswordPage from './pages/profile/ChangePasswordPage'
 import NotificationPage from './pages/notification/NotificationPage'
 import CartPage from './pages/cart/CartPage'
@@ -66,6 +67,9 @@ function App() {
             <Route path="address" element={<AddressPage />} />
             <Route path="orderHistory" element={<OrderHistoryPage />} />
             <Route path="order">
+              <Route path="review">
+                <Route path=":orderId" element={<ReviewProductPage />} />
+              </Route>
               <Route path=":orderId" element={<OrderDetailPage />} />
             </Route>
             <Route path="changePassword" element={<ChangePasswordPage />} />
