@@ -7,7 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import { Autoplay, Navigation, Pagination } from 'swiper'
-import { Button, Col, Image, InputNumber, Radio, Row, Tooltip } from 'antd'
+import { Button, Col, Divider, Image, InputNumber, List, Radio, Row, Tabs, Tooltip } from 'antd'
 import { formatMoney, formatNumber } from '../../utils/functionHelper'
 import { toast } from 'react-toastify'
 import { Link, useNavigate } from 'react-router-dom'
@@ -15,6 +15,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { updateCart, updateCount } from '../../actionCreators/CartCreator'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import { addFavoriteProduct, deleteFavoriteProduct, getFavoriteProduct } from '../../apis/favorite'
+import TabPane from 'antd/es/tabs/TabPane'
+import moment from 'moment'
+import { getReviewProduct } from '../../apis/reviewControllerApi'
+import Avatar from 'react-avatar'
 
 const ProductComponent = (props) => {
   const user = useSelector((state) => state?.user?.user)
@@ -38,6 +42,8 @@ const ProductComponent = (props) => {
   const [quantity, setQuantity] = useState(1)
   const [recommendProduct, setRecommendProduct] = useState([])
   const [viewedProduct, setViewedProduct] = useState([])
+  const [review, setReview] = useState([])
+  const [pageSize, setPageSize] = useState(1000)
   const [state, setState] = useState({
     key: -1,
     id: -1,
@@ -111,6 +117,24 @@ const ProductComponent = (props) => {
       handleGetFavorite()
     }
   }, [props?.id])
+
+  useEffect(() => {
+    const handleGetPage = async () => {
+      const resp = await getReviewProduct(props.id)
+      const data = resp?.data
+      setPageSize(data?.totalElement)
+    }
+    handleGetPage()
+  }, [props.id])
+
+  useEffect(() => {
+    const handleGetReview = async () => {
+      const resp = await getReviewProduct(props?.id, { size: pageSize, sortByOldest: false })
+      const data = resp?.data?.data
+      setReview(data)
+    }
+    handleGetReview()
+  }, [props?.id, pageSize])
 
   const getCountCart = async () => {
     if (user) {
@@ -379,10 +403,419 @@ const ProductComponent = (props) => {
           </div>
         </div>
       </div>
+
       <div className="productDescription">
         <div className="title">Description</div>
         <div className="description"> {product?.description}</div>
       </div>
+
+      <div className="productReviews">
+        <div className="title">Review product</div>
+        <div className="productReviewsContent">
+          <Tabs
+            className="tab"
+            defaultActiveKey="ALL"
+            style={{
+              display: 'flex',
+              width: '94%',
+              justifyContent: 'space-between',
+              margin: '0 2vw',
+            }}
+          >
+            <TabPane className="reviewTab" tab="All" key="ALL" onTabScroll="right">
+              <List
+                className="review"
+                pagination={{
+                  showSizeChanger: true,
+                  pageSizeOptions: ['5', '10', '20', '50'],
+                  defaultPageSize: 5,
+                }}
+                dataSource={review}
+                renderItem={(item) => (
+                  <>
+                    <List.Item
+                      style={{
+                        padding: '0.4vw 0',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        alignContent: 'flex-start',
+                      }}
+                    >
+                      <div className="userInfo">
+                        {item?.buyerAvatar ? (
+                          <img className="avatar" src={item?.buyerAvatar} alt="" />
+                        ) : (
+                          <Avatar className="avatar" name={item?.buyerUsername} alt="" />
+                        )}
+                        <div className="info">
+                          <div className="name">{item?.buyerUsername}</div>
+                          <div className="rating">
+                            {item?.point}&#160; <i data-star={item?.point}></i>
+                          </div>
+                          <div className="time">
+                            {moment(item?.time).format('LLL')}
+                            <Divider type="vertical" style={{ height: '1.2vw' }} />
+                            Variation:
+                            <div className="variation">{item?.productVariation?.name}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="content">{item?.content}</div>
+                      <div className="listImage">
+                        {item?.images?.length > 0 &&
+                          item?.images.map((img) => {
+                            return (
+                              <div key={img} className="image">
+                                <Image src={img?.url} className="img" alt="" />
+                              </div>
+                            )
+                          })}
+                      </div>
+                    </List.Item>
+                  </>
+                )}
+              />
+            </TabPane>
+            <TabPane className="reviewTab" tab="5 stars" key="5stars" onTabScroll="right">
+              <List
+                className="review"
+                pagination={{
+                  showSizeChanger: true,
+                  pageSizeOptions: ['5', '10', '20', '50'],
+                  defaultPageSize: 5,
+                }}
+                dataSource={review?.filter((item) => item?.point === 5)}
+                renderItem={(item) => (
+                  <>
+                    <List.Item
+                      style={{
+                        padding: '0.4vw 0',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        alignContent: 'flex-start',
+                      }}
+                    >
+                      <div className="userInfo">
+                        {item?.buyerAvatar ? (
+                          <img className="avatar" src={item?.buyerAvatar} alt="" />
+                        ) : (
+                          <Avatar className="avatar" name={item?.buyerUsername} alt="" />
+                        )}
+                        <div className="info">
+                          <div className="name">{item?.buyerUsername}</div>
+                          <div className="rating">
+                            {item?.point}&#160; <i data-star={item?.point}></i>
+                          </div>
+                          <div className="time">
+                            {moment(item?.time).format('LLL')}
+                            <Divider type="vertical" style={{ height: '1.2vw' }} />
+                            Variation:
+                            <div className="variation">{item?.productVariation?.name}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="content">{item?.content}</div>
+                      <div className="listImage">
+                        {item?.images?.length > 0 &&
+                          item?.images.map((img) => {
+                            return (
+                              <div key={img} className="image">
+                                <Image src={img?.url} className="img" alt="" />
+                              </div>
+                            )
+                          })}
+                      </div>
+                    </List.Item>
+                  </>
+                )}
+              />
+            </TabPane>
+            <TabPane className="reviewTab" tab="4 stars" key="4stars" onTabScroll="right">
+              <List
+                className="review"
+                pagination={{
+                  showSizeChanger: true,
+                  pageSizeOptions: ['5', '10', '20', '50'],
+                  defaultPageSize: 5,
+                }}
+                dataSource={review?.filter((item) => item?.point === 4)}
+                renderItem={(item) => (
+                  <>
+                    <List.Item
+                      style={{
+                        padding: '0.4vw 0',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        alignContent: 'flex-start',
+                      }}
+                    >
+                      <div className="userInfo">
+                        {item?.buyerAvatar ? (
+                          <img className="avatar" src={item?.buyerAvatar} alt="" />
+                        ) : (
+                          <Avatar className="avatar" name={item?.buyerUsername} alt="" />
+                        )}
+                        <div className="info">
+                          <div className="name">{item?.buyerUsername}</div>
+                          <div className="rating">
+                            {item?.point}&#160; <i data-star={item?.point}></i>
+                          </div>
+                          <div className="time">
+                            {moment(item?.time).format('LLL')}
+                            <Divider type="vertical" style={{ height: '1.2vw' }} />
+                            Variation:
+                            <div className="variation">{item?.productVariation?.name}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="content">{item?.content}</div>
+                      <div className="listImage">
+                        {item?.images?.length > 0 &&
+                          item?.images.map((img) => {
+                            return (
+                              <div key={img} className="image">
+                                <Image src={img?.url} className="img" alt="" />
+                              </div>
+                            )
+                          })}
+                      </div>
+                    </List.Item>
+                  </>
+                )}
+              />
+            </TabPane>
+            <TabPane className="reviewTab" tab="3 stars" key="3stars" onTabScroll="right">
+              <List
+                className="review"
+                pagination={{
+                  showSizeChanger: true,
+                  pageSizeOptions: ['5', '10', '20', '50'],
+                  defaultPageSize: 5,
+                }}
+                dataSource={review?.filter((item) => item?.point === 3)}
+                renderItem={(item) => (
+                  <>
+                    <List.Item
+                      style={{
+                        padding: '0.4vw 0',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        alignContent: 'flex-start',
+                      }}
+                    >
+                      <div className="userInfo">
+                        {item?.buyerAvatar ? (
+                          <img className="avatar" src={item?.buyerAvatar} alt="" />
+                        ) : (
+                          <Avatar className="avatar" name={item?.buyerUsername} alt="" />
+                        )}
+                        <div className="info">
+                          <div className="name">{item?.buyerUsername}</div>
+                          <div className="rating">
+                            {item?.point}&#160; <i data-star={item?.point}></i>
+                          </div>
+                          <div className="time">
+                            {moment(item?.time).format('LLL')}
+                            <Divider type="vertical" style={{ height: '1.2vw' }} />
+                            Variation:
+                            <div className="variation">{item?.productVariation?.name}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="content">{item?.content}</div>
+                      <div className="listImage">
+                        {item?.images?.length > 0 &&
+                          item?.images.map((img) => {
+                            return (
+                              <div key={img} className="image">
+                                <Image src={img?.url} className="img" alt="" />
+                              </div>
+                            )
+                          })}
+                      </div>
+                    </List.Item>
+                  </>
+                )}
+              />
+            </TabPane>
+            <TabPane className="reviewTab" tab="2 stars" key="2stars" onTabScroll="right">
+              <List
+                className="review"
+                pagination={{
+                  showSizeChanger: true,
+                  pageSizeOptions: ['5', '10', '20', '50'],
+                  defaultPageSize: 5,
+                }}
+                dataSource={review?.filter((item) => item?.point === 2)}
+                renderItem={(item) => (
+                  <>
+                    <List.Item
+                      style={{
+                        padding: '0.4vw 0',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        alignContent: 'flex-start',
+                      }}
+                    >
+                      <div className="userInfo">
+                        {item?.buyerAvatar ? (
+                          <img className="avatar" src={item?.buyerAvatar} alt="" />
+                        ) : (
+                          <Avatar className="avatar" name={item?.buyerUsername} alt="" />
+                        )}
+                        <div className="info">
+                          <div className="name">{item?.buyerUsername}</div>
+                          <div className="rating">
+                            {item?.point}&#160; <i data-star={item?.point}></i>
+                          </div>
+                          <div className="time">
+                            {moment(item?.time).format('LLL')}
+                            <Divider type="vertical" style={{ height: '1.2vw' }} />
+                            Variation:
+                            <div className="variation">{item?.productVariation?.name}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="content">{item?.content}</div>
+                      <div className="listImage">
+                        {item?.images?.length > 0 &&
+                          item?.images.map((img) => {
+                            return (
+                              <div key={img} className="image">
+                                <Image src={img?.url} className="img" alt="" />
+                              </div>
+                            )
+                          })}
+                      </div>
+                    </List.Item>
+                  </>
+                )}
+              />
+            </TabPane>
+            <TabPane className="reviewTab" tab="1 star" key="1star" onTabScroll="right">
+              <List
+                className="review"
+                pagination={{
+                  showSizeChanger: true,
+                  pageSizeOptions: ['5', '10', '20', '50'],
+                  defaultPageSize: 5,
+                }}
+                dataSource={review?.filter((item) => item?.point === 1)}
+                renderItem={(item) => (
+                  <>
+                    <List.Item
+                      style={{
+                        padding: '0.4vw 0',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        alignContent: 'flex-start',
+                      }}
+                    >
+                      <div className="userInfo">
+                        {item?.buyerAvatar ? (
+                          <img className="avatar" src={item?.buyerAvatar} alt="" />
+                        ) : (
+                          <Avatar className="avatar" name={item?.buyerUsername} alt="" />
+                        )}
+                        <div className="info">
+                          <div className="name">{item?.buyerUsername}</div>
+                          <div className="rating">
+                            {item?.point}&#160; <i data-star={item?.point}></i>
+                          </div>
+                          <div className="time">
+                            {moment(item?.time).format('LLL')}
+                            <Divider type="vertical" style={{ height: '1.2vw' }} />
+                            Variation:
+                            <div className="variation">{item?.productVariation?.name}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="content">{item?.content}</div>
+                      <div className="listImage">
+                        {item?.images?.length > 0 &&
+                          item?.images.map((img) => {
+                            return (
+                              <div key={img} className="image">
+                                <Image src={img?.url} className="img" alt="" />
+                              </div>
+                            )
+                          })}
+                      </div>
+                    </List.Item>
+                  </>
+                )}
+              />
+            </TabPane>
+            <TabPane
+              className="reviewTab"
+              tab="Comment with images"
+              key="cmtImg"
+              onTabScroll="right"
+            >
+              <List
+                className="review"
+                pagination={{
+                  showSizeChanger: true,
+                  pageSizeOptions: ['5', '10', '20', '50'],
+                  defaultPageSize: 5,
+                }}
+                dataSource={review?.filter((item) => item?.images?.length > 0)}
+                renderItem={(item) => (
+                  <>
+                    <List.Item
+                      style={{
+                        padding: '0.4vw 0',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        alignContent: 'flex-start',
+                      }}
+                    >
+                      <div className="userInfo">
+                        {item?.buyerAvatar ? (
+                          <img className="avatar" src={item?.buyerAvatar} alt="" />
+                        ) : (
+                          <Avatar className="avatar" name={item?.buyerUsername} alt="" />
+                        )}
+                        <div className="info">
+                          <div className="name">{item?.buyerUsername}</div>
+                          <div className="rating">
+                            {item?.point}&#160; <i data-star={item?.point}></i>
+                          </div>
+                          <div className="time">
+                            {moment(item?.time).format('LLL')}
+                            <Divider type="vertical" style={{ height: '1.2vw' }} />
+                            Variation:
+                            <div className="variation">{item?.productVariation?.name}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="content">{item?.content}</div>
+                      <div className="listImage">
+                        {item?.images?.length > 0 &&
+                          item?.images.map((img) => {
+                            return (
+                              <div key={img} className="image">
+                                <Image src={img?.url} className="img" alt="" />
+                              </div>
+                            )
+                          })}
+                      </div>
+                    </List.Item>
+                  </>
+                )}
+              />
+            </TabPane>
+          </Tabs>
+        </div>
+      </div>
+
       <div className="relativeProduct">
         <div className="title">
           Relative products <Link to={'/category/' + product?.category?.id}>See more</Link>
