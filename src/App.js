@@ -3,6 +3,7 @@ import './App.css'
 import Navbar from './components/navbar/Navbar'
 import Slide from './components/slide/Slide'
 import MenuNav from './components/menuNav/MenuNav'
+import ChatBot from './components/chatBot/ChatBot'
 import LoginPage from './pages/login/LoginPage'
 import RegisterPage from './pages/register/RegisterPage'
 import Home from './pages/home'
@@ -41,6 +42,7 @@ function App() {
           <Navbar />
           {/* <Slide /> */}
           <MenuNav />
+          <ChatBot />
           <ScrollToTop />
         </div>
         <Routes>
