@@ -6,9 +6,10 @@ import Avatar from 'react-avatar'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { getOrderHistory } from '../../apis/orderApi'
+import { cancelOrder, getOrderHistory } from '../../apis/orderApi'
 import moment from 'moment'
 import { formatMoney } from '../../utils/functionHelper'
+import { toast } from 'react-toastify'
 
 const OrderHistoryComponent = () => {
   const user = useSelector((state) => state?.user?.user)
@@ -16,6 +17,17 @@ const OrderHistoryComponent = () => {
   const [listOrder, setListOrder] = useState()
   const [pageSize, setPageSize] = useState(100)
   const navigate = useNavigate()
+
+  const style = {
+    position: 'top-right',
+    autoClose: 1000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: false,
+    progress: undefined,
+    theme: 'light',
+  }
 
   useEffect(() => {
     const handleGetPage = async () => {
@@ -34,6 +46,18 @@ const OrderHistoryComponent = () => {
     }
     handleGetCategory()
   }, [pageSize])
+
+  const handleCancelOrder = async (id) => {
+    const result = await cancelOrder(id)
+    if (result) {
+      toast.success('Your order was canceled!', style)
+      setTimeout(() => {
+        window.location.reload()
+      }, 500)
+    } else {
+      toast.error("Can't cancel your order", style)
+    }
+  }
 
   return (
     <div className="orderHistoryPage">
@@ -103,6 +127,16 @@ const OrderHistoryComponent = () => {
                 Change password
               </List.Item>
             </List>
+          </div>
+          <div
+            className="voucher"
+            onClick={() =>
+              navigate({
+                pathname: '/voucher',
+              })
+            }
+          >
+            Voucher
           </div>
           <div
             className="order"
@@ -197,6 +231,16 @@ const OrderHistoryComponent = () => {
                       </div>
                       <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
                       <div className="action">
+                        {(item?.status === 'WAIT_FOR_PAYMENT' ||
+                          item?.status === 'WAIT_FOR_CONFIRM' ||
+                          item?.status === 'WAIT_FOR_SEND') && (
+                          <Button
+                            className="cancelButton"
+                            onClick={() => handleCancelOrder(item?.id)}
+                          >
+                            Cancel
+                          </Button>
+                        )}
                         {item?.status === 'DELIVERED' && (
                           <Button
                             className="commentButton"
@@ -271,6 +315,14 @@ const OrderHistoryComponent = () => {
                       </div>
                       <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
                       <div className="action">
+                        {item?.status === 'WAIT_FOR_PAYMENT' && (
+                          <Button
+                            className="cancelButton"
+                            onClick={() => handleCancelOrder(item?.id)}
+                          >
+                            Cancel
+                          </Button>
+                        )}
                         <Button
                           className="detailButton"
                           onClick={() => navigate({ pathname: '/order/' + item?.id })}
@@ -337,6 +389,14 @@ const OrderHistoryComponent = () => {
                       </div>
                       <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
                       <div className="action">
+                        {item?.status === 'WAIT_FOR_CONFIRM' && (
+                          <Button
+                            className="cancelButton"
+                            onClick={() => handleCancelOrder(item?.id)}
+                          >
+                            Cancel
+                          </Button>
+                        )}
                         <Button
                           className="detailButton"
                           onClick={() => navigate({ pathname: '/order/' + item?.id })}
@@ -403,6 +463,14 @@ const OrderHistoryComponent = () => {
                       </div>
                       <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
                       <div className="action">
+                        {item?.status === 'WAIT_FOR_SEND' && (
+                          <Button
+                            className="cancelButton"
+                            onClick={() => handleCancelOrder(item?.id)}
+                          >
+                            Cancel
+                          </Button>
+                        )}
                         <Button
                           className="detailButton"
                           onClick={() => navigate({ pathname: '/order/' + item?.id })}
@@ -611,8 +679,8 @@ const OrderHistoryComponent = () => {
                           className="commentButton"
                           onClick={() => navigate({ pathname: '/order/review/' + item?.id })}
                         >
-                          Comment
-                        </Button>{' '}
+                          Feedback
+                        </Button>
                         <Button
                           className="detailButton"
                           onClick={() => navigate({ pathname: '/order/' + item?.id })}

@@ -25,6 +25,8 @@ import { AiFillEnvironment, AiOutlinePlus } from 'react-icons/ai'
 import { IoTicketOutline } from 'react-icons/io5'
 import { update, update as updateUser } from '../../../actionCreators/UserCreator'
 import { updateAddress } from '../../../actionCreators/UserCreator'
+import { getListVoucher } from '../../../apis/voucherApi'
+import moment from 'moment'
 
 const CheckoutComponent = () => {
   const style = {
@@ -67,6 +69,10 @@ const CheckoutComponent = () => {
   const [coupon, setCoupon] = useState('')
   const [listTotalPrice, setListTotalPrice] = useState()
   const [totalPrice, setTotalPrice] = useState()
+  const [voucher, setVoucher] = useState([])
+  const [pageSize, setPageSize] = useState(100)
+  const [chooseVoucher, setChooseVoucher] = useState('')
+  const [modalCoupon, setModalCoupon] = useState(false)
 
   const shipments = [
     {
@@ -204,27 +210,6 @@ const CheckoutComponent = () => {
     } else toast.error('Update address failed!', style)
   }
 
-  // const handleDefaultAddress = async (address) => {
-  //   const result = await updateAddressInfo(address?.id, {
-  //     idAddressWard: address?.addressWard.id,
-  //     addressDetail: address?.addressDetail,
-  //     receiverName: address?.receiverName,
-  //     receiverPhone: address?.receiverPhone,
-  //     isDefault: true,
-  //   })
-  //   if (result) {
-  //     toast.success('Set default address successful!', style)
-  //     dispatch(
-  //       updateUser({
-  //         ...user,
-  //         defaultAddress: listAddress?.find((item) => item?.id === address?.id),
-  //       }),
-  //     )
-  //   } else {
-  //     toast.error('Set default address failed!', style)
-  //   }
-  // }
-
   const changeAddress = (index) => {
     setChooseAddress(index)
     const tmp = listAddress?.filter((item) => item?.id === index)[0]
@@ -233,17 +218,24 @@ const CheckoutComponent = () => {
     }
   }
 
+  const changeVoucher = (index) => {
+    setChooseVoucher(index)
+    const tmp = voucher?.filter((item) => item?.id === index)[0]
+    if (tmp) {
+      setCoupon(tmp)
+    }
+  }
+
   const handleOrder = async () => {
     const idProductVariation = cart?.map((item) => item?.productVariation?.id)
-    const result = await getOrderByCart({
-      note: note,
-      couponCode: coupon,
-      idDeliveryAddress: address?.id,
-      paymentMethod: payment,
-      idProductVariations: idProductVariation,
-    })
-
-    if (result) {
+    try {
+      const result = await getOrderByCart({
+        note: note,
+        couponCode: coupon?.code,
+        idDeliveryAddress: address?.id,
+        paymentMethod: payment,
+        idProductVariations: idProductVariation,
+      })
       if (result?.data?.data?.payUrl) {
         window.location.href = result?.data?.data?.payUrl
       } else {
@@ -252,20 +244,35 @@ const CheckoutComponent = () => {
         dispatch(updateCount(0))
         dispatch(updateCart([]))
       }
-    } else {
-      toast.error('Get order unsuccessful!', style)
+    } catch (error) {
+      toast.error(error?.response?.data?.message, style)
     }
+
+    // if (result?.data?.data?.success === true) {
+    //   if (result?.data?.data?.payUrl) {
+    //     window.location.href = result?.data?.data?.payUrl
+    //   } else {
+    //     toast.success('Get order successful!', style)
+    //     navigate('/orderHistory')
+    //     dispatch(updateCount(0))
+    //     dispatch(updateCart([]))
+    //   }
+    // } else if (result?.data?.data?.success === false) {
+    //   toast.error(result?.data?.data?.messge, style)
+    // }
   }
 
   useEffect(() => {
     const getListTotalPrice = async () => {
-      const resp = await getListCart({ size: cart?.length })
-      const data = resp?.data?.data
-      setListTotalPrice(
-        data?.map((item) => ({
-          total: item?.quantity * item?.productVariation?.priceAfterDiscount,
-        })),
-      )
+      if (cart?.length > 0) {
+        const resp = await getListCart({ size: cart?.length })
+        const data = resp?.data?.data
+        setListTotalPrice(
+          data?.map((item) => ({
+            total: item?.quantity * item?.productVariation?.priceAfterDiscount,
+          })),
+        )
+      }
     }
     getListTotalPrice()
   }, [cart])
@@ -356,6 +363,24 @@ const CheckoutComponent = () => {
     }
     handleGetFeeShip()
   }, [address])
+
+  useEffect(() => {
+    const handleGetPage = async () => {
+      const resp = await getListVoucher()
+      const data = resp?.data
+      setPageSize(data?.totalElement)
+    }
+    handleGetPage()
+  }, [])
+
+  useEffect(() => {
+    const handleGetFavorite = async () => {
+      const resp = await getListVoucher({ size: pageSize })
+      const data = resp?.data?.data
+      setVoucher(data)
+    }
+    handleGetFavorite()
+  }, [pageSize])
 
   const columns = useMemo(() => [
     {
@@ -495,7 +520,12 @@ const CheckoutComponent = () => {
           <div className="voucherTitle">
             <IoTicketOutline size="1.2vw" style={{ marginRight: '0.8vw' }} /> Voucher
           </div>
-          <div className="voucherCode">Choose voucher</div>
+          <div className="voucherInfo">
+            {coupon && <div className="voucherCode">{coupon?.code}</div>}
+            <div className="voucherButton" onClick={() => setModalCoupon(true)}>
+              Choose voucher
+            </div>
+          </div>
         </div>
 
         <div className="paymentMethod">
@@ -544,22 +574,111 @@ const CheckoutComponent = () => {
               </div>
             </div>
           )}
-          <div className="discountVoucher">
-            <div className="discountVoucherTitle"></div>
-            <div className="discountVoucherPrice"></div>
-          </div>
+
           <div className="shipPrice">
             <div className="shipPriceTitle">Shipping fee:</div>
             <div className="shipFee">{formatMoney(fee)}</div>
           </div>
+
+          {coupon && (
+            <div className="discountVoucher">
+              <div className="discountVoucherTitle">Voucher discount:</div>
+              <div className="discountVoucherPrice">
+                -{' '}
+                {coupon?.discountType === 'AMOUNT'
+                  ? coupon?.discountAmount <= coupon?.maxDiscount
+                    ? formatMoney(coupon?.discountAmount)
+                    : formatMoney(coupon?.maxDiscount)
+                  : (coupon?.discountAmount *
+                      (totalPrice -
+                        parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(0) +
+                        fee)) /
+                      100 <=
+                    coupon?.maxDiscount
+                  ? formatMoney(
+                      parseFloat(
+                        (coupon?.discountAmount *
+                          (totalPrice -
+                            parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(0) +
+                            fee)) /
+                          100,
+                      ).toFixed(0),
+                    )
+                  : formatMoney(coupon?.maxDiscount)}
+              </div>
+            </div>
+          )}
+
           <div className="totalPayment">
             <div className="totalPaymentTitle">Total payment:</div>
             <div className="totalPaymentPrice">
-              {formatMoney(
-                totalPrice -
-                  parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(0) +
-                  fee,
-              )}
+              {/* {chooseVoucher
+                ? coupon?.discountType === 'AMOUNT'
+                  ? formatMoney(
+                      totalPrice -
+                        parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(0) -
+                        coupon?.discountAmount +
+                        fee,
+                    )
+                  : formatMoney(
+                      totalPrice -
+                        parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(0) -
+                        (coupon?.discountAmount * totalPrice) / 100 +
+                        fee,
+                    )
+                : formatMoney(
+                    totalPrice -
+                      parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(0) +
+                      fee,
+                  )} */}
+              {chooseVoucher
+                ? coupon?.discountType === 'AMOUNT'
+                  ? coupon?.discountAmount <= coupon?.maxDiscount
+                    ? formatMoney(
+                        totalPrice -
+                          parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(0) +
+                          fee -
+                          coupon?.discountAmount,
+                      )
+                    : formatMoney(
+                        totalPrice -
+                          parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(0) +
+                          fee -
+                          coupon?.maxDiscount,
+                      )
+                  : (coupon?.discountAmount *
+                      (totalPrice -
+                        parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(0) +
+                        fee)) /
+                      100 >
+                    coupon?.maxDiscount
+                  ? formatMoney(
+                      totalPrice -
+                        parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(0) +
+                        fee -
+                        coupon?.discountAmount,
+                    )
+                  : formatMoney(
+                      parseFloat(
+                        totalPrice -
+                          parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(0) +
+                          fee -
+                          parseFloat(
+                            (coupon?.discountAmount *
+                              (totalPrice -
+                                parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(
+                                  0,
+                                ) +
+                                fee)) /
+                              100,
+                          ).toFixed(0),
+                      ).toFixed(0),
+                    )
+                : formatMoney(
+                    totalPrice -
+                      parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(0) +
+                      fee,
+                  )}
             </div>
           </div>
         </div>
@@ -1005,6 +1124,139 @@ const CheckoutComponent = () => {
         >
           Set default address
         </Checkbox>
+      </Modal>
+      <Modal
+        className="modal"
+        title="Voucher"
+        centered
+        open={modalCoupon}
+        onOk={() => {
+          setModalCoupon(false)
+        }}
+        onCancel={() => setModalCoupon(false)}
+        width={'36vw'}
+        destroyOnClose={true}
+      >
+        <Radio.Group
+          name="radiogroup"
+          value={chooseVoucher}
+          onChange={(e) => changeVoucher(e?.target?.value)}
+        >
+          <List
+            className="listAddress"
+            dataSource={voucher}
+            renderItem={(item) => (
+              <List.Item>
+                <Radio
+                  value={item?.id}
+                  style={{
+                    display: 'flex',
+                    width: '100%',
+                  }}
+                >
+                  <div
+                    className="item"
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      width: '100%',
+                      margin: '0 0.2vw',
+                    }}
+                  >
+                    <div
+                      className="main"
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        width: '30vw',
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-end',
+                        backgroundColor: '#decdbb1f',
+                        borderRadius: '0.4vw',
+                        margin: '1.2vw',
+                      }}
+                    >
+                      <div
+                        className="voucherInfo"
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          padding: '0.2vw 0',
+                        }}
+                      >
+                        <div
+                          className="code"
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            width: '10vw',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            fontSize: '1vw',
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          {item?.code}
+                        </div>
+                        <Divider type="vertical" style={{ height: '10vw' }} />
+                        <div
+                          className="info"
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                            margin: '0.4vw 0',
+                            fontSize: '0.6vw',
+                          }}
+                        >
+                          <div
+                            className="description"
+                            style={{
+                              color: '#77675a',
+                              fontSize: '0.8vw',
+                              fontWeight: 'bold',
+                            }}
+                          >
+                            {item?.description}
+                          </div>
+                          <div className="minOrderAmount">
+                            Minimum value: {formatMoney(item?.minOrderAmount)}
+                          </div>
+                          <div
+                            className="discount"
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                            }}
+                          >
+                            Discount:&nbsp;
+                            {item?.discountType === 'AMOUNT' ? (
+                              <div className="discountAmount">
+                                {formatMoney(item?.discountAmount)}
+                              </div>
+                            ) : (
+                              <div className="discountAmount">{item?.discountAmount}%</div>
+                            )}
+                          </div>
+                          <div className="maxDiscount">
+                            Max discount: {formatMoney(item?.maxDiscount)}
+                          </div>
+                          <div className="startDate">
+                            Start date: {moment(item?.validFrom).format('DD/MM/YY hh:mm')}
+                          </div>
+                          <div className="endDate">
+                            End date: {moment(item?.validTo).format('DD/MM/YY hh:mm')}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Radio>
+              </List.Item>
+            )}
+          />
+        </Radio.Group>
       </Modal>
     </div>
   )

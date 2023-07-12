@@ -18,15 +18,16 @@ import { toast } from 'react-toastify'
 
 const ReviewProductComponent = (props) => {
   const style = {
-    position: 'bottom-right',
+    position: 'top-right',
     autoClose: 1000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
-    draggable: true,
+    draggable: false,
     progress: undefined,
-    theme: 'colored',
+    theme: 'light',
   }
+
   const user = useSelector((state) => state?.user?.user)
   const [state, setState] = useState(false)
   const [detail, setDetail] = useState()
@@ -162,6 +163,16 @@ const ReviewProductComponent = (props) => {
             </List>
           </div>
           <div
+            className="voucher"
+            onClick={() =>
+              navigate({
+                pathname: '/voucher',
+              })
+            }
+          >
+            Voucher
+          </div>
+          <div
             className="order"
             style={{ fontWeight: 'bold' }}
             onClick={() =>
@@ -277,7 +288,7 @@ const ReviewProductComponent = (props) => {
               {detail?.couponCode && (
                 <div className="discountVoucher">
                   <div className="discountVoucherTitle">Voucher discount:</div>
-                  <div className="discountVoucherPrice"></div>
+                  <div className="discountVoucherPrice">{formatMoney(detail?.couponDiscount)}</div>
                 </div>
               )}
               <div className="shipPrice">

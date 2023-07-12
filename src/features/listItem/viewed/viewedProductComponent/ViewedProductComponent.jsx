@@ -108,6 +108,16 @@ const ViewedProductComponent = () => {
             </List>
           </div>
           <div
+            className="voucher"
+            onClick={() =>
+              navigate({
+                pathname: '/voucher',
+              })
+            }
+          >
+            Voucher
+          </div>
+          <div
             className="order"
             onClick={() =>
               navigate({
