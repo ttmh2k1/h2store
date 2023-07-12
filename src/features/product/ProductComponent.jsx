@@ -406,7 +406,7 @@ const ProductComponent = (props) => {
 
       <div className="productDescription">
         <div className="title">Description</div>
-        <div className="description"> {product?.description}</div>
+        <div className="description">{product?.description}</div>
       </div>
 
       <div className="productReviews">

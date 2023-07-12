@@ -116,6 +116,16 @@ const CategoryComponent = (props) => {
                     <div className="textCategory">
                       <div className="name">{item?.name}</div>
                       <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                      <Rating
+                        className="ratingPoint"
+                        size={16}
+                        initialValue={parseFloat(item?.averageRating).toFixed(0)}
+                        label
+                        transition
+                        readonly
+                        fillColor="orange"
+                        emptyColor="gray"
+                      />
                     </div>
                   </Tooltip>
                 </List.Item>

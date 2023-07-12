@@ -8,6 +8,7 @@ import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
 import { AiOutlineEdit } from 'react-icons/ai'
 import Avatar from 'react-avatar'
+import { Rating } from 'react-simple-star-rating'
 
 const FavoriteComponent = () => {
   const style = {
@@ -78,6 +79,16 @@ const FavoriteComponent = () => {
                 }
               >
                 Profile
+              </List.Item>
+              <List.Item
+                className="item"
+                onClick={() =>
+                  navigate({
+                    pathname: '/rank',
+                  })
+                }
+              >
+                Rank
               </List.Item>
               <List.Item
                 className="item"
@@ -191,6 +202,16 @@ const FavoriteComponent = () => {
                   >
                     <div className="name">{item?.product?.name}</div>
                     <div className="price">Price: {formatMoney(item?.product?.minPrice)}</div>
+                    <Rating
+                      className="ratingPoint"
+                      size={16}
+                      initialValue={parseFloat(item?.averageRating).toFixed(0)}
+                      label
+                      transition
+                      readonly
+                      fillColor="orange"
+                      emptyColor="gray"
+                    />
                   </div>
                   <div className="button">
                     <Button

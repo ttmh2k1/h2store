@@ -8,6 +8,7 @@ import {
   AiOutlineShoppingCart,
   AiOutlineBell,
   AiOutlineLogout,
+  AiOutlineFileImage,
 } from 'react-icons/ai'
 import logo from '../../commons/assets/brand.png'
 import { Link, useNavigate } from 'react-router-dom'
@@ -18,6 +19,8 @@ import { update } from '../../actionCreators/UserCreator'
 import { currentUser } from '../../apis/userApi'
 import { logout as logoutAction } from '../../actionCreators/UserCreator'
 import Avatar from 'react-avatar'
+import { putImg } from '../../apis/productControllerApi'
+import { toast } from 'react-toastify'
 
 const Navbar = () => {
   const dispatch = useDispatch()
@@ -25,8 +28,25 @@ const Navbar = () => {
   const account = useSelector((state) => state?.user?.user)
   const [nav, setNav] = useState(false)
   const [state, setState] = useState(false)
+  const [img, setImg] = useState('')
+  const [image, setImage] = useState('')
   const [search, setSearch] = useState('')
   const navigate = useNavigate()
+
+  const uploadImg = async (e) => {
+    var transform = new FormData()
+    const file = e?.target?.files[0]
+    file.preview = URL.createObjectURL(file)
+    setImg(file)
+    transform?.append('image', img)
+    try {
+      const resp = await putImg(transform)
+      setImage(resp?.data?.imageId)
+      navigate(`/searchImageResult/${image}`)
+    } catch (error) {
+      toast.error(error?.data?.data.message)
+    }
+  }
 
   const logout = (e) => {
     e.preventDefault()
@@ -65,6 +85,20 @@ const Navbar = () => {
       </Link>
       <nav>
         <ul className={nav ? 'headerMenu active' : 'headerMenu'}>
+          <li>
+            <label class="searchImg">
+              <input
+                type="file"
+                id="file"
+                className="file"
+                accept="image/*"
+                style={{ visibility: 'hidden' }}
+                onChange={uploadImg}
+              />
+              <i class="fa fa-cloud-upload"></i>
+              <AiOutlineFileImage size={25} style={{ marginTop: '6px' }} />
+            </label>
+          </li>
           <input
             size={25}
             className="inputSearch"

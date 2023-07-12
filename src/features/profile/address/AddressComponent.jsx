@@ -257,6 +257,16 @@ const AddressComponent = () => {
               </List.Item>
               <List.Item
                 className="item"
+                onClick={() =>
+                  navigate({
+                    pathname: '/rank',
+                  })
+                }
+              >
+                Rank
+              </List.Item>
+              <List.Item
+                className="item"
                 style={{ fontWeight: 'bold' }}
                 onClick={() =>
                   navigate({

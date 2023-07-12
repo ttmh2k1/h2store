@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { getViewedProduct } from '../../../apis/productControllerApi'
 import { formatMoney } from '../../../utils/functionHelper'
 import { useNavigate } from 'react-router-dom'
+import { Rating } from 'react-simple-star-rating'
 
 const ViewedComponent = () => {
   const [viewed, setViewed] = useState([])
@@ -68,6 +69,16 @@ const ViewedComponent = () => {
                   <div className="textViewed">
                     <div className="name">{item?.name}</div>
                     <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                    <Rating
+                      className="ratingPoint"
+                      size={16}
+                      initialValue={parseFloat(item?.averageRating).toFixed(0)}
+                      label
+                      transition
+                      readonly
+                      fillColor="orange"
+                      emptyColor="gray"
+                    />{' '}
                   </div>
                 </Tooltip>
               </List.Item>

@@ -1,34 +1,21 @@
-import './changePasswordStyle.scss'
-import { useDispatch, useSelector } from 'react-redux'
+import './rankingStyle.scss'
+import { useSelector } from 'react-redux'
 import Avatar from 'react-avatar'
 import { Divider, Image, List } from 'antd'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { formatMoney } from '../../utils/functionHelper'
+import { useState } from 'react'
 
-import { toast } from 'react-toastify'
-
-const ChangePasswordComponent = () => {
-  const style = {
-    position: 'top-right',
-    autoClose: 1000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: false,
-    progress: undefined,
-    theme: 'light',
-  }
-
+const RankingComponent = () => {
   const user = useSelector((state) => state?.user?.user)
   const [state, setState] = useState(true)
 
   const navigate = useNavigate()
-  const dispatch = useDispatch()
 
   return (
-    <div className="changePasswordPage">
-      <div className="changePasswordMenu">
+    <div className="rankingPage">
+      <div className="rankingMenu">
         <div className="avatar">
           {user?.avatar !== null ? (
             <Image className="avatarImg" src={user?.avatar} alt="" />
@@ -65,6 +52,7 @@ const ChangePasswordComponent = () => {
               </List.Item>
               <List.Item
                 className="item"
+                style={{ fontWeight: 'bold' }}
                 onClick={() =>
                   navigate({
                     pathname: '/rank',
@@ -95,10 +83,9 @@ const ChangePasswordComponent = () => {
               </List.Item>
               <List.Item
                 className="item"
-                style={{ fontWeight: 'bold' }}
                 onClick={() =>
                   navigate({
-                    pathname: '/changePassword',
+                    pathname: '/ranking',
                   })
                 }
               >
@@ -148,12 +135,36 @@ const ChangePasswordComponent = () => {
           </div>
         </div>
       </div>
-      <div className="changePasswordContent">
-        <div className="title">Change password</div>
+      <div className="rankingContent">
+        <div className="title">Ranking</div>
         <Divider />
+        <div className="content">
+          <div className="item">
+            <div className="itemTitle">Ranking name:</div>
+            <div className="value">{user?.rank?.name}</div>
+          </div>
+          <div className="item">
+            <div className="itemTitle">Threshold:</div>
+            <div className="value">{formatMoney(user?.rank?.threshold)}</div>
+          </div>
+          <div className="item">
+            <div className="itemTitle">Total spent:</div>
+            <div className="value">{formatMoney(user?.totalSpent)}</div>
+          </div>
+          <div className="item">
+            <div className="itemTitle">Customer discount:</div>
+            <div className="value">{user?.rank?.discountRate * 100}%</div>
+          </div>
+          {user?.rank?.nextRank && (
+            <div className="item">
+              <div className="itemTitle">Spent to next rank:</div>
+              <div className="value">{formatMoney(user?.rank?.threshold - user?.totalSpent)}</div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
 }
 
-export default ChangePasswordComponent
+export default RankingComponent

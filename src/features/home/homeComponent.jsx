@@ -4,16 +4,23 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import { Autoplay, Navigation, Pagination } from 'swiper'
 import { useEffect, useState } from 'react'
-import { getLastedProduct, getTopSold, getTopView } from '../../apis/productControllerApi'
+import {
+  getLastedProduct,
+  getRecommendProduct,
+  getTopSold,
+  getTopView,
+} from '../../apis/productControllerApi'
 import { formatMoney } from '../../utils/functionHelper'
 import Slide from '../../components/slide/Slide'
 import { Link, useNavigate } from 'react-router-dom'
 import { Tooltip } from 'antd'
+import { Rating } from 'react-simple-star-rating'
 
 const HomeComponent = () => {
   const [newArrival, setNewArrival] = useState([])
   const [topView, setTopView] = useState([])
   const [topSold, setTopSold] = useState([])
+  const [recommend, setRecommend] = useState([])
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -41,6 +48,18 @@ const HomeComponent = () => {
       setTopView(data)
     }
     handleGetTopView()
+  }, [])
+
+  useEffect(() => {
+    const handleGetRecommend = async () => {
+      const resp = await getRecommendProduct({
+        sessionId: localStorage?.getItem('sessionId'),
+        isExplicit: localStorage?.getItem('token') ? true : false,
+      })
+      const data = resp?.data?.data
+      setRecommend(data)
+    }
+    handleGetRecommend()
   }, [])
 
   return (
@@ -95,6 +114,16 @@ const HomeComponent = () => {
                     <div className="slideText">
                       <div className="name">{item?.name}</div>
                       <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                      <Rating
+                        className="ratingPoint"
+                        size={16}
+                        initialValue={parseFloat(item?.averageRating).toFixed(0)}
+                        label
+                        transition
+                        readonly
+                        fillColor="orange"
+                        emptyColor="gray"
+                      />
                     </div>
                   </Tooltip>
                 </div>
@@ -150,6 +179,16 @@ const HomeComponent = () => {
                     <div className="slideText">
                       <div className="name">{item?.name}</div>
                       <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                      <Rating
+                        className="ratingPoint"
+                        size={16}
+                        initialValue={parseFloat(item?.averageRating).toFixed(0)}
+                        label
+                        transition
+                        readonly
+                        fillColor="orange"
+                        emptyColor="gray"
+                      />
                     </div>
                   </Tooltip>
                 </div>
@@ -205,6 +244,81 @@ const HomeComponent = () => {
                     <div className="slideText">
                       <div className="name">{item?.name}</div>
                       <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                      <Rating
+                        className="ratingPoint"
+                        size={16}
+                        initialValue={parseFloat(item?.averageRating).toFixed(0)}
+                        label
+                        transition
+                        readonly
+                        fillColor="orange"
+                        emptyColor="gray"
+                      />{' '}
+                    </div>
+                  </Tooltip>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+        <div className="recommend">
+          <div className="title">RECOMMEND</div>
+          <Link className="seeAll" to="/recommend">
+            See more
+          </Link>
+          <Swiper
+            autoplay={{
+              delay: 2000,
+              disableOnInteraction: false,
+            }}
+            modules={[Autoplay, Pagination, Navigation]}
+            slidesPerView={1}
+            spaceBetween={10}
+            pagination={{
+              clickable: true,
+            }}
+            navigation={true}
+            breakpoints={{
+              '@0.00': {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
+              '@0.75': {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              '@1.00': {
+                slidesPerView: 3,
+                spaceBetween: 40,
+              },
+              '@1.50': {
+                slidesPerView: 4,
+                spaceBetween: 50,
+              },
+            }}
+            className="swiper"
+          >
+            {recommend?.map((item) => (
+              <SwiperSlide>
+                <div
+                  className="slideContent"
+                  onClick={() => navigate({ pathname: '/product/' + item?.id })}
+                >
+                  <Tooltip title={item?.name} color="#decdbb">
+                    <img className="slideImage" src={item?.avatar} alt="" />
+                    <div className="slideText">
+                      <div className="name">{item?.name}</div>
+                      <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                      <Rating
+                        className="ratingPoint"
+                        size={16}
+                        initialValue={parseFloat(item?.averageRating).toFixed(0)}
+                        label
+                        transition
+                        readonly
+                        fillColor="orange"
+                        emptyColor="gray"
+                      />
                     </div>
                   </Tooltip>
                 </div>

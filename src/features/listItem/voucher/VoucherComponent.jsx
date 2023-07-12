@@ -75,6 +75,16 @@ const VoucherComponent = () => {
                 className="item"
                 onClick={() =>
                   navigate({
+                    pathname: '/rank',
+                  })
+                }
+              >
+                Rank
+              </List.Item>
+              <List.Item
+                className="item"
+                onClick={() =>
+                  navigate({
                     pathname: '/address',
                   })
                 }
