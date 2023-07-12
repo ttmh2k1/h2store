@@ -11,6 +11,7 @@ import CategoryPage from './pages/CategoryPage'
 import ProductPage from './pages/product/ProductPage'
 import BestSellerPage from './pages/BestSellerPage'
 import NewArrivalPage from './pages/NewArrivalPage'
+import VoucherPage from './pages/VoucherPage'
 import FavoritePage from './pages/FavoritePage'
 import ViewedHistoryPage from './pages/ViewedHistoryPage'
 import OnSalePage from './pages/OnSalePage'
@@ -58,6 +59,7 @@ function App() {
             </Route>
             <Route path="bestSeller" element={<BestSellerPage />} />
             <Route path="newArrival" element={<NewArrivalPage />} />
+            <Route path="voucher" element={<VoucherPage />} />
             <Route path="favoriteProduct" element={<FavoritePage />} />
             <Route path="viewedProduct" element={<ViewedHistoryPage />} />
             <Route path="onSale" element={<OnSalePage />} />

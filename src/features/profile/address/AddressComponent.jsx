@@ -287,6 +287,16 @@ const AddressComponent = () => {
                 Change password
               </List.Item>
             </List>
+          </div>{' '}
+          <div
+            className="voucher"
+            onClick={() =>
+              navigate({
+                pathname: '/voucher',
+              })
+            }
+          >
+            Voucher
           </div>
           <div
             className="order"

@@ -206,15 +206,29 @@
         align-items: center;
       }
 
-      .voucherCode {
+      .voucherInfo {
         display: flex;
         flex-direction: row;
-        align-items: center;
-        color: #77675a;
-        cursor: pointer;
 
-        &:hover {
+        .voucherCode {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          color: orange;
           font-weight: bold;
+          margin-right: 2vw;
+        }
+
+        .voucherButton {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          color: #77675a;
+          cursor: pointer;
+
+          &:hover {
+            font-weight: bold;
+          }
         }
       }
     }

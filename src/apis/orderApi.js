@@ -19,3 +19,7 @@ export function getOrderHistory(req) {
 export function getOrderDetail(id) {
   return api.GET(`${SERVICE}/api/buyer/order/${id}`)
 }
+
+export function cancelOrder(id) {
+  return api.PUT(`${SERVICE}/api/buyer/order/${id}/cancel`)
+}

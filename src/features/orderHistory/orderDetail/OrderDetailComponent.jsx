@@ -98,6 +98,16 @@ const OrderDetailComponent = (props) => {
             </List>
           </div>
           <div
+            className="voucher"
+            onClick={() =>
+              navigate({
+                pathname: '/voucher',
+              })
+            }
+          >
+            Voucher
+          </div>
+          <div
             className="order"
             style={{ fontWeight: 'bold' }}
             onClick={() =>
@@ -190,7 +200,7 @@ const OrderDetailComponent = (props) => {
               {detail?.couponCode && (
                 <div className="discountVoucher">
                   <div className="discountVoucherTitle">Voucher discount:</div>
-                  <div className="discountVoucherPrice"></div>
+                  <div className="discountVoucherPrice">{formatMoney(detail?.couponDiscount)}</div>
                 </div>
               )}
               <div className="shipPrice">

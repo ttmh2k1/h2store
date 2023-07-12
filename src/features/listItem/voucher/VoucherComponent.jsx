@@ -1,47 +1,42 @@
-import './favoriteStyle.scss'
-import { Button, Image, List, Tooltip } from 'antd'
+import './voucherStyle.scss'
+import { Divider, Image, List } from 'antd'
 import { useEffect, useState } from 'react'
 import { formatMoney } from '../../../utils/functionHelper'
 import { useNavigate } from 'react-router-dom'
-import { deleteFavoriteProduct, getFavoriteProduct } from '../../../apis/favorite'
-import { toast } from 'react-toastify'
+import { getListVoucher } from '../../../apis/voucherApi'
 import { useSelector } from 'react-redux'
 import { AiOutlineEdit } from 'react-icons/ai'
 import Avatar from 'react-avatar'
+import moment from 'moment/moment'
 
-const FavoriteComponent = () => {
-  const style = {
-    position: 'top-right',
-    autoClose: 1000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: false,
-    progress: undefined,
-    theme: 'light',
-  }
+const VoucherComponent = () => {
   const user = useSelector((state) => state?.user?.user)
-  const [favorite, setFavorite] = useState([])
+  const [voucher, setVoucher] = useState([])
+  const [pageSize, setPageSize] = useState(100)
   const [state, setState] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
+    const handleGetPage = async () => {
+      const resp = await getListVoucher()
+      const data = resp?.data
+      setPageSize(data?.totalElement)
+    }
+    handleGetPage()
+  }, [])
+
+  useEffect(() => {
     const handleGetFavorite = async () => {
-      const resp = await getFavoriteProduct({ size: 100 })
+      const resp = await getListVoucher({ size: pageSize })
       const data = resp?.data?.data
-      setFavorite(data)
+      setVoucher(data)
     }
     handleGetFavorite()
-  }, [favorite])
-
-  const handleDeleteFavorite = async (id) => {
-    await deleteFavoriteProduct(id)
-    toast.success('Product removed from favorite products', style)
-  }
+  }, [pageSize])
 
   return (
-    <div className="favorite">
-      <div className="favoriteMenu">
+    <div className="voucherPage">
+      <div className="voucherMenu">
         <div className="avatar">
           {user?.avatar !== null ? (
             <Image className="avatarImg" src={user?.avatar} alt="" />
@@ -110,6 +105,7 @@ const FavoriteComponent = () => {
           </div>
           <div
             className="voucher"
+            style={{ fontWeight: 'bold' }}
             onClick={() =>
               navigate({
                 pathname: '/voucher',
@@ -130,7 +126,6 @@ const FavoriteComponent = () => {
           </div>
           <div
             className="favoriteProduct"
-            style={{ fontWeight: 'bold' }}
             onClick={() =>
               navigate({
                 pathname: '/favoriteProduct',
@@ -151,53 +146,44 @@ const FavoriteComponent = () => {
           </div>
         </div>
       </div>
-      <div className="favoriteContent">
-        <div className="title">FAVORITE PRODUCTS</div>
+      <div className="voucherContent">
+        <div className="title">VOUCHERS</div>
         <List
-          className="listFavorite"
-          grid={{
-            gutter: 12,
-            xs: 1,
-            sm: 2,
-            md: 4,
-            lg: 4,
-            xl: 4,
-            xxl: 3,
-          }}
-          size="large"
+          className="listVoucher"
+          grid={12}
           itemLayout="vertical"
           pagination={{
             showSizeChanger: true,
             pageSizeOptions: ['8', '20', '50', '100'],
             defaultPageSize: 8,
           }}
-          dataSource={favorite}
+          dataSource={voucher}
           renderItem={(item) => (
-            <div className="itemFavorite">
-              <List.Item className="listItem" key={item.product?.name}>
-                <Tooltip title={item?.product?.name} color="#decdbb">
-                  <img
-                    className="imageFavorite"
-                    src={item?.product?.avatar}
-                    alt=""
-                    onClick={() => navigate({ pathname: '/product/' + item?.product?.id })}
-                  />
-                  <div
-                    className="textFavorite"
-                    onClick={() => navigate({ pathname: '/product/' + item?.product?.id })}
-                  >
-                    <div className="name">{item?.product?.name}</div>
-                    <div className="price">Price: {formatMoney(item?.product?.minPrice)}</div>
+            <div className="itemVoucher">
+              <List.Item className="listItem" style={{ marginBlockEnd: '0', margin: '0 2vw' }}>
+                <div className="code">{item?.code}</div>
+                <Divider type="vertical" style={{ height: '12vw' }} />
+                <div className="info">
+                  <div className="description">{item?.description}</div>
+                  <div className="minOrderAmount">
+                    Minimum value: {formatMoney(item?.minOrderAmount)}
                   </div>
-                  <div className="button">
-                    <Button
-                      className="delete"
-                      onClick={() => handleDeleteFavorite(item?.product?.id)}
-                    >
-                      Delete product
-                    </Button>
+                  <div className="discount">
+                    Discount:&nbsp;
+                    {item?.discountType === 'AMOUNT' ? (
+                      <div className="discountAmount">{formatMoney(item?.discountAmount)}</div>
+                    ) : (
+                      <div className="discountAmount">{item?.discountAmount}%</div>
+                    )}
                   </div>
-                </Tooltip>
+                  <div className="maxDiscount">Max discount: {formatMoney(item?.maxDiscount)}</div>
+                  <div className="startDate">
+                    Start date: {moment(item?.validFrom).format('DD/MM/YY hh:mm')}
+                  </div>
+                  <div className="endDate">
+                    End date: {moment(item?.validTo).format('DD/MM/YY hh:mm')}
+                  </div>
+                </div>
               </List.Item>
             </div>
           )}
@@ -207,4 +193,4 @@ const FavoriteComponent = () => {
   )
 }
 
-export default FavoriteComponent
+export default VoucherComponent
