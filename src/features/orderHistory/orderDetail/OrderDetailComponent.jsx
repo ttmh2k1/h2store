@@ -10,6 +10,7 @@ import { getOrderDetail } from '../../../apis/orderApi'
 import { formatMoney } from '../../../utils/functionHelper'
 import Momo from '../../../commons/assets/momo.png'
 import COD from '../../../commons/assets/cod.png'
+import Paypal from '../../../commons/assets/paypal.png'
 
 const OrderDetailComponent = (props) => {
   const user = useSelector((state) => state?.user?.user)
@@ -220,9 +221,13 @@ const OrderDetailComponent = (props) => {
                   <>
                     <img className="image" src={COD} alt="COD" /> COD
                   </>
-                ) : (
+                ) : detail?.paymentMethod === 'ONLINE_PAYMENT_MOMO' ? (
                   <>
                     <img className="image" src={Momo} alt="MOMO" /> MOMO
+                  </>
+                ) : (
+                  <>
+                    <img className="image" src={Paypal} alt="MOMO" /> PAYPAL
                   </>
                 )}
               </div>
