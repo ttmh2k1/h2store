@@ -272,7 +272,7 @@ const CheckoutComponent = () => {
       setTotalPrice(sum)
     }
     getTotalPrice()
-  }, [cart])
+  }, [listTotalPrice])
 
   function handleUpdate(e) {
     editAddress(e)
@@ -291,7 +291,7 @@ const CheckoutComponent = () => {
   useEffect(() => {
     getListAddress()
     getListCity()
-  }, [])
+  }, [getListAddress, getListCity])
 
   useEffect(() => {
     if (optionAddress?.City?.length > 1) {
