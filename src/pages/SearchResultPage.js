@@ -5,6 +5,7 @@ import { useParams } from 'react-router'
 function SearchResult() {
   const param = useParams()
   const { text } = param
+
   return <SearchResultComponent text={text} />
 }
 

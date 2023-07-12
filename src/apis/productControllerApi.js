@@ -6,6 +6,11 @@ export function getListProduct(req) {
   return api.GET(`${SERVICE}/api/product${queries}`)
 }
 
+export function getListProductImg(req) {
+  const queries = combineQueriesUrl({ ...req })
+  return api.GET(`${SERVICE}/api/product/image-search${queries}`)
+}
+
 export function getProduct(id) {
   const sessionId = localStorage.getItem('sessionId')
   if (sessionId) {
@@ -49,4 +54,10 @@ export function getViewedProduct(req) {
     return api.GET(`${SERVICE}/api/view-history${queries}`)
   }
   return api.GET(`${SERVICE}/api/view-history`)
+}
+
+export function putImg(data) {
+  return api.POST(`${SERVICE}/api/product/image-search`, data, {
+    'Content-Type': 'multipart/form-data',
+  })
 }

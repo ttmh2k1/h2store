@@ -135,6 +135,16 @@ const ReviewProductComponent = (props) => {
                 className="item"
                 onClick={() =>
                   navigate({
+                    pathname: '/rank',
+                  })
+                }
+              >
+                Rank
+              </List.Item>
+              <List.Item
+                className="item"
+                onClick={() =>
+                  navigate({
                     pathname: '/address',
                   })
                 }
@@ -193,6 +203,16 @@ const ReviewProductComponent = (props) => {
             }
           >
             Favorite product
+          </div>
+          <div
+            className="viewedProduct"
+            onClick={() =>
+              navigate({
+                pathname: '/viewedProduct',
+              })
+            }
+          >
+            Viewed product
           </div>
         </div>
       </div>

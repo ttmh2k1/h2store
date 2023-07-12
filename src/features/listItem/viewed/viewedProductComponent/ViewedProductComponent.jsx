@@ -7,6 +7,7 @@ import { AiOutlineEdit } from 'react-icons/ai'
 import Avatar from 'react-avatar'
 import { formatMoney } from '../../../../utils/functionHelper'
 import { getViewedProduct } from '../../../../apis/productControllerApi'
+import { Rating } from 'react-simple-star-rating'
 
 const ViewedProductComponent = () => {
   const user = useSelector((state) => state?.user?.user)
@@ -74,6 +75,16 @@ const ViewedProductComponent = () => {
                 }
               >
                 Profile
+              </List.Item>
+              <List.Item
+                className="item"
+                onClick={() =>
+                  navigate({
+                    pathname: '/rank',
+                  })
+                }
+              >
+                Rank
               </List.Item>
               <List.Item
                 className="item"
@@ -187,6 +198,16 @@ const ViewedProductComponent = () => {
                   >
                     <div className="name">{item?.name}</div>
                     <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                    <Rating
+                      className="ratingPoint"
+                      size={16}
+                      initialValue={parseFloat(item?.averageRating).toFixed(0)}
+                      label
+                      transition
+                      readonly
+                      fillColor="orange"
+                      emptyColor="gray"
+                    />{' '}
                   </div>
                 </Tooltip>
               </List.Item>

@@ -72,16 +72,24 @@
             @media (max-width: 980px) {
               margin: 0 2vw;
             }
+
             .name {
-              font-family: 'Paytone';
-              font-size: 1.2vw;
+              font-weight: bold;
+              font-size: 1vw;
               max-width: 16vw;
               white-space: nowrap;
               overflow: hidden;
               text-overflow: ellipsis;
               @media (max-width: 980px) {
                 max-width: 68vw;
-                font-size: 2.8vw;
+                font-size: 2vw;
+              }
+            }
+
+            .price {
+              font-size: 1vw;
+              @media (max-width: 980px) {
+                font-size: 2vw;
               }
             }
           }

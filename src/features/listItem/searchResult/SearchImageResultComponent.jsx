@@ -1,13 +1,13 @@
 import './searchResultStyle.scss'
 import { useEffect, useState } from 'react'
-import { getListProduct } from '../../../apis/productControllerApi'
+import { getListProductImg } from '../../../apis/productControllerApi'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { Empty, List, Slider, Tooltip } from 'antd'
+import { Empty, List, Tooltip } from 'antd'
 import { formatMoney } from '../../../utils/functionHelper'
 import { Rating } from 'react-simple-star-rating'
 
-const SearchResultComponent = (props) => {
+const SearchImageResultComponent = (props) => {
   const style = {
     position: 'top-right',
     autoClose: 1000,
@@ -21,75 +21,28 @@ const SearchResultComponent = (props) => {
 
   const [listSearch, setListSearch] = useState([])
   const [pageSize, setPageSize] = useState(100)
-  const [rating, setRating] = useState(0)
-  const [price, setPrice] = useState({ minPrice: '', maxPrice: '' })
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const handleGetPage = async () => {
-      const resp = await getListProduct()
-      const data = resp?.data
-      setPageSize(data?.totalElement)
-    }
-    handleGetPage()
-  }, [props.id])
-
   const searchProduct = async () => {
-    const result = await getListProduct({
-      searchName: props?.text,
-      searchDescription: props?.text,
+    const imgResult = await getListProductImg({
+      imageId: props?.file,
       size: pageSize,
-      minAverageRating: rating,
-      minPrice: price?.minPrice,
-      maxPrice: price?.maxPrice,
     })
-    setListSearch(result?.data?.data)
+    setListSearch(imgResult?.data?.data)
   }
 
   useEffect(() => {
     if (props) {
       searchProduct()
     } else {
-      toast.warning('NO TEXT WAS SUBMITTED', style)
+      toast.warning('NO IMAGE WAS SUBMITTED', style)
     }
-  }, [props, pageSize, rating, price])
-
-  const sliderProps = {
-    range: true,
-    min: 0,
-    max: 1000000,
-    defaultValue: [0, 0],
-    tipFormatter: (value) => {
-      return formatMoney(value)
-    },
-    onChange: (values) => {
-      setPrice({ minPrice: values[0], maxPrice: values[1] })
-    },
-  }
+  }, [props?.file, pageSize])
 
   return (
     <div className="searchResult">
       <div className="productSearchResult">
         <div className="title">SEARCH RESULT</div>
-        <div className="search">
-          <div className="searchGroup">
-            <div className="priceSearch">
-              Price: <Slider {...sliderProps} />
-            </div>
-            <div className="ratingSearch">
-              Rating:{' '}
-              <Rating
-                className="ratingPoint"
-                onClick={(e) => setRating(e)}
-                size={16}
-                label
-                transition
-                fillColor="orange"
-                emptyColor="gray"
-              />
-            </div>
-          </div>
-        </div>
         {listSearch?.length > 0 ? (
           <List
             className="listSearchResult"
@@ -131,7 +84,7 @@ const SearchResultComponent = (props) => {
                         readonly
                         fillColor="orange"
                         emptyColor="gray"
-                      />
+                      />{' '}
                     </div>
                   </Tooltip>
                 </List.Item>
@@ -148,4 +101,4 @@ const SearchResultComponent = (props) => {
   )
 }
 
-export default SearchResultComponent
+export default SearchImageResultComponent

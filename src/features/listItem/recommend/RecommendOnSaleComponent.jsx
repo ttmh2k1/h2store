@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { getRecommendProduct } from '../../../apis/productControllerApi'
 import { formatMoney } from '../../../utils/functionHelper'
 import { useNavigate } from 'react-router-dom'
+import { Rating } from 'react-simple-star-rating'
 
 const RecommendComponent = () => {
   const [recommend, setRecommend] = useState([])
@@ -57,6 +58,16 @@ const RecommendComponent = () => {
                   <div className="textRecommend">
                     <div className="name">{item?.name}</div>
                     <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                    <Rating
+                      className="ratingPoint"
+                      size={16}
+                      initialValue={parseFloat(item?.averageRating).toFixed(0)}
+                      label
+                      transition
+                      readonly
+                      fillColor="orange"
+                      emptyColor="gray"
+                    />{' '}
                   </div>
                 </Tooltip>
               </List.Item>
