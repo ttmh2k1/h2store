@@ -22,11 +22,8 @@ const CartComponent = () => {
     theme: 'light',
   }
 
-  const user = useSelector((state) => state.user.user)
-  const cart = useSelector((state) => state.cart.cart)
-
+  const cart = useSelector((state) => state?.cart?.cart)
   const [listCart, setListCart] = useState('')
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -98,7 +95,7 @@ const CartComponent = () => {
   useEffect(() => {
     getCartInfo()
     getCountCart()
-  })
+  }, [listCart])
 
   const columns = useMemo(() => [
     {
@@ -245,4 +242,5 @@ const CartComponent = () => {
     </div>
   )
 }
+
 export default CartComponent
