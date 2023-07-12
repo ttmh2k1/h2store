@@ -10,6 +10,7 @@ import { getOrderDetail } from '../../../apis/orderApi'
 import { formatMoney } from '../../../utils/functionHelper'
 import Momo from '../../../commons/assets/momo.png'
 import COD from '../../../commons/assets/cod.png'
+import Paypal from '../../../commons/assets/paypal.png'
 import { Rating } from 'react-simple-star-rating'
 import TextArea from 'antd/es/input/TextArea'
 import { FaRegTimesCircle, FaUpload } from 'react-icons/fa'
@@ -308,9 +309,13 @@ const ReviewProductComponent = (props) => {
                   <>
                     <img className="image" src={COD} alt="COD" /> COD
                   </>
-                ) : (
+                ) : detail?.paymentMethod === 'ONLINE_PAYMENT_MOMO' ? (
                   <>
                     <img className="image" src={Momo} alt="MOMO" /> MOMO
+                  </>
+                ) : (
+                  <>
+                    <img className="image" src={Paypal} alt="MOMO" /> PAYPAL
                   </>
                 )}
               </div>

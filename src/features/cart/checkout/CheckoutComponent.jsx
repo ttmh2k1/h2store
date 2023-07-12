@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import Momo from '../../../commons/assets/momo.png'
 import COD from '../../../commons/assets/cod.png'
+import Paypal from '../../../commons/assets/paypal.png'
 import { updateCart, updateCount } from '../../../actionCreators/CartCreator'
 import {
   addAddressInfo,
@@ -89,13 +90,13 @@ const CheckoutComponent = () => {
       image: Momo,
       key: 'ONLINE_PAYMENT_MOMO',
     },
-    // {
-    //   id: 'payment',
+    {
+      id: 'payment',
 
-    //   name: 'Paypal',
-    //   image: Paypal,
-    //   key: 'ONLINE_PAYMENT_PAYPAL',
-    // },
+      name: 'PAYPAL',
+      image: Paypal,
+      key: 'ONLINE_PAYMENT_PAYPAL',
+    },
   ]
 
   const navigate = useNavigate()
@@ -451,34 +452,36 @@ const CheckoutComponent = () => {
             Shipping infomation
           </div>
           <div className="info">
-            <div className="addressInfo">
-              <div className="receiverName">
-                {address ? address?.receiverName : user?.defaultAddress?.receiverName}
+            {address && (
+              <div className="addressInfo">
+                <div className="receiverName">
+                  {address ? address?.receiverName : user?.defaultAddress?.receiverName}
+                </div>
+                <div className="receiverPhone">
+                  {address ? address?.receiverPhone : user?.defaultAddress?.receiverPhone}
+                </div>
+                <div className="address">
+                  {address
+                    ? address?.addressDetail +
+                      ', ' +
+                      address?.addressWard?.name +
+                      ', ' +
+                      address?.addressWard?.district?.name +
+                      ', ' +
+                      address?.addressWard?.district?.provinceCity?.name
+                    : user?.defaultAddress?.addressDetail +
+                      ', ' +
+                      user?.defaultAddress?.addressWard?.name +
+                      ', ' +
+                      user?.defaultAddress?.addressWard?.district?.name +
+                      ', ' +
+                      user?.defaultAddress?.addressWard?.district?.provinceCity?.name}
+                  {chooseAddress === user?.defaultAddress?.id ? (
+                    <div className="default">Default</div>
+                  ) : null}
+                </div>
               </div>
-              <div className="receiverPhone">
-                {address ? address?.receiverPhone : user?.defaultAddress?.receiverPhone}
-              </div>
-              <div className="address">
-                {address
-                  ? address?.addressDetail +
-                    ', ' +
-                    address?.addressWard?.name +
-                    ', ' +
-                    address?.addressWard?.district?.name +
-                    ', ' +
-                    address?.addressWard?.district?.provinceCity?.name
-                  : user?.defaultAddress?.addressDetail +
-                    ', ' +
-                    user?.defaultAddress?.addressWard?.name +
-                    ', ' +
-                    user?.defaultAddress?.addressWard?.district?.name +
-                    ', ' +
-                    user?.defaultAddress?.addressWard?.district?.provinceCity?.name}
-                {chooseAddress === user?.defaultAddress?.id ? (
-                  <div className="default">Default</div>
-                ) : null}
-              </div>
-            </div>
+            )}
             <div
               className="changeAddress"
               onClick={() => {
