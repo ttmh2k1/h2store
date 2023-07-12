@@ -27,7 +27,7 @@ import NotificationPage from './pages/notification/NotificationPage'
 import CartPage from './pages/cart/CartPage'
 import CheckoutPage from './pages/cart/checkout/CheckoutPage'
 import ScrollToTop from './components/topToButton/topToButton'
-// import SearchResultPage from './pages/SearchResultPage'
+import SearchResultPage from './pages/SearchResultPage'
 import { v4 as uuidv4 } from 'uuid'
 
 const token = localStorage.getItem('token')
@@ -78,7 +78,9 @@ function App() {
             </Route>
             <Route path="changePassword" element={<ChangePasswordPage />} />
             <Route path="notification" element={<NotificationPage />} />
-            {/* <Route path="searchResult" element={<SearchResultPage />} /> */}
+            <Route path="searchResult">
+              <Route path=":text" element={<SearchResultPage />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
