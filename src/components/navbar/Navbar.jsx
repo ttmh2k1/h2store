@@ -25,8 +25,9 @@ const Navbar = () => {
   const account = useSelector((state) => state.user.user)
   const [nav, setNav] = useState(false)
   const [state, setState] = useState(false)
-
+  const [search, setSearch] = useState('')
   const navigate = useNavigate()
+
   const logout = (e) => {
     e.preventDefault()
     localStorage.clear()
@@ -64,9 +65,22 @@ const Navbar = () => {
       </Link>
       <nav>
         <ul className={nav ? 'headerMenu active' : 'headerMenu'}>
-          <input size={25} className="inputSearch" type="text" placeholder="Search" />
+          <input
+            size={25}
+            className="inputSearch"
+            type="text"
+            placeholder="Search"
+            value={search}
+            onChange={(e) => setSearch(e?.target?.value)}
+          />
           <li>
-            <AiOutlineSearch size={25} style={{ marginTop: '6px' }} />
+            {search ? (
+              <AiOutlineSearch
+                size={25}
+                style={{ marginTop: '6px' }}
+                onClick={() => navigate({ pathname: `/searchResult/${search}` })}
+              />
+            ) : null}
           </li>
           <li>
             <a href="/cart" className="cart">

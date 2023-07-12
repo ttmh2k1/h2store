@@ -1,15 +1,18 @@
 import './categoryStyle.scss'
-import { List, Tooltip } from 'antd'
+import { List, Slider, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { getListProduct } from '../../../apis/productControllerApi'
 import { formatMoney } from '../../../utils/functionHelper'
 import { getCategory } from '../../../apis/categoryController'
 import { useNavigate } from 'react-router-dom'
+import { Rating } from 'react-simple-star-rating'
 
 const CategoryComponent = (props) => {
   const [category, setCategory] = useState([])
   const [listProduct, setListProduct] = useState([])
   const [pageSize, setPageSize] = useState(100)
+  const [rating, setRating] = useState(0)
+  const [price, setPrice] = useState([])
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -32,18 +35,56 @@ const CategoryComponent = (props) => {
 
   useEffect(() => {
     const handleGetListProduct = async () => {
-      const resp = await getListProduct({ idCategory: props.id, size: pageSize })
+      const resp = await getListProduct({
+        idCategory: props.id,
+        size: pageSize,
+        minAverageRating: rating,
+        minPrice: price?.minPrice,
+        maxPrice: price?.maxPrice,
+      })
       const data = resp?.data?.data
       setListProduct(data)
     }
     handleGetListProduct()
-  }, [props.id, pageSize])
+  }, [props.id, pageSize, rating, price])
+
+  const sliderProps = {
+    range: true,
+    min: 0,
+    max: 10000000,
+    defaultValue: [0, 0],
+    tipFormatter: (value) => {
+      return formatMoney(value)
+    },
+    onChange: (values) => {
+      setPrice({ minPrice: values[0], maxPrice: values[1] })
+    },
+  }
 
   return (
     <>
       <div className="categoryPage">
         <div className="productCategory">
           <div className="title">{category?.name}</div>
+          <div className="search">
+            <div className="searchGroup">
+              <div className="priceSearch">
+                Price: <Slider {...sliderProps} />
+              </div>
+              <div className="ratingSearch">
+                Rating:{' '}
+                <Rating
+                  className="ratingPoint"
+                  onClick={(e) => setRating(e)}
+                  size={16}
+                  label
+                  transition
+                  fillColor="orange"
+                  emptyColor="gray"
+                />
+              </div>
+            </div>
+          </div>
           <List
             className="listCategory"
             grid={{

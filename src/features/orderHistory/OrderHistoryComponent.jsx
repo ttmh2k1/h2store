@@ -40,7 +40,11 @@ const OrderHistoryComponent = () => {
 
   useEffect(() => {
     const handleGetCategory = async () => {
-      const resp = await getOrderHistory({ size: pageSize, sortBy: 2, sortDescending: true })
+      const resp = await getOrderHistory({
+        size: pageSize > 0 ? pageSize : 100,
+        sortBy: 2,
+        sortDescending: true,
+      })
       const data = resp?.data?.data
       setListOrder(data)
     }

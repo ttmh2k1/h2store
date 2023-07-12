@@ -1,13 +1,12 @@
-.categoryPage {
+.searchResult {
   margin: 1.6vw 8vw;
   padding: 0;
   border-radius: 0.4rem;
 
-  .productCategory {
+  .productSearchResult {
     .title {
       font-family: 'Paytone';
       font-size: 2.8vw;
-      text-transform: uppercase;
       color: #2a2728;
       display: flex;
       justify-content: center;
@@ -62,7 +61,7 @@
       }
     }
 
-    .listCategory {
+    .listSearchResult {
       display: flex;
       justify-content: center;
       flex-direction: column;
@@ -70,7 +69,7 @@
       height: 100%;
       padding: 1vw 2vw;
 
-      .itemCategory {
+      .itemSearchResult {
         text-align: justify;
         font-size: 0.8vw;
         display: flex;
@@ -87,7 +86,6 @@
           border-radius: 0.4vw;
           background-color: #decdbb;
           box-shadow: 0.2vw 0.2vw #ab9b92;
-          cursor: pointer;
           @media (max-width: 980px) {
             padding: 2.4vw 0.4vw;
             border-radius: 0.8vw;
@@ -98,7 +96,7 @@
             box-shadow: none;
           }
 
-          .imageCategory {
+          .imageSearchResult {
             display: block;
             width: 90%;
             height: 90%;
@@ -110,7 +108,7 @@
             }
           }
 
-          .textCategory {
+          .textSearchResult {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -135,6 +133,12 @@
         }
       }
     }
+
+    .noResult {
+      display: flex;
+      justify-content: center;
+      margin-top: 10vw;
+    }
   }
 }
 
@@ -146,11 +150,6 @@
     border-color: #fff;
   }
 }
-.ant-pagination .ant-pagination-item {
-  font-size: 0.8vw;
-  min-width: 1.2vw;
-}
-
 .ant-pagination .ant-pagination-item a {
   color: #2a2728;
   @media (max-width: 980px) {

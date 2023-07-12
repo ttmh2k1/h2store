@@ -32,11 +32,14 @@ const FavoriteComponent = () => {
       setFavorite(data)
     }
     handleGetFavorite()
-  }, [favorite])
+  }, [])
 
   const handleDeleteFavorite = async (id) => {
     await deleteFavoriteProduct(id)
     toast.success('Product removed from favorite products', style)
+    setTimeout(() => {
+      window.location.reload()
+    }, 500)
   }
 
   return (
