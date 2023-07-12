@@ -29,6 +29,7 @@ import CheckoutPage from './pages/cart/checkout/CheckoutPage'
 import ScrollToTop from './components/topToButton/topToButton'
 import SearchResultPage from './pages/SearchResultPage'
 import { v4 as uuidv4 } from 'uuid'
+import Footer from './components/footer/Footer'
 
 const token = localStorage.getItem('token')
 if (!token) {
@@ -83,6 +84,7 @@ function App() {
             </Route>
           </Route>
         </Routes>
+        <Footer />
       </BrowserRouter>
     </>
   )
