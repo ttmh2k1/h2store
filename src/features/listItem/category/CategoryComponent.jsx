@@ -12,7 +12,7 @@ const CategoryComponent = (props) => {
   const [listProduct, setListProduct] = useState([])
   const [pageSize, setPageSize] = useState(100)
   const [rating, setRating] = useState(0)
-  const [price, setPrice] = useState([])
+  const [price, setPrice] = useState({ minPrice: '', maxPrice: '' })
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const CategoryComponent = (props) => {
   const sliderProps = {
     range: true,
     min: 0,
-    max: 10000000,
+    max: 1000000,
     defaultValue: [0, 0],
     tipFormatter: (value) => {
       return formatMoney(value)

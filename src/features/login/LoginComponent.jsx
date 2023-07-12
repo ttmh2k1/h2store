@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { login as loginAction } from '../../actionCreators/UserCreator'
+import { login as loginAction, update } from '../../actionCreators/UserCreator'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import './loginStyle.scss'
 import { LoginService } from '../../apis/loginApi'
@@ -8,6 +8,7 @@ import { AiFillGoogleCircle } from 'react-icons/ai'
 import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 import { currentUser } from '../../apis/userApi'
+import logo from '../../commons/assets/brand.png'
 
 const LoginComponent = () => {
   const style = {
@@ -34,6 +35,7 @@ const LoginComponent = () => {
         localStorage.setItem('role', resp?.userInfo?.role?.name)
         localStorage.setItem('fullname', resp?.userInfo?.fullname)
         toast.success('Login success!', style)
+        dispatch(update(resp?.userInfo))
         navigate('/')
       }
     } catch (e) {
@@ -50,6 +52,7 @@ const LoginComponent = () => {
     if (result) {
       localStorage.setItem('user', JSON.stringify(result))
       dispatch(loginAction({ user: result, token: token }))
+      dispatch(update(result?.data?.data))
     } else {
       toast.error('Failed Login!', 'Try again!')
     }
@@ -67,6 +70,7 @@ const LoginComponent = () => {
 
   return (
     <div className="loginPage">
+      <img src={logo} width="200vw" alt="H2Store" onClick={() => navigate({ pathname: '/' })} />
       <div className="loginForm">
         <h2 className="title">LOGIN</h2>
         <div className="inputs">

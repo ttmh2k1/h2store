@@ -45,7 +45,6 @@ const SearchResultComponent = (props) => {
     })
     setListSearch(result?.data?.data)
   }
-  // console.log(props)
 
   useEffect(() => {
     if (props?.text) {
@@ -58,7 +57,7 @@ const SearchResultComponent = (props) => {
   const sliderProps = {
     range: true,
     min: 0,
-    max: 10000000,
+    max: 1000000,
     defaultValue: [0, 0],
     tipFormatter: (value) => {
       return formatMoney(value)
