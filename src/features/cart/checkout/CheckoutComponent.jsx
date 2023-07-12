@@ -248,19 +248,6 @@ const CheckoutComponent = () => {
     } catch (error) {
       toast.error(error?.response?.data?.message, style)
     }
-
-    // if (result?.data?.data?.success === true) {
-    //   if (result?.data?.data?.payUrl) {
-    //     window.location.href = result?.data?.data?.payUrl
-    //   } else {
-    //     toast.success('Get order successful!', style)
-    //     navigate('/orderHistory')
-    //     dispatch(updateCount(0))
-    //     dispatch(updateCart([]))
-    //   }
-    // } else if (result?.data?.data?.success === false) {
-    //   toast.error(result?.data?.data?.messge, style)
-    // }
   }
 
   useEffect(() => {

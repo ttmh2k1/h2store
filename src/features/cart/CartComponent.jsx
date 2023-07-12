@@ -93,9 +93,6 @@ const CartComponent = () => {
     await deleteCart(id)
     dispatch(updateCart(cart?.filter((item, index) => item?.productVariation?.id !== id)))
     toast.success('Product removed from cart successfully', style)
-    setTimeout(() => {
-      window.location.reload()
-    }, 500)
   }
 
   useEffect(() => {
