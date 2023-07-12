@@ -43,7 +43,7 @@ const ProductComponent = (props) => {
   const [recommendProduct, setRecommendProduct] = useState([])
   const [viewedProduct, setViewedProduct] = useState([])
   const [review, setReview] = useState([])
-  const [pageSize, setPageSize] = useState(1000)
+  const [pageSize, setPageSize] = useState(1)
   const [state, setState] = useState({
     key: -1,
     id: -1,
