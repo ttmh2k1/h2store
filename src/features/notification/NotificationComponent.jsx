@@ -42,7 +42,10 @@ const NotificationComponent = () => {
 
   useEffect(() => {
     const handleGetNotification = async () => {
-      const resp = await getNotification({ size: pageSize, sortByOldest: false })
+      const resp = await getNotification({
+        size: pageSize > 0 ? pageSize : 10,
+        sortByOldest: false,
+      })
       const data = resp?.data?.data
       setNotify(data)
     }
@@ -53,7 +56,7 @@ const NotificationComponent = () => {
     const handleSeenNotification = async () => {
       const resp = await getNotification({
         isSeen: true,
-        size: seenSize ? seenSize : '',
+        size: seenSize > 0 ? seenSize : 10,
         sortByOldest: false,
       })
       const data = resp?.data?.data
@@ -66,7 +69,7 @@ const NotificationComponent = () => {
     const handleNotSeenNotification = async () => {
       const resp = await getNotification({
         isSeen: false,
-        size: notSeenSize ? notSeenSize : '',
+        size: notSeenSize > 0 ? notSeenSize : 10,
         sortByOldest: false,
       })
       const data = resp?.data?.data

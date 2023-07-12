@@ -106,10 +106,10 @@ const MenuNav = () => {
       name: 'Best seller',
       href: '/bestSeller',
     },
-    {
-      name: 'Contact',
-      href: '/contact',
-    },
+    // {
+    //   name: 'Contact',
+    //   href: '/contact',
+    // },
   ]
 
   return (
