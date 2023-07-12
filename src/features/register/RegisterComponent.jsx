@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { registerAccount } from '../../apis/userApi'
 import { toast } from 'react-toastify'
+import logo from '../../commons/assets/brand.png'
 
 const RegisterComponent = () => {
   const style = {
@@ -47,6 +48,7 @@ const RegisterComponent = () => {
 
   return (
     <form className="registerPage">
+      <img src={logo} width="200vw" alt="H2Store" onClick={() => navigate({ pathname: '/' })} />
       <div className="registerForm">
         <h2 className="title">REGISTER</h2>
         <div className="inputs">

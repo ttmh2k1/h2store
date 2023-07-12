@@ -22,7 +22,7 @@ import Avatar from 'react-avatar'
 const Navbar = () => {
   const dispatch = useDispatch()
   const count = useSelector((state) => state?.cart?.count)
-  const account = useSelector((state) => state.user.user)
+  const account = useSelector((state) => state?.user?.user)
   const [nav, setNav] = useState(false)
   const [state, setState] = useState(false)
   const [search, setSearch] = useState('')
@@ -36,7 +36,7 @@ const Navbar = () => {
   }
 
   const getCountCart = async () => {
-    if (localStorage.getItem('token')) {
+    if (localStorage?.getItem('token')) {
       const result = await countCart()
       if (result) {
         dispatch(updateCount(result?.data?.data))
@@ -45,7 +45,7 @@ const Navbar = () => {
   }
 
   const getUserInfo = async () => {
-    if (localStorage.getItem('token')) {
+    if (localStorage?.getItem('token')) {
       const user = await currentUser()
       if (user) {
         dispatch(update(user?.data?.data))
@@ -139,7 +139,6 @@ const Navbar = () => {
                     </ul>
                   </div>
                 </div>
-                {/* )} */}
               </div>
             </>
           ) : (
