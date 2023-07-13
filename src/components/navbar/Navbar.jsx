@@ -28,21 +28,15 @@ const Navbar = () => {
   const account = useSelector((state) => state?.user?.user)
   const [nav, setNav] = useState(false)
   const [state, setState] = useState(false)
-  const [img, setImg] = useState('')
-  const [image, setImage] = useState('')
   const [search, setSearch] = useState('')
   const navigate = useNavigate()
 
   const uploadImg = async (e) => {
     var transform = new FormData()
-    const file = e?.target?.files[0]
-    file.preview = URL.createObjectURL(file)
-    setImg(file)
-    transform?.append('image', img)
+    transform?.append('image', e?.target?.files[0])
     try {
       const resp = await putImg(transform)
-      setImage(resp?.data?.imageId)
-      navigate(`/searchImageResult/${image}`)
+      navigate(`/searchImageResult/${resp?.data?.imageId}`)
     } catch (error) {
       toast.error(error?.data?.data.message)
     }

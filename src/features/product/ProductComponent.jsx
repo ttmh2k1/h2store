@@ -103,7 +103,7 @@ const ProductComponent = (props) => {
       }
     }
     handleGetRecommendProduct()
-  }, [])
+  }, [props?.id])
 
   useEffect(() => {
     const handleGetViewedProduct = async () => {
@@ -429,7 +429,10 @@ const ProductComponent = (props) => {
 
       <div className="productDescription">
         <div className="title">Description</div>
-        <div className="description">{product?.description}</div>
+        <div
+          className="description"
+          dangerouslySetInnerHTML={{ __html: product?.description?.replace(/\r?\n/g, '<br/>') }}
+        />
       </div>
 
       <div className="productReviews">
