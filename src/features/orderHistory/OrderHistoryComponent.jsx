@@ -52,14 +52,16 @@ const OrderHistoryComponent = () => {
   }, [pageSize])
 
   const handleCancelOrder = async (id) => {
-    const result = await cancelOrder(id)
-    if (result) {
-      toast.success('Your order was canceled!', style)
-      setTimeout(() => {
-        window.location.reload()
-      }, 500)
-    } else {
-      toast.error("Can't cancel your order", style)
+    try {
+      const result = await cancelOrder(id)
+      if (result) {
+        toast.success('Your order was canceled!', style)
+        setTimeout(() => {
+          window.location.reload()
+        }, 500)
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message, style)
     }
   }
 

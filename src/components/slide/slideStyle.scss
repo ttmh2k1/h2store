@@ -1,92 +1,90 @@
 .slide {
   background: #decdbb;
 
-  .slideBackground {
-    .slideContent {
-      display: flex !important;
-      flex-direction: row;
+  .slideContent {
+    display: flex !important;
+    flex-direction: row;
 
-      .slideImage {
-        margin: 2vh;
-        width: 50vw;
-        max-height: 50vh;
-        border-radius: 0.4rem;
+    .slideImage {
+      margin: 2vh;
+      width: 50vw;
+      max-height: 50vh;
+      border-radius: 0.4rem;
+    }
+
+    .slideText {
+      margin: 2.4vw;
+
+      .topSale {
+        color: #fff;
+        font-size: 3vw;
+        font-weight: bolder;
+        text-overflow: ellipsis;
+        text-align: justify;
+        overflow: hidden;
+        font-family: 'Paytone';
       }
 
-      .slideText {
-        margin: 2.4vw;
-
-        .topSale {
-          color: #fff;
-          font-size: 3vw;
-          font-weight: bolder;
-          text-overflow: ellipsis;
-          text-align: justify;
-          overflow: hidden;
-          font-family: 'Paytone';
-        }
-
-        .name {
-          width: 95%;
-          max-height: 12vh;
-          margin: 0.4vw;
-          color: #77675a;
-          font-size: 2vw;
-          text-align: justify;
-          text-overflow: ellipsis;
-          text-transform: uppercase;
-          overflow: hidden;
-          font-family: 'Paytone';
-        }
-
-        .description {
-          width: 95%;
-          max-height: 12vh;
-          margin: 0.4vw;
-          color: #2a2728;
-          font-size: 1vw;
-          text-align: justify;
-          text-overflow: ellipsis;
-          overflow: hidden;
-        }
+      .name {
+        width: 95%;
+        max-height: 12vh;
+        margin: 0.4vw;
+        color: #77675a;
+        font-size: 2vw;
+        text-align: justify;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        overflow: hidden;
+        font-family: 'Paytone';
       }
 
-      .slideButton {
-        width: 18vw;
-        bottom: 10%;
-        left: 36vw;
-        position: absolute;
+      .description {
+        width: 95%;
+        max-height: 12vh;
+        margin: 0.4vw;
+        color: #2a2728;
+        font-size: 1vw;
+        text-align: justify;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+    }
+
+    .slideButton {
+      width: 18vw;
+      bottom: 10%;
+      left: 36vw;
+      position: absolute;
+      font-size: 1.2vw;
+      display: flex;
+      justify-content: space-around;
+
+      .detailButton {
+        left: 40vw;
+        width: 8vw;
+        height: 2.4vw;
+        color: #77675a;
+        border: 0.12rem solid #77675a;
+        background: #decdbb;
         font-size: 1.2vw;
+        text-transform: uppercase;
         display: flex;
-        justify-content: space-around;
+        align-items: center;
+        justify-content: center;
+      }
 
-        .detailButton {
-          left: 40vw;
-          width: 8vw;
-          height: 2.4vw;
-          color: #77675a;
-          border: 0.12rem solid #77675a;
-          background: #decdbb;
-          font-size: 1.2vw;
-          text-transform: uppercase;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .buyButton {
-          left: 40vw;
-          width: 8vw;
-          height: 2.4vw;
-          color: #decdbb;
-          border: 0.12rem solid #77675a;
-          background: #77675a;
-          font-size: 1.2vw;
-          text-transform: uppercase;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
+      .buyButton {
+        left: 40vw;
+        width: 8vw;
+        height: 2.4vw;
+        color: #decdbb;
+        border: 0.12rem solid #77675a;
+        background: #77675a;
+        font-size: 1.2vw;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
   }

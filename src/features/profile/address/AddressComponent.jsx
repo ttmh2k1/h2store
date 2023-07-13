@@ -62,23 +62,25 @@ const AddressComponent = () => {
   }
 
   const handleDefaultAddress = async (address) => {
-    const result = await updateAddressInfo(address?.id, {
-      idAddressWard: address?.addressWard.id,
-      addressDetail: address?.addressDetail,
-      receiverName: address?.receiverName,
-      receiverPhone: address?.receiverPhone,
-      isDefault: true,
-    })
-    if (result) {
-      toast.success('Set default address successful!', style)
-      dispatch(
-        updateUser({
-          ...user,
-          defaultAddress: listAddress?.find((item) => item?.id === address?.id),
-        }),
-      )
-    } else {
-      toast.error('Set default address failed!', style)
+    try {
+      const result = await updateAddressInfo(address?.id, {
+        idAddressWard: address?.addressWard.id,
+        addressDetail: address?.addressDetail,
+        receiverName: address?.receiverName,
+        receiverPhone: address?.receiverPhone,
+        isDefault: true,
+      })
+      if (result) {
+        toast.success('Set default address successful!', style)
+        dispatch(
+          updateUser({
+            ...user,
+            defaultAddress: listAddress?.find((item) => item?.id === address?.id),
+          }),
+        )
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message, style)
     }
   }
 
@@ -144,44 +146,54 @@ const AddressComponent = () => {
   }
 
   const newAddress = async () => {
-    const result = await addAddressInfo({
-      idAddressWard: ward,
-      addressDetail: addressDetail,
-      receiverName: fullname,
-      receiverPhone: phone,
-      setToDefault: defaultAddress,
-    })
+    try {
+      const result = await addAddressInfo({
+        idAddressWard: ward,
+        addressDetail: addressDetail,
+        receiverName: fullname,
+        receiverPhone: phone,
+        setToDefault: defaultAddress,
+      })
 
-    if (result) {
-      toast.success('Created new address successfully!', style)
-      dispatch(updateAddress([...listAddress, result?.data?.data]))
-      setPhone('')
-      setFullname('')
-      setAddressDetail('')
-      setCity(0)
-      setDistrict(0)
-      setWard(0)
-      getCurrentUser()
-      setDefaultAddress(false)
-    } else toast.error('Failed!', style)
+      if (result) {
+        toast.success('Created new address successfully!', style)
+        dispatch(updateAddress([...listAddress, result?.data?.data]))
+        setPhone('')
+        setFullname('')
+        setAddressDetail('')
+        setCity(0)
+        setDistrict(0)
+        setWard(0)
+        getCurrentUser()
+        setDefaultAddress(false)
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message, style)
+    }
   }
 
   const editAddress = async (e) => {
-    const result = await updateAddressInfo(e?.id, {
-      idAddressWard: ward ? ward : e?.addressWard?.id,
-      addressDetail: addressDetail ? addressDetail : e?.addressDetail,
-      receiverName: fullname,
-      receiverPhone: phone,
-      setToDefault: e?.id === user?.defaultAddress?.id ? true : false,
-    })
+    try {
+      const result = await updateAddressInfo(e?.id, {
+        idAddressWard: ward ? ward : e?.addressWard?.id,
+        addressDetail: addressDetail ? addressDetail : e?.addressDetail,
+        receiverName: fullname,
+        receiverPhone: phone,
+        setToDefault: e?.id === user?.defaultAddress?.id ? true : false,
+      })
 
-    if (result) {
-      dispatch(
-        updateAddress(listAddress?.map((item) => (item?.id === e?.id ? result?.data?.data : item))),
-      )
-      toast.success('Update address successfully!', style)
-      setDefaultAddress(false)
-    } else toast.error('Update address failed!', style)
+      if (result) {
+        dispatch(
+          updateAddress(
+            listAddress?.map((item) => (item?.id === e?.id ? result?.data?.data : item)),
+          ),
+        )
+        toast.success('Update address successfully!', style)
+        setDefaultAddress(false)
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message, style)
+    }
   }
 
   const deleteAddress = async (id) => {
@@ -548,6 +560,8 @@ const AddressComponent = () => {
                                   value={phone}
                                   onChange={(e) => setPhone(e?.target?.value)}
                                   style={{ width: '18vw' }}
+                                  minLength={10}
+                                  maxLength={10}
                                 />
                               </div>
                             </div>

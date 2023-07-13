@@ -31,11 +31,11 @@ const MenuNav = () => {
       const data = resp?.data?.data
       setCategoryItem(() => {
         const list = data.map((item) => {
-          return item.children.map((category) => {
+          return item?.children?.map((category) => {
             return {
-              id: category.id,
-              name: category.name,
-              listCategory: category.children,
+              id: category?.id,
+              name: category?.name,
+              listCategory: category?.children,
             }
           })
         })
@@ -138,7 +138,7 @@ const MenuNav = () => {
         />
       </div>
       <div className="menuBar" ref={menuBar}>
-        {listItems.map((item, index) => {
+        {listItems?.map((item, index) => {
           return (
             <div className="menuItem" key={index}>
               <Link to={item.href}>{item.name}</Link>
@@ -157,7 +157,7 @@ const MenuNav = () => {
                     {categoryItem && index === 1 && (
                       <SubNavbar
                         state={{
-                          isShow: state.subnav1,
+                          isShow: state?.subnav1,
                           list: categoryItem[0],
                           href: '/category',
                         }}
@@ -168,7 +168,7 @@ const MenuNav = () => {
                     {categoryItem && index === 2 && (
                       <SubNavbar
                         state={{
-                          isShow: state.subnav2,
+                          isShow: state?.subnav2,
                           list: categoryItem[1],
                           href: '/category',
                         }}

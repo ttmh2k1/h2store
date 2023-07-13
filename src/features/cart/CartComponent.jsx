@@ -2,7 +2,7 @@ import './cartStyle.scss'
 import { useNavigate } from 'react-router-dom'
 import React, { useEffect, useMemo, useState } from 'react'
 import { deleteCart, getCart, countCart, getListCart, updateQuantity } from '../../apis/cartApi'
-import { Button, Image, InputNumber, Select } from 'antd'
+import { Button, Image, Input, InputNumber, Select } from 'antd'
 import { formatMoney } from '../../utils/functionHelper'
 import { AiOutlineDelete } from 'react-icons/ai'
 import Table from '../../components/table/Table'
@@ -27,31 +27,35 @@ const CartComponent = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const getCartInfo = async () => {
-    const result = await getCart()
-    if (result) {
-      dispatch(updateCart(result?.data?.data))
-    }
-  }
+  // const getCartInfo = async () => {
+  //   const result = await getCart()
+  //   if (result) {
+  //     dispatch(updateCart(result?.data?.data))
+  //   }
+  // }
 
-  const getCountCart = async () => {
-    const result = await countCart()
-    if (result) {
-      dispatch(updateCount(result?.data?.data))
-    }
-  }
+  // const getCountCart = async () => {
+  //   const result = await countCart()
+  //   if (result) {
+  //     dispatch(updateCount(result?.data?.data))
+  //   }
+  // }
 
   const onChangeQuantity = async (id, quantity) => {
-    await updateQuantity(id, quantity)
-    dispatch(updateCount(quantity))
-    dispatch(
-      updateCart(
-        cart.map((item) =>
-          item?.productVariation?.id === id ? { ...item, quantity: quantity } : item,
+    try {
+      await updateQuantity(id, quantity)
+      dispatch(updateCount(quantity))
+      dispatch(
+        updateCart(
+          cart?.map((item) =>
+            item?.productVariation?.id === id ? { ...item, quantity: quantity } : item,
+          ),
         ),
-      ),
-    )
-    toast.success('Update cart success!', style)
+      )
+      toast.success('Update cart success!', style)
+    } catch (error) {
+      toast.error(error?.response?.data?.message, style)
+    }
   }
 
   useEffect(() => {
@@ -92,10 +96,10 @@ const CartComponent = () => {
     toast.success('Product removed from cart successfully', style)
   }
 
-  useEffect(() => {
-    getCartInfo()
-    getCountCart()
-  }, [listCart])
+  // useEffect(() => {
+  //   getCartInfo()
+  //   getCountCart()
+  // }, [listCart])
 
   const columns = useMemo(() => [
     {
@@ -125,12 +129,13 @@ const CartComponent = () => {
       render: (variation) => {
         return (
           <div className="variation">
-            <Select
+            {/* <Select
               defaultValue={variation?.name}
               options={variation?.product?.variations?.map((item) => {
                 return { value: item?.id, label: item?.name }
               })}
-            />
+            /> */}
+            <Input disabled defaultValue={variation?.name} />
           </div>
         )
       },
@@ -195,9 +200,7 @@ const CartComponent = () => {
         return (
           <div className="action flex justify-center">
             <Button
-              onlyIcon
               onClick={() => handleDeleteItem(variationId)}
-              classNameButton={'bg-transparent'}
               icon={
                 <AiOutlineDelete
                   className="h-6 w-6"

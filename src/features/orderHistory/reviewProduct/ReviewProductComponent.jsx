@@ -90,7 +90,7 @@ const ReviewProductComponent = (props) => {
         window.location.reload()
       }, 2000)
     } catch (error) {
-      toast.error('Create product failed!', style)
+      toast.error(error?.response?.data?.message, style)
     }
   }
 
