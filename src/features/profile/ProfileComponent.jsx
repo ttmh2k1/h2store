@@ -48,7 +48,7 @@ const ProfileComponent = () => {
 
   useEffect(() => {
     return () => {
-      avatar && URL.revokeObjectURL(avatar.preview)
+      avatar && URL.revokeObjectURL(avatar?.preview)
     }
   }, [avatar])
 
@@ -59,7 +59,7 @@ const ProfileComponent = () => {
     setEmail(user?.email)
     setGender(user?.gender)
     setBirthday(user?.dob)
-    // setAvatar(user?.avatar)
+    setAvatar(user?.avatar)
   }, [user])
 
   const sendOTP = async (e) => {
@@ -94,117 +94,123 @@ const ProfileComponent = () => {
     }
   }
 
-  // function handleSave() {
-  //   const update = async () => {
-  //     var transform = new FormData()
-  //     const obj = {
-  //       fullname: fullname,
-  //       username: username,
-  //       email: email !== user?.email ? email : null,
-  //       phone: phone !== user?.phone ? phone : null,
-  //       gender: gender,
-  //       dob: birthday,
-  //       otp: otp,
-  //     }
-  //     const json = JSON.stringify(obj)
-  //     const blob = new Blob([json], {
-  //       type: 'application/json',
-  //     })
-  //     transform?.append('info', blob)
-  //     const avatar = document.getElementById('avatar').files
-  //     if (avatarFile) {
-  //       transform?.append('avatar', avatar[0])
-  //     }
-  //     console.log(obj)
-  //     // transform?.append('avatar', avatar) // file avatar nếu có k thì k có dòng này
-  //     const result = await updateProfileInfo(transform)
-  //     if (result) {
-  //       if (user?.username === username) {
-  //         localStorage.removeItem('user')
-  //         const userRs = { ...result }
-  //         localStorage.setItem('user', userRs)
-  //         dispatch(upadateUser(userRs))
-  //         toast.success('Change profile successful!', style)
-  //         setEditUsername(false)
-  //         setEditPhone(false)
-  //         setEditEmail(false)
-  //       } else {
-  //         dispatch(logoutUser())
-  //         toast.success('Change profile successful!', style)
-  //         localStorage.clear()
-  //         navigate('/login')
-  //       }
-  //     } else {
-  //       toast.error('Failed!', style)
-  //     }
+  function handleSave() {
+    const update = async () => {
+      var transform = new FormData()
+      const obj = {
+        fullname: fullname,
+        username: username,
+        email: email !== user?.email ? email : null,
+        phone: phone !== user?.phone ? phone : null,
+        gender: gender,
+        dob: birthday,
+        otp: otp,
+      }
+      const json = JSON.stringify(obj)
+      const blob = new Blob([json], {
+        type: 'application/json',
+      })
+      transform?.append('info', blob)
+      const avatar = document.getElementById('avatar').files
+      if (avatarFile) {
+        transform?.append('avatar', avatar[0])
+      } else transform?.append('avatar', avatar)
+      // // console.log(obj)
+      // transform?.append('avatar', avatar) // file avatar nếu có k thì k có dòng này
+      try {
+        const result = await updateProfileInfo(transform)
+        if (result) {
+          if (user?.username === username) {
+            localStorage.removeItem('user')
+            const userRs = { ...result?.data?.data }
+            localStorage.setItem('user', userRs)
+            dispatch(upadateUser(userRs))
+            setEditUsername(false)
+            setEditPhone(false)
+            setEditEmail(false)
+          } else {
+            dispatch(logoutUser())
+            toast.success(
+              'Change profile successful! Your username is changed, please login again!',
+              style,
+            )
+            localStorage.clear()
+            navigate('/login')
+          }
+        }
+        navigate(0)
+        toast.success('Change profile successful!', style)
+      } catch (error) {
+        toast.error(error?.response?.data?.data, style)
+      }
+    }
+
+    update()
+  }
+
+  // const handleSave = async () => {
+  //   var transform = new FormData()
+  //   var transform1 = new FormData()
+  //   const obj = {
+  //     fullname: fullname,
+  //     username: username,
+  //     email: email !== user?.email ? email : '',
+  //     phone: phone !== user?.phone ? phone : '',
+  //     gender: gender,
+  //     dob: birthday,
+  //     otp: otp,
+  //   }
+  //   const obj1 = {
+  //     fullname: fullname,
+  //     username: username,
+  //     email: email !== user?.email ? email : user?.email,
+  //     phone: phone !== user?.phone ? phone : user?.phone,
+  //     gender: gender,
+  //     dob: birthday,
+  //     // otp: otp,
+  //   }
+  //   const blob = new Blob([JSON?.stringify(obj)], {
+  //     type: 'application/json',
+  //   })
+  //   const blob1 = new Blob([JSON?.stringify(obj1)], {
+  //     type: 'application/json',
+  //   })
+  //   transform?.append('info', blob)
+  //   transform1?.append('info', blob1)
+  //   const avatar = document.getElementById('avatar').files
+
+  //   if (avatar.length > 0) {
+  //     transform?.append('avatar', avatar)
+  //   }
+  //   if (avatar.length > 0) {
+  //     transform1?.append('avatar', avatar)
   //   }
 
-  //   update()
+  //   await updateProfileInfo(editEmail === true || editPhone === true ? transform : transform1)
+  //   // await updateProfileInfo(transform)
+
+  //   if (user?.username === username) {
+  //     localStorage?.removeItem('user')
+  //     const userRs = { ...updateProfileInfo(transform) }
+  //     localStorage?.setItem('user', userRs)
+  //     dispatch(upadateUser(userRs))
+  //     setEditUsername(false)
+  //     setEditPhone(false)
+  //     setEditEmail(false)
+  //     toast.success('Change profile successful!', style)
+  //     // setTimeout(() => {
+  //     //   window.location.reload()
+  //     // }, 50)
+  //   } else {
+  //     dispatch(logoutUser())
+  //     toast.success(
+  //       'Change profile successful! Your username is changed, please login again!',
+  //       style,
+  //     )
+  //     localStorage?.clear()
+  //     navigate('/login')
+  //   }
   // }
-
-  const handleSave = async () => {
-    var transform = new FormData()
-    var transform1 = new FormData()
-    const obj = {
-      fullname: fullname,
-      username: username,
-      email: email !== user?.email ? email : '',
-      phone: phone !== user?.phone ? phone : '',
-      gender: gender,
-      dob: birthday,
-      otp: otp,
-    }
-    const obj1 = {
-      fullname: fullname,
-      username: username,
-      email: email !== user?.email ? email : user?.email,
-      phone: phone !== user?.phone ? phone : user?.phone,
-      gender: gender,
-      dob: birthday,
-      otp: otp,
-    }
-    const blob = new Blob([JSON?.stringify(obj)], {
-      type: 'application/json',
-    })
-    const blob1 = new Blob([JSON?.stringify(obj1)], {
-      type: 'application/json',
-    })
-    transform?.append('info', blob)
-    transform1?.append('info', blob1)
-    const avatar = document.getElementById('avatar').files
-
-    if (avatar.length > 0) {
-      transform?.append('avatar', avatar[0])
-    }
-    if (avatar.length > 0) {
-      transform1?.append('avatar', avatar[0])
-    }
-
-    await updateProfileInfo(editEmail === true || editPhone === true ? transform : transform1)
-    // await updateProfileInfo(transform)
-
-    if (user?.username === username) {
-      localStorage?.removeItem('user')
-      const userRs = { ...updateProfileInfo(transform) }
-      localStorage?.setItem('user', userRs)
-      dispatch(upadateUser(userRs))
-      setEditUsername(false)
-      setEditPhone(false)
-      setEditEmail(false)
-      toast.success('Change profile successful!', style)
-      setTimeout(() => {
-        window.location.reload()
-      }, 50)
-    } else {
-      dispatch(logoutUser())
-      toast.success(
-        'Change profile successful! Your username is changed, please login again!',
-        style,
-      )
-      localStorage?.clear()
-      navigate('/login')
-    }
-  }
 
   return (
     <div className="profilePage">

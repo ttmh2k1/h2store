@@ -56,8 +56,9 @@ export function getViewedProduct(req) {
   return api.GET(`${SERVICE}/api/view-history`)
 }
 
-export function putImg(data) {
-  return api.POST(`${SERVICE}/api/product/image-search`, data, {
+export async function putImg(data) {
+  const img = await api.POST(`${SERVICE}/api/product/image-search`, data, {
     'Content-Type': 'multipart/form-data',
   })
+  return img
 }

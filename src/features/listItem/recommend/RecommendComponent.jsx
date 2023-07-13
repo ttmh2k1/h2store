@@ -5,22 +5,25 @@ import { getRecommendProduct } from '../../../apis/productControllerApi'
 import { formatMoney } from '../../../utils/functionHelper'
 import { useNavigate } from 'react-router-dom'
 import { Rating } from 'react-simple-star-rating'
+import { useSelector } from 'react-redux'
 
 const RecommendComponent = () => {
+  const user = useSelector((state) => state?.user?.user)
   const [recommend, setRecommend] = useState([])
   const navigate = useNavigate()
 
   useEffect(() => {
     const handleGetRecommend = async () => {
-      const sessionId = localStorage?.getItem('sessionId')
-      if (sessionId !== null) {
+      try {
+        const sessionId = ''
         const resp = await getRecommendProduct({
-          sessionId: localStorage?.getItem('sessionId'),
+          sessionId: user ? sessionId : localStorage?.getItem('sessionId'),
           isExplicit: localStorage?.getItem('token') ? true : false,
-          size: 100,
         })
         const data = resp?.data?.data
         setRecommend(data)
+      } catch (error) {
+        return error
       }
     }
     handleGetRecommend()
