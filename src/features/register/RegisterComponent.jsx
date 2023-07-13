@@ -37,7 +37,6 @@ const RegisterComponent = () => {
           navigate('/login')
         }
       } catch (error) {
-        console.log(error?.response?.data?.data)
         if (error?.response?.data?.data) {
           if (error?.response?.data?.data?.fullname)
             toast.error('Fullname ' + error?.response?.data?.data?.fullname, style)

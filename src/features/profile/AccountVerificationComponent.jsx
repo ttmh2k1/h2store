@@ -1,4 +1,4 @@
-import './changePasswordStyle.scss'
+import './accountVerificationStyle.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import Avatar from 'react-avatar'
 import { Button, Divider, Image, Input, List, Radio } from 'antd'
@@ -8,8 +8,14 @@ import { useEffect, useState } from 'react'
 import Phone from '../../commons/assets/phone.png'
 import Mail from '../../commons/assets/mail.png'
 import { toast } from 'react-toastify'
-import { changePassword, currentEmailOTP, currentPhoneOTP } from '../../apis/userApi'
-import { logout } from '../../actionCreators/UserCreator'
+import {
+  changePassword,
+  confirmEmail,
+  confirmPhone,
+  currentEmailOTP,
+  currentPhoneOTP,
+} from '../../apis/userApi'
+import { login, logout } from '../../actionCreators/UserCreator'
 
 const ChangePasswordComponent = () => {
   const style = {
@@ -27,9 +33,6 @@ const ChangePasswordComponent = () => {
   const email = user?.email
   const phone = user?.phone
   const [state, setState] = useState(true)
-  const [oldPassword, setOldPassword] = useState('')
-  const [newPassword, setNewPassword] = useState('')
-  const [confirm, setConfirm] = useState('')
   const [select, setSelect] = useState(0)
   const [otp, setOtp] = useState('')
   const navigate = useNavigate()
@@ -38,12 +41,12 @@ const ChangePasswordComponent = () => {
   const options = [
     {
       id: 1,
-      name: phone ? 'OTP to phone number ' + phone : '',
+      name: phone ? 'Confirm phone number ' + phone : '',
       image: Phone,
     },
     {
       id: 2,
-      name: email ? 'OTP to email ' + email : '',
+      name: email ? 'Confirm email ' + email : '',
       image: Mail,
     },
   ]
@@ -75,32 +78,41 @@ const ChangePasswordComponent = () => {
     }
   }
 
-  const handlChangePassword = async () => {
-    const result = await changePassword(newPassword, oldPassword, otp)
-    return result
-  }
-
   const handleSave = (e) => {
-    if ((user?.password && oldPassword === user?.password) || !user?.password) {
-      if (confirm === newPassword && newPassword.length > 7) {
-        try {
-          if (handlChangePassword()) {
-            toast.success('Change password successful!', style)
-            localStorage.removeItem('token')
-            localStorage.removeItem('user')
-            dispatch(logout())
-            setTimeout(() => {
-              window.location.reload()
-            }, 50)
-          }
-        } catch (error) {
-          toast.error(error?.response?.data?.message, style)
+    e.preventDefault()
+
+    const handleConfirmEmail = async () => {
+      try {
+        const result = await confirmEmail(otp)
+        if (result) {
+          toast.success('Successful!!', style)
+          localStorage.removeItem('user')
+          localStorage.setItem('user', result)
+          dispatch(login(result))
         }
-      } else {
-        toast.error('Password is not match!', style)
+      } catch (error) {
+        toast.error(error?.response?.data?.message, style)
       }
+    }
+
+    const handleConfirmPhone = async () => {
+      try {
+        const result = await confirmPhone(otp)
+        if (result) {
+          toast.success('Successful!!', style)
+          localStorage.removeItem('user')
+          localStorage.setItem('user', result)
+          dispatch(login(result))
+        }
+      } catch (error) {
+        toast.error(error?.response?.data?.message, style)
+      }
+    }
+
+    if (select === 0) {
+      handleConfirmPhone()
     } else {
-      toast.error('Old password is incorrect!', style)
+      handleConfirmEmail()
     }
   }
 
@@ -163,6 +175,7 @@ const ChangePasswordComponent = () => {
               </List.Item>
               <List.Item
                 className="item"
+                style={{ fontWeight: 'bold' }}
                 onClick={() =>
                   navigate({
                     pathname: '/accountVerification',
@@ -173,7 +186,6 @@ const ChangePasswordComponent = () => {
               </List.Item>
               <List.Item
                 className="item"
-                style={{ fontWeight: 'bold' }}
                 onClick={() =>
                   navigate({
                     pathname: '/changePassword',
@@ -227,49 +239,34 @@ const ChangePasswordComponent = () => {
         </div>
       </div>
       <div className="changePasswordContent">
-        <div className="title">Change password</div>
+        <div className="title">Account verification</div>
         <Divider />
         <div className="content">
           <div className="item">
-            <div className="itemLabel">Old password</div>
+            <div className="itemLabel">Email</div>
             <div className="itemValue">
-              {user?.emptyPassword === false ? (
-                <Input.Password
-                  type="password"
-                  className="input"
-                  placeholder="Old password"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e?.target?.value)}
-                />
+              {user?.email ? (
+                <div disabled className="input" placeholder="Email">
+                  {user?.email}
+                </div>
               ) : (
-                <span>You don't have a password</span>
+                <span>You don't have an email</span>
               )}
             </div>
           </div>
           <div className="item">
-            <div className="itemLabel">New password</div>
+            <div className="itemLabel">Phone number</div>
             <div className="itemValue">
-              <Input.Password
-                type="password"
-                className="input"
-                placeholder="New password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e?.target?.value)}
-              />
+              {user?.phone ? (
+                <div disabled className="input" placeholder="Phone">
+                  {user?.phone}
+                </div>
+              ) : (
+                <span>You don't have phone number</span>
+              )}
             </div>
           </div>
-          <div className="item">
-            <div className="itemLabel">Confirm password</div>
-            <div className="itemValue">
-              <Input.Password
-                type="password"
-                className="input"
-                placeholder="Confirm password"
-                value={confirm}
-                onChange={(e) => setConfirm(e?.target?.value)}
-              />
-            </div>
-          </div>
+
           <div className="optionOTP">
             {options?.map((item, index) => {
               return (
@@ -306,7 +303,6 @@ const ChangePasswordComponent = () => {
               onClick={(e) => sendOTP(e)}
             />
           </div>
-
           <div className="button">
             <Button
               primary

@@ -42,13 +42,9 @@ const Navbar = () => {
     try {
       const resp = await putImg(transform)
       setImage(resp?.data?.imageId)
-      setTimeout(() => {
-        navigate({
-          pathname: `/searchImageResult/${image}`,
-        })
-      }, 1000)
+      navigate(`/searchImageResult/${image}`)
     } catch (error) {
-      return error
+      toast.error(error?.data?.data.message)
     }
   }
 

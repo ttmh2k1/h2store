@@ -15,8 +15,11 @@ import Slide from '../../components/slide/Slide'
 import { Link, useNavigate } from 'react-router-dom'
 import { Tooltip } from 'antd'
 import { Rating } from 'react-simple-star-rating'
+import { useSelector } from 'react-redux'
 
 const HomeComponent = () => {
+  const user = useSelector((state) => state?.user?.user)
+
   const [newArrival, setNewArrival] = useState([])
   const [topView, setTopView] = useState([])
   const [topSold, setTopSold] = useState([])
@@ -53,15 +56,13 @@ const HomeComponent = () => {
   useEffect(() => {
     const handleGetRecommend = async () => {
       try {
-        const sessionId = localStorage?.getItem('sessionId')
-        if (sessionId !== null) {
-          const resp = await getRecommendProduct({
-            sessionId: localStorage?.getItem('sessionId'),
-            isExplicit: localStorage?.getItem('token') ? true : false,
-          })
-          const data = resp?.data?.data
-          setRecommend(data)
-        }
+        const sessionId = ''
+        const resp = await getRecommendProduct({
+          sessionId: user ? sessionId : localStorage?.getItem('sessionId'),
+          isExplicit: localStorage?.getItem('token') ? true : false,
+        })
+        const data = resp?.data?.data
+        setRecommend(data)
       } catch (error) {
         return error
       }
@@ -268,71 +269,73 @@ const HomeComponent = () => {
             ))}
           </Swiper>
         </div>
-        <div className="recommend">
-          <div className="title">RECOMMEND</div>
-          <Link className="seeAll" to="/recommend">
-            See more
-          </Link>
-          <Swiper
-            autoplay={{
-              delay: 2000,
-              disableOnInteraction: false,
-            }}
-            modules={[Autoplay, Pagination, Navigation]}
-            slidesPerView={1}
-            spaceBetween={10}
-            pagination={{
-              clickable: true,
-            }}
-            navigation={true}
-            breakpoints={{
-              '@0.00': {
-                slidesPerView: 1,
-                spaceBetween: 20,
-              },
-              '@0.75': {
-                slidesPerView: 2,
-                spaceBetween: 20,
-              },
-              '@1.00': {
-                slidesPerView: 3,
-                spaceBetween: 40,
-              },
-              '@1.50': {
-                slidesPerView: 4,
-                spaceBetween: 50,
-              },
-            }}
-            className="swiper"
-          >
-            {recommend?.map((item) => (
-              <SwiperSlide>
-                <div
-                  className="slideContent"
-                  onClick={() => navigate({ pathname: '/product/' + item?.id })}
-                >
-                  <Tooltip title={item?.name} color="#decdbb">
-                    <img className="slideImage" src={item?.avatar} alt="" />
-                    <div className="slideText">
-                      <div className="name">{item?.name}</div>
-                      <div className="price">Price: {formatMoney(item?.minPrice)}</div>
-                      <Rating
-                        className="ratingPoint"
-                        size={16}
-                        initialValue={parseFloat(item?.averageRating).toFixed(0)}
-                        label
-                        transition
-                        readonly
-                        fillColor="orange"
-                        emptyColor="gray"
-                      />
-                    </div>
-                  </Tooltip>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
+        {recommend?.length > 0 && (
+          <div className="recommend">
+            <div className="title">RECOMMEND</div>
+            <Link className="seeAll" to="/recommend">
+              See more
+            </Link>
+            <Swiper
+              autoplay={{
+                delay: 2000,
+                disableOnInteraction: false,
+              }}
+              modules={[Autoplay, Pagination, Navigation]}
+              slidesPerView={1}
+              spaceBetween={10}
+              pagination={{
+                clickable: true,
+              }}
+              navigation={true}
+              breakpoints={{
+                '@0.00': {
+                  slidesPerView: 1,
+                  spaceBetween: 20,
+                },
+                '@0.75': {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                '@1.00': {
+                  slidesPerView: 3,
+                  spaceBetween: 40,
+                },
+                '@1.50': {
+                  slidesPerView: 4,
+                  spaceBetween: 50,
+                },
+              }}
+              className="swiper"
+            >
+              {recommend?.map((item) => (
+                <SwiperSlide>
+                  <div
+                    className="slideContent"
+                    onClick={() => navigate({ pathname: '/product/' + item?.id })}
+                  >
+                    <Tooltip title={item?.name} color="#decdbb">
+                      <img className="slideImage" src={item?.avatar} alt="" />
+                      <div className="slideText">
+                        <div className="name">{item?.name}</div>
+                        <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                        <Rating
+                          className="ratingPoint"
+                          size={16}
+                          initialValue={parseFloat(item?.averageRating).toFixed(0)}
+                          label
+                          transition
+                          readonly
+                          fillColor="orange"
+                          emptyColor="gray"
+                        />
+                      </div>
+                    </Tooltip>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        )}
       </div>
     </>
   )
