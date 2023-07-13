@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { getTopSale } from '../../apis/productControllerApi'
 
 const Slide = () => {
-  const [slide, setSlide] = useState([])
+  const [slide, setSlide] = useState()
 
   useEffect(() => {
     const handleGetTopSale = async () => {
@@ -16,27 +16,25 @@ const Slide = () => {
   }, [])
 
   return (
-    <div className="slide">
-      <div className="slideBackground">
-        <Carousel autoplay effect="fade" autoplaySpeed={1000}>
-          {slide?.map((item) => (
-            <div className="slideContent">
-              <img className="slideImage" src={item?.avatar} alt="" />
-              <div className="slideText">
-                <div className="topSale">ON SALE</div>
-                <div className="name">{item?.name}</div>
-                <div className="description">{item?.description}</div>
-              </div>
-              <div className="slideButton">
-                <Button className="detailButton" href={'/product/' + item?.id}>
-                  Detail
-                </Button>
-                <Button className="buyButton">Buy now</Button>
-              </div>
+    <div className="slide" key="slide">
+      <Carousel autoplay effect="fade" autoplaySpeed={1000}>
+        {slide?.map((item) => (
+          <div className="slideContent">
+            <img className="slideImage" src={item?.avatar} alt="" />
+            <div className="slideText">
+              <div className="topSale">ON SALE</div>
+              <div className="name">{item?.name}</div>
+              <div className="description">{item?.description}</div>
             </div>
-          ))}
-        </Carousel>
-      </div>
+            <div className="slideButton">
+              <Button className="detailButton" href={'/product/' + item?.id}>
+                Detail
+              </Button>
+              <Button className="buyButton">Buy now</Button>
+            </div>
+          </div>
+        ))}
+      </Carousel>
     </div>
   )
 }

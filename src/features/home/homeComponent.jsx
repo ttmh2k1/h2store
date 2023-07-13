@@ -52,12 +52,19 @@ const HomeComponent = () => {
 
   useEffect(() => {
     const handleGetRecommend = async () => {
-      const resp = await getRecommendProduct({
-        sessionId: localStorage?.getItem('sessionId'),
-        isExplicit: localStorage?.getItem('token') ? true : false,
-      })
-      const data = resp?.data?.data
-      setRecommend(data)
+      try {
+        const sessionId = localStorage?.getItem('sessionId')
+        if (sessionId !== null) {
+          const resp = await getRecommendProduct({
+            sessionId: localStorage?.getItem('sessionId'),
+            isExplicit: localStorage?.getItem('token') ? true : false,
+          })
+          const data = resp?.data?.data
+          setRecommend(data)
+        }
+      } catch (error) {
+        return error
+      }
     }
     handleGetRecommend()
   }, [])

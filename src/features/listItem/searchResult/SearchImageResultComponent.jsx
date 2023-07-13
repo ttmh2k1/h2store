@@ -24,11 +24,15 @@ const SearchImageResultComponent = (props) => {
   const navigate = useNavigate()
 
   const searchProduct = async () => {
-    const imgResult = await getListProductImg({
-      imageId: props?.file,
-      size: pageSize,
-    })
-    setListSearch(imgResult?.data?.data)
+    try {
+      const imgResult = await getListProductImg({
+        imageId: props?.file,
+        size: pageSize,
+      })
+      setListSearch(imgResult?.data?.data)
+    } catch (error) {
+      toast.error(error?.response?.data?.message, style)
+    }
   }
 
   useEffect(() => {

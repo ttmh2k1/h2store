@@ -9,7 +9,7 @@ const ChatBot = () => {
       </Helmet>
       <df-messenger
         className="message"
-        chat-icon="https:&#x2F;&#x2F;cdn0.iconfinder.com&#x2F;data&#x2F;icons&#x2F;product-avatar&#x2F;256&#x2F;Robot_Avatars_1-512.png"
+        // chat-icon="https:&#x2F;&#x2F;cdn0.iconfinder.com&#x2F;data&#x2F;icons&#x2F;product-avatar&#x2F;512&#x2F;Robot_Avatars_1-512.png"
         intent="WELCOME"
         chat-title="H2Store Virtual Assistant"
         agent-id="29caa562-6af4-4b1d-a022-31c25cce08e6"

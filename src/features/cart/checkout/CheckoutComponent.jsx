@@ -43,7 +43,7 @@ const CheckoutComponent = () => {
 
   const user = useSelector((state) => state?.user?.user)
   const listAddress = useSelector((state) => state?.user?.address)
-  const cart = useSelector((state) => state?.cart?.cart)
+
   const [listCart, setListCart] = useState('')
   const [modalAddress, setModalAddress] = useState(false)
   const [modalUpdate, setModalUpdate] = useState(false)
@@ -102,12 +102,12 @@ const CheckoutComponent = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const getCartInfo = async () => {
-    const result = await getCart()
-    if (result) {
-      dispatch(updateCart(result?.data?.data))
-    }
-  }
+  // const getCartInfo = async () => {
+  //   const result = await getCart()
+  //   if (result) {
+  //     dispatch(updateCart(result?.data?.data))
+  //   }
+  // }
 
   const getListAddress = async () => {
     const result = await getAddress()
@@ -171,44 +171,54 @@ const CheckoutComponent = () => {
   }
 
   const newAddress = async () => {
-    const result = await addAddressInfo({
-      idAddressWard: ward,
-      addressDetail: addressDetail,
-      receiverName: fullname,
-      receiverPhone: phone,
-      setToDefault: defaultAddress,
-    })
+    try {
+      const result = await addAddressInfo({
+        idAddressWard: ward,
+        addressDetail: addressDetail,
+        receiverName: fullname,
+        receiverPhone: phone,
+        setToDefault: defaultAddress,
+      })
 
-    if (result) {
-      toast.success('Created new address successfully!', style)
-      dispatch(updateAddress([...listAddress, result?.data?.data]))
-      setPhone('')
-      setFullname('')
-      setAddressDetail('')
-      setCity(0)
-      setDistrict(0)
-      setWard(0)
-      getCurrentUser()
-      setDefaultAddress(false)
-    } else toast.error('Failed!', style)
+      if (result) {
+        toast.success('Create new address successfully!', style)
+        dispatch(updateAddress([...listAddress, result?.data?.data]))
+        setPhone('')
+        setFullname('')
+        setAddressDetail('')
+        setCity(0)
+        setDistrict(0)
+        setWard(0)
+        getCurrentUser()
+        setDefaultAddress(false)
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message, style)
+    }
   }
 
   const editAddress = async (e) => {
-    const result = await updateAddressInfo(e?.id, {
-      idAddressWard: ward ? ward : e?.addressWard?.id,
-      addressDetail: addressDetail ? addressDetail : e?.addressDetail,
-      receiverName: fullname,
-      receiverPhone: phone,
-      setToDefault: e?.id === user?.defaultAddress?.id ? true : false,
-    })
+    try {
+      const result = await updateAddressInfo(e?.id, {
+        idAddressWard: ward ? ward : e?.addressWard?.id,
+        addressDetail: addressDetail ? addressDetail : e?.addressDetail,
+        receiverName: fullname,
+        receiverPhone: phone,
+        setToDefault: e?.id === user?.defaultAddress?.id ? true : false,
+      })
 
-    if (result) {
-      dispatch(
-        updateAddress(listAddress?.map((item) => (item?.id === e?.id ? result?.data?.data : item))),
-      )
-      toast.success('Update address successfully!', style)
-      setDefaultAddress(false)
-    } else toast.error('Update address failed!', style)
+      if (result) {
+        dispatch(
+          updateAddress(
+            listAddress?.map((item) => (item?.id === e?.id ? result?.data?.data : item)),
+          ),
+        )
+        toast.success('Update address successfully!', style)
+        setDefaultAddress(false)
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message, style)
+    }
   }
 
   const changeAddress = (index) => {
@@ -228,7 +238,7 @@ const CheckoutComponent = () => {
   }
 
   const handleOrder = async () => {
-    const idProductVariation = cart?.map((item) => item?.productVariation?.id)
+    const idProductVariation = listCart?.map((item) => item?.productVariation?.id)
     try {
       const result = await getOrderByCart({
         note: note,
@@ -252,8 +262,8 @@ const CheckoutComponent = () => {
 
   useEffect(() => {
     const getListTotalPrice = async () => {
-      if (cart?.length > 0) {
-        const resp = await getListCart({ size: cart?.length })
+      if (listCart?.length > 0) {
+        const resp = await getListCart({ size: listCart?.length })
         const data = resp?.data?.data
         setListTotalPrice(
           data?.map((item) => ({
@@ -263,7 +273,7 @@ const CheckoutComponent = () => {
       }
     }
     getListTotalPrice()
-  }, [cart])
+  }, [listCart])
 
   useEffect(() => {
     const getTotalPrice = async () => {
@@ -291,7 +301,12 @@ const CheckoutComponent = () => {
   useEffect(() => {
     getListAddress()
     getListCity()
-  }, [getListAddress, getListCity])
+    if (user?.defaultAddress) {
+      setAddress(user?.defaultAddress?.id)
+      setFullname(user?.defaultAddress?.receiverName)
+      setPhone(user?.defaultAddress?.receiverPhone)
+    }
+  }, [user])
 
   useEffect(() => {
     if (optionAddress?.City?.length > 1) {
@@ -306,7 +321,7 @@ const CheckoutComponent = () => {
   }, [district])
 
   useEffect(() => {
-    const handleGetOnSale = async () => {
+    const handleGetListCart = async () => {
       const resp = await getListCart({ size: 100 })
       const data = resp?.data?.data
       setListCart(
@@ -334,12 +349,12 @@ const CheckoutComponent = () => {
         })),
       )
     }
-    handleGetOnSale()
-  }, [cart])
+    handleGetListCart()
+  }, [user])
 
-  useEffect(() => {
-    getCartInfo()
-  })
+  // useEffect(() => {
+  //   getCartInfo()
+  // })
 
   useEffect(() => {
     const handleGetFeeShip = async () => {
@@ -602,25 +617,6 @@ const CheckoutComponent = () => {
           <div className="totalPayment">
             <div className="totalPaymentTitle">Total payment:</div>
             <div className="totalPaymentPrice">
-              {/* {chooseVoucher
-                ? coupon?.discountType === 'AMOUNT'
-                  ? formatMoney(
-                      totalPrice -
-                        parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(0) -
-                        coupon?.discountAmount +
-                        fee,
-                    )
-                  : formatMoney(
-                      totalPrice -
-                        parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(0) -
-                        (coupon?.discountAmount * totalPrice) / 100 +
-                        fee,
-                    )
-                : formatMoney(
-                    totalPrice -
-                      parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(0) +
-                      fee,
-                  )} */}
               {chooseVoucher
                 ? coupon?.discountType === 'AMOUNT'
                   ? coupon?.discountAmount <= coupon?.maxDiscount

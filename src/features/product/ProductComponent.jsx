@@ -56,42 +56,55 @@ const ProductComponent = (props) => {
 
   useEffect(() => {
     const handleGetProduct = async () => {
-      const resp = await getProduct(props?.id)
-      const data = resp?.data?.data
-      setProduct(data)
+      if (props?.id) {
+        const resp = await getProduct(props?.id)
+        const data = resp?.data?.data
+        setProduct(data)
+      }
     }
     handleGetProduct()
-  }, [props?.id])
+  })
 
   useEffect(() => {
     const handleGetVariations = async () => {
-      const resp = await getProduct(props?.id)
-      const data = resp?.data?.data
-      setVariations(data.variations)
+      if (props?.id) {
+        const resp = await getProduct(props?.id)
+        const data = resp?.data?.data
+        setVariations(data.variations)
+      }
     }
     handleGetVariations()
-  }, [props?.id])
+  })
 
   useEffect(() => {
     const handleGetInfos = async () => {
-      const resp = await getProduct(props?.id)
-      const data = resp?.data?.data
-      setChoose(data.variations[state.key])
+      if (props?.id) {
+        const resp = await getProduct(props?.id)
+        const data = resp?.data?.data
+        setChoose(data?.variations[state?.key])
+      }
     }
     handleGetInfos()
   }, [props?.id, state])
 
   useEffect(() => {
     const handleGetRecommendProduct = async () => {
-      const resp = await getRecommendProduct({
-        sessionId: localStorage?.getItem('sessionId'),
-        isExplicit: localStorage?.getItem('token') ? true : false,
-      })
-      const data = resp?.data?.data
-      setRecommendProduct(data)
+      try {
+        const sessionId = localStorage?.getItem('sessionId')
+        if (sessionId !== null) {
+          const resp = await getRecommendProduct({
+            sessionId: localStorage?.getItem('sessionId'),
+            isExplicit: localStorage?.getItem('token') ? true : false,
+          })
+          const data = resp?.data?.data
+          setRecommendProduct(data)
+        }
+      } catch (error) {
+        return error
+      }
     }
     handleGetRecommendProduct()
-  }, [props?.id])
+  })
 
   useEffect(() => {
     const handleGetViewedProduct = async () => {
@@ -102,7 +115,7 @@ const ProductComponent = (props) => {
       setViewedProduct(data)
     }
     handleGetViewedProduct()
-  }, [props?.id])
+  })
 
   useEffect(() => {
     const handleGetFavorite = async () => {
@@ -116,22 +129,26 @@ const ProductComponent = (props) => {
     if (user) {
       handleGetFavorite()
     }
-  }, [props?.id])
+  }, [isFavorite])
 
   useEffect(() => {
     const handleGetPage = async () => {
-      const resp = await getReviewProduct(props.id)
-      const data = resp?.data
-      setPageSize(data?.totalElement)
+      if (props?.id) {
+        const resp = await getReviewProduct(props.id)
+        const data = resp?.data
+        setPageSize(data?.totalElement)
+      }
     }
     handleGetPage()
   }, [props.id])
 
   useEffect(() => {
     const handleGetReview = async () => {
-      const resp = await getReviewProduct(props?.id, { size: pageSize, sortByOldest: false })
-      const data = resp?.data?.data
-      setReview(data)
+      if (props?.id) {
+        const resp = await getReviewProduct(props?.id, { size: pageSize, sortByOldest: false })
+        const data = resp?.data?.data
+        setReview(data)
+      }
     }
     handleGetReview()
   }, [props?.id, pageSize])
@@ -166,33 +183,36 @@ const ProductComponent = (props) => {
         Number(quantity) +
         Number(cart?.filter((item) => item?.productVariation?.id === choose?.id)[0]?.quantity)
     }
-    const result = await importCart({
-      idProductVariation: choose?.id,
-      quantity: +tmp,
-    })
+    try {
+      const result = await importCart({
+        idProductVariation: choose?.id,
+        quantity: +tmp,
+      })
 
-    dispatch(
-      updateCart(
-        cart?.map((item) =>
-          item?.productVariation?.id === choose?.id
-            ? {
-                ...item,
-                quantity:
-                  Number(quantity) +
-                  Number(
-                    cart?.filter((item) => item?.productVariation?.id === choose?.id)[0]?.quantity,
-                  ),
-              }
-            : item,
+      dispatch(
+        updateCart(
+          cart?.map((item) =>
+            item?.productVariation?.id === choose?.id
+              ? {
+                  ...item,
+                  quantity:
+                    Number(quantity) +
+                    Number(
+                      cart?.filter((item) => item?.productVariation?.id === choose?.id)[0]
+                        ?.quantity,
+                    ),
+                }
+              : item,
+          ),
         ),
-      ),
-    )
-    if (result) {
-      toast.success('Product was added to cart!', style)
-      getCountCart()
-      getCartInfo()
-    } else {
-      toast.error("Can't add product to cart!", style)
+      )
+      if (result) {
+        toast.success('Product was added to cart!', style)
+        getCountCart()
+        getCartInfo()
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message, style)
     }
   }
 
@@ -203,33 +223,37 @@ const ProductComponent = (props) => {
         Number(quantity) +
         Number(cart?.filter((item) => item?.productVariation?.id === choose?.id)[0]?.quantity)
     }
-    const result = await importCart({
-      idProductVariation: choose?.id,
-      quantity: +tmp,
-    })
 
-    dispatch(
-      updateCart(
-        cart?.map((item) =>
-          item?.productVariation?.id === choose?.id
-            ? {
-                ...item,
-                quantity:
-                  Number(quantity) +
-                  Number(
-                    cart?.filter((item) => item?.productVariation?.id === choose?.id)[0]?.quantity,
-                  ),
-              }
-            : item,
+    try {
+      const result = await importCart({
+        idProductVariation: choose?.id,
+        quantity: +tmp,
+      })
+
+      dispatch(
+        updateCart(
+          cart?.map((item) =>
+            item?.productVariation?.id === choose?.id
+              ? {
+                  ...item,
+                  quantity:
+                    Number(quantity) +
+                    Number(
+                      cart?.filter((item) => item?.productVariation?.id === choose?.id)[0]
+                        ?.quantity,
+                    ),
+                }
+              : item,
+          ),
         ),
-      ),
-    )
-    if (result) {
-      toast.success('Product was added to cart!', style)
-      getCountCart()
-      getCartInfo()
-    } else {
-      toast.error("Can't add product to cart!", style)
+      )
+      if (result) {
+        toast.success('Product was added to cart!', style)
+        getCountCart()
+        getCartInfo()
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message, style)
     }
     setTimeout(() => {
       navigate({

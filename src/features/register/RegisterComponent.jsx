@@ -18,24 +18,36 @@ const RegisterComponent = () => {
     theme: 'light',
   }
 
-  const [fullname, setFullname] = useState('')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirm, setConfirm] = useState('')
-  const [email, setEmail] = useState('')
-  const [gender, setGender] = useState('')
+  const [fullname, setFullname] = useState()
+  const [username, setUsername] = useState()
+  const [password, setPassword] = useState()
+  const [confirm, setConfirm] = useState()
+  const [email, setEmail] = useState()
+  const [gender, setGender] = useState()
   const navigate = useNavigate()
 
   const register = async (e) => {
     e.preventDefault()
 
     const registerUser = async () => {
-      const result = await registerAccount(fullname, username, password, email, gender)
-      if (result) {
-        toast.success('Register success!, Go to Login!', style)
-        navigate('/login')
-      } else {
-        toast.error('Failed Register!, Try a again!', style)
+      try {
+        const result = await registerAccount(fullname, username, password, email, gender)
+        if (result) {
+          toast.success('Register success!, Go to Login!', style)
+          navigate('/login')
+        }
+      } catch (error) {
+        console.log(error?.response?.data?.data)
+        if (error?.response?.data?.data) {
+          if (error?.response?.data?.data?.fullname)
+            toast.error('Fullname ' + error?.response?.data?.data?.fullname, style)
+          else if (error?.response?.data?.data?.email)
+            toast.error('Email ' + error?.response?.data?.data?.email, style)
+          else if (error?.response?.data?.data?.password)
+            toast.error('Password ' + error?.response?.data?.data?.password, style)
+          else if (error?.response?.data?.data?.username)
+            toast.error('Username ' + error?.response?.data?.data?.username, style)
+        } else toast.error(error?.response?.data?.message, style)
       }
     }
 

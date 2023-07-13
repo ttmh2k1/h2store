@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { Rating } from 'react-simple-star-rating'
 
 const CategoryComponent = (props) => {
-  const [category, setCategory] = useState([])
+  const [category, setCategory] = useState()
   const [listProduct, setListProduct] = useState([])
   const [pageSize, setPageSize] = useState(100)
   const [rating, setRating] = useState(0)

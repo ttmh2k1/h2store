@@ -42,9 +42,13 @@ const Navbar = () => {
     try {
       const resp = await putImg(transform)
       setImage(resp?.data?.imageId)
-      navigate(`/searchImageResult/${image}`)
+      setTimeout(() => {
+        navigate({
+          pathname: `/searchImageResult/${image}`,
+        })
+      }, 1000)
     } catch (error) {
-      toast.error(error?.data?.data.message)
+      return error
     }
   }
 
@@ -86,16 +90,16 @@ const Navbar = () => {
       <nav>
         <ul className={nav ? 'headerMenu active' : 'headerMenu'}>
           <li>
-            <label class="searchImg">
+            <label className="searchImg" width={'2vw'}>
               <input
                 type="file"
                 id="file"
                 className="file"
                 accept="image/*"
-                style={{ visibility: 'hidden' }}
+                style={{ width: '0', visibility: 'hidden' }}
                 onChange={uploadImg}
               />
-              <i class="fa fa-cloud-upload"></i>
+              <i className="fa fa-cloud-upload"></i>
               <AiOutlineFileImage size={25} style={{ marginTop: '6px' }} />
             </label>
           </li>

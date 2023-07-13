@@ -12,9 +12,13 @@ const NewArrivalComponent = () => {
 
   useEffect(() => {
     const handleGetNewArrival = async () => {
-      const resp = await getLastedProduct({ size: 100 })
-      const data = resp?.data?.data
-      setNewArrival(data)
+      try {
+        const resp = await getLastedProduct({ size: 100 })
+        const data = resp?.data?.data
+        setNewArrival(data)
+      } catch (error) {
+        return error
+      }
     }
     handleGetNewArrival()
   }, [])

@@ -12,13 +12,16 @@ const RecommendComponent = () => {
 
   useEffect(() => {
     const handleGetRecommend = async () => {
-      const resp = await getRecommendProduct({
-        sessionId: localStorage?.getItem('sessionId'),
-        isExplicit: localStorage?.getItem('token') ? true : false,
-        size: 100,
-      })
-      const data = resp?.data?.data
-      setRecommend(data)
+      const sessionId = localStorage?.getItem('sessionId')
+      if (sessionId !== null) {
+        const resp = await getRecommendProduct({
+          sessionId: localStorage?.getItem('sessionId'),
+          isExplicit: localStorage?.getItem('token') ? true : false,
+          size: 100,
+        })
+        const data = resp?.data?.data
+        setRecommend(data)
+      }
     }
     handleGetRecommend()
   }, [])
@@ -67,7 +70,7 @@ const RecommendComponent = () => {
                       readonly
                       fillColor="orange"
                       emptyColor="gray"
-                    />{' '}
+                    />
                   </div>
                 </Tooltip>
               </List.Item>

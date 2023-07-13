@@ -38,8 +38,8 @@ const LoginComponent = () => {
         dispatch(update(resp?.userInfo))
         navigate('/')
       }
-    } catch (e) {
-      toast.error('Failed Login!', 'Try again!')
+    } catch (error) {
+      toast.error(error?.response?.data?.message, style)
     }
   }
 
@@ -48,13 +48,15 @@ const LoginComponent = () => {
   const token = searchParams.get('token')
 
   const getUser = async () => {
-    const result = await currentUser()
-    if (result) {
-      localStorage.setItem('user', JSON.stringify(result))
-      dispatch(loginAction({ user: result, token: token }))
-      dispatch(update(result?.data?.data))
-    } else {
-      toast.error('Failed Login!', 'Try again!')
+    try {
+      const result = await currentUser()
+      if (result) {
+        localStorage.setItem('user', JSON.stringify(result))
+        dispatch(loginAction({ user: result, token: token }))
+        dispatch(update(result?.data?.data))
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message, style)
     }
   }
 
@@ -87,7 +89,7 @@ const LoginComponent = () => {
             <Input.Password type="password" className="input" id="password" />
           </div>
         </div>
-        <div className="rememberPw">
+        {/* <div className="rememberPw">
           <span style={{ display: 'flex', alignItems: 'center' }}>
             <input type="checkbox" className="checkbox" id="checkbox" />
             <label for="checkbox">Remember me</label>
@@ -95,7 +97,7 @@ const LoginComponent = () => {
           <span>
             <label style={{ textDecorationLine: 'underline' }}>Forget password?</label>
           </span>
-        </div>
+        </div> */}
         <br />
         <div className="button">
           <Button className="buttonLogin" onClick={() => handleLogin()}>
