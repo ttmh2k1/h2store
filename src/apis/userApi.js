@@ -20,6 +20,72 @@ export function registerAccount(fullname, username, password, email, gender) {
   })
 }
 
+export const changePassword = async (newPassword, oldPassword, otp) => {
+  try {
+    let res = await api.PUT(
+      `${SERVICE}/api/buyer/profile/password`,
+      {
+        newPassword: newPassword,
+        oldPassword: oldPassword,
+        otp: otp,
+      },
+      {
+        headers: {
+          accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      },
+    )
+
+    return res.success
+  } catch (e) {
+    return false
+  }
+}
+
+export const confirmPhone = async (otp) => {
+  try {
+    let res = await api.POST(
+      `${SERVICE}/api/buyer/profile/phone-confirm`,
+      {
+        otp: otp,
+      },
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    return res.data
+  } catch (e) {
+    return false
+  }
+}
+
+export const confirmEmail = async (otp) => {
+  try {
+    let res = await api.POST(
+      `${SERVICE}/api/buyer/profile/email-confirm`,
+      {
+        otp: otp,
+      },
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    return res.data
+  } catch (e) {
+    return false
+  }
+}
+
 // Address API
 export function getAddress() {
   return api.GET(`${SERVICE}/api/buyer/delivery-address`, {
@@ -79,10 +145,10 @@ export function getFeeShip(id) {
 }
 
 // Profile API
-export function currentEmailOTP() {
+export function currentEmailOTP(email) {
   return api.POST(
     `${SERVICE}/api/otp/email`,
-    {},
+    { email: email },
     {
       headers: {
         'Content-Type': 'application/json',
@@ -92,10 +158,10 @@ export function currentEmailOTP() {
   )
 }
 
-export function currentPhoneOTP() {
+export function currentPhoneOTP(phone) {
   return api.POST(
     `${SERVICE}/api/otp/phone`,
-    {},
+    { phoneNumber: phone },
     {
       headers: {
         'Content-Type': 'application/json',

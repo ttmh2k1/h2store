@@ -55,8 +55,8 @@ const ProfileComponent = () => {
   useEffect(() => {
     setUsername(user?.username)
     setFullname(user?.fullname)
-    // setPhone(user?.phone)
-    // setEmail(user?.email)
+    setPhone(user?.phone)
+    setEmail(user?.email)
     setGender(user?.gender)
     setBirthday(user?.dob)
     // setAvatar(user?.avatar)
@@ -65,19 +65,20 @@ const ProfileComponent = () => {
   const sendOTP = async (e) => {
     e.preventDefault()
     const emailOTP = async () => {
-      const result = await currentEmailOTP()
-      if (result?.success) {
+      try {
+        await currentEmailOTP(user?.email)
         toast.success('OTP was sended! Let submit OTP code!', style)
-      } else {
-        toast.error('Connect email failed! Please try again!', style)
+      } catch (error) {
+        toast.error(error?.response?.data?.message, style)
       }
     }
+
     const phoneOTP = async () => {
-      const result = await currentPhoneOTP()
-      if (result?.success) {
+      try {
+        await currentPhoneOTP(user?.phone)
         toast.success('OTP was sended!', 'Let submit OTP code!', style)
-      } else {
-        toast.error('Connect phone failed! Please try again!', style)
+      } catch (error) {
+        toast.error(error?.response?.data?.message, style)
       }
     }
 
@@ -99,8 +100,8 @@ const ProfileComponent = () => {
   //     const obj = {
   //       fullname: fullname,
   //       username: username,
-  //       email: email !== user?.email ? email : user?.email,
-  //       phone: phone !== user?.phone ? phone : user?.phone,
+  //       email: email !== user?.email ? email : null,
+  //       phone: phone !== user?.phone ? phone : null,
   //       gender: gender,
   //       dob: birthday,
   //       otp: otp,
@@ -129,10 +130,7 @@ const ProfileComponent = () => {
   //         setEditEmail(false)
   //       } else {
   //         dispatch(logoutUser())
-  //         toast.success(
-  //           'Change profile successful!. Your username is changed, please login again!',
-  //           'success',
-  //         )
+  //         toast.success('Change profile successful!', style)
   //         localStorage.clear()
   //         navigate('/login')
   //       }
@@ -150,10 +148,11 @@ const ProfileComponent = () => {
     const obj = {
       fullname: fullname,
       username: username,
-      email: email !== user?.email ? email : user?.email,
-      phone: phone !== user?.phone ? phone : user?.phone,
+      email: email !== user?.email ? email : '',
+      phone: phone !== user?.phone ? phone : '',
       gender: gender,
       dob: birthday,
+      otp: otp,
     }
     const obj1 = {
       fullname: fullname,
@@ -189,10 +188,10 @@ const ProfileComponent = () => {
       const userRs = { ...updateProfileInfo(transform) }
       localStorage?.setItem('user', userRs)
       dispatch(upadateUser(userRs))
-      toast.success('Change profile successful!', style)
       setEditUsername(false)
       setEditPhone(false)
       setEditEmail(false)
+      toast.success('Change profile successful!', style)
       setTimeout(() => {
         window.location.reload()
       }, 50)
