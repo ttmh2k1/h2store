@@ -171,9 +171,10 @@ export function currentPhoneOTP(phone) {
   )
 }
 
-export function updateProfileInfo(data) {
-  const res = api.PUT(`${SERVICE}/api/buyer/profile`, data, {
+export async function updateProfileInfo(data) {
+  const res = await api.PUT(`${SERVICE}/api/buyer/profile`, data, {
     'Content-Type': 'multipart/form-data',
   })
-  return res?.data
+
+  return res?.data?.data
 }

@@ -26,7 +26,7 @@ const OrderHistoryComponent = () => {
     pauseOnHover: true,
     draggable: false,
     progress: undefined,
-    theme: 'light',
+    theme: 'colored',
   }
 
   useEffect(() => {

@@ -20,7 +20,7 @@ const LoginComponent = () => {
     pauseOnHover: true,
     draggable: false,
     progress: undefined,
-    theme: 'light',
+    theme: 'colored',
   }
 
   const dispatch = useDispatch()

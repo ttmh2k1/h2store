@@ -32,7 +32,7 @@ const ProductComponent = (props) => {
     pauseOnHover: true,
     draggable: false,
     progress: undefined,
-    theme: 'light',
+    theme: 'colored',
   }
   const navigate = useNavigate()
   const [product, setProduct] = useState([])
