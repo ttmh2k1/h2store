@@ -238,7 +238,7 @@ const CheckoutComponent = () => {
   }
 
   const handleOrder = async () => {
-    const idProductVariation = listCart?.map((item) => item?.productVariation?.id)
+    const idProductVariation = listCart?.map((item) => item?.variationId)
     try {
       const result = await getOrderByCart({
         note: note,
