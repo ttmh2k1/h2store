@@ -9,6 +9,7 @@ import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 import { currentUser } from '../../apis/userApi'
 import logo from '../../commons/assets/brand.png'
+import { SERVICE } from '../../apis/api'
 
 const LoginComponent = () => {
   const style = {
@@ -108,7 +109,8 @@ const LoginComponent = () => {
           </Button>
         </div>
         <p>OR</p>
-        <Button className="buttonGoogle" href="http://localhost:8080/oauth2/authorization/google">
+        {/* <Button className="buttonGoogle" href="http://localhost:8080/oauth2/authorization/google"> */}
+        <Button className="buttonGoogle" href={SERVICE + '/oauth2/authorization/google'}>
           <AiFillGoogleCircle size="2vw" />
           &nbsp; Login with Google
         </Button>
