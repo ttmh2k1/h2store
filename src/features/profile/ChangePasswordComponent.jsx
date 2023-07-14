@@ -20,7 +20,7 @@ const ChangePasswordComponent = () => {
     pauseOnHover: true,
     draggable: false,
     progress: undefined,
-    theme: 'light',
+    theme: 'colored',
   }
 
   const user = useSelector((state) => state?.user?.user)

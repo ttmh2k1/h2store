@@ -19,7 +19,7 @@ const CartComponent = () => {
     pauseOnHover: true,
     draggable: false,
     progress: undefined,
-    theme: 'light',
+    theme: 'colored',
   }
 
   const cart = useSelector((state) => state?.cart?.cart)

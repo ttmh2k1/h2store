@@ -15,7 +15,7 @@ const RegisterComponent = () => {
     pauseOnHover: true,
     draggable: false,
     progress: undefined,
-    theme: 'light',
+    theme: 'colored',
   }
 
   const [fullname, setFullname] = useState()

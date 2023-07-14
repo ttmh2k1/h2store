@@ -16,7 +16,7 @@ const SearchResultComponent = (props) => {
     pauseOnHover: true,
     draggable: false,
     progress: undefined,
-    theme: 'light',
+    theme: 'colored',
   }
 
   const [listSearch, setListSearch] = useState([])

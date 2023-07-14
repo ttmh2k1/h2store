@@ -48,7 +48,7 @@ const ProfileComponent = () => {
 
   useEffect(() => {
     return () => {
-      avatar && URL.revokeObjectURL(avatar?.preview)
+      avatar && URL.revokeObjectURL(avatar.preview)
     }
   }, [avatar])
 
@@ -59,7 +59,7 @@ const ProfileComponent = () => {
     setEmail(user?.email)
     setGender(user?.gender)
     setBirthday(user?.dob)
-    setAvatar(user?.avatar)
+    // setAvatar(user?.avatar)
   }, [user])
 
   const sendOTP = async (e) => {
@@ -114,34 +114,32 @@ const ProfileComponent = () => {
       const avatar = document.getElementById('avatar').files
       if (avatarFile) {
         transform?.append('avatar', avatar[0])
-      } else transform?.append('avatar', avatar)
-      // // console.log(obj)
+      }
       // transform?.append('avatar', avatar) // file avatar nếu có k thì k có dòng này
       try {
         const result = await updateProfileInfo(transform)
+
         if (result) {
           if (user?.username === username) {
             localStorage.removeItem('user')
-            const userRs = { ...result?.data?.data }
+            const userRs = { ...result }
             localStorage.setItem('user', userRs)
             dispatch(upadateUser(userRs))
+            toast.success('Change profile successful!', style)
             setEditUsername(false)
             setEditPhone(false)
             setEditEmail(false)
           } else {
             dispatch(logoutUser())
-            toast.success(
-              'Change profile successful! Your username is changed, please login again!',
-              style,
-            )
+            toast.success('Change profile successful!', style)
             localStorage.clear()
             navigate('/login')
           }
+        } else {
+          toast.error('Failed!', style)
         }
-        navigate(0)
-        toast.success('Change profile successful!', style)
       } catch (error) {
-        toast.error(error?.response?.data?.data, style)
+        toast.error(error?.response?.data?.message, style)
       }
     }
 
@@ -167,7 +165,7 @@ const ProfileComponent = () => {
   //     phone: phone !== user?.phone ? phone : user?.phone,
   //     gender: gender,
   //     dob: birthday,
-  //     // otp: otp,
+  //     otp: otp,
   //   }
   //   const blob = new Blob([JSON?.stringify(obj)], {
   //     type: 'application/json',
@@ -180,10 +178,10 @@ const ProfileComponent = () => {
   //   const avatar = document.getElementById('avatar').files
 
   //   if (avatar.length > 0) {
-  //     transform?.append('avatar', avatar)
+  //     transform?.append('avatar', avatar[0])
   //   }
   //   if (avatar.length > 0) {
-  //     transform1?.append('avatar', avatar)
+  //     transform1?.append('avatar', avatar[0])
   //   }
 
   //   await updateProfileInfo(editEmail === true || editPhone === true ? transform : transform1)
@@ -198,9 +196,9 @@ const ProfileComponent = () => {
   //     setEditPhone(false)
   //     setEditEmail(false)
   //     toast.success('Change profile successful!', style)
-  //     // setTimeout(() => {
-  //     //   window.location.reload()
-  //     // }, 50)
+  //     setTimeout(() => {
+  //       window.location.reload()
+  //     }, 50)
   //   } else {
   //     dispatch(logoutUser())
   //     toast.success(
