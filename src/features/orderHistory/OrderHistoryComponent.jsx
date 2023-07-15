@@ -14,7 +14,7 @@ import { toast } from 'react-toastify'
 const OrderHistoryComponent = () => {
   const user = useSelector((state) => state?.user?.user)
   const [state, setState] = useState(false)
-  const [listOrder, setListOrder] = useState()
+  const [listOrder, setListOrder] = useState([])
   const [pageSize, setPageSize] = useState(100)
   const navigate = useNavigate()
 
@@ -197,6 +197,7 @@ const OrderHistoryComponent = () => {
           >
             <TabPane className="order" tab="All" key="ALL" onTabScroll="right">
               <List
+                loading={listOrder?.length === 0 && true}
                 onTabScroll
                 dataSource={listOrder}
                 pagination={{

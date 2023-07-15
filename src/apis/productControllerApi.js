@@ -1,59 +1,59 @@
 import { combineQueriesUrl } from '../utils/functionHelper'
 import api, { SERVICE } from './api'
 
-export function getListProduct(req) {
+export async function getListProduct(req) {
   const queries = combineQueriesUrl({ ...req })
-  return api.GET(`${SERVICE}/api/product${queries}`)
+  return await api.GET(`${SERVICE}/api/product${queries}`)
 }
 
-export function getListProductImg(req) {
+export async function getListProductImg(req) {
   const queries = combineQueriesUrl({ ...req })
-  return api.GET(`${SERVICE}/api/product/image-search${queries}`)
+  return await api.GET(`${SERVICE}/api/product/image-search${queries}`)
 }
 
-export function getProduct(id) {
+export async function getProduct(id) {
   const sessionId = localStorage.getItem('sessionId')
   if (sessionId) {
-    return api.GET(`${SERVICE}/api/product/${id}?sessionId=${sessionId}`)
-  } else return api.GET(`${SERVICE}/api/product/${id}`)
+    return await api.GET(`${SERVICE}/api/product/${id}?sessionId=${sessionId}`)
+  } else return await api.GET(`${SERVICE}/api/product/${id}`)
 }
 
-export function getTopView(req) {
+export async function getTopView(req) {
   const queries = combineQueriesUrl({ ...req })
-  return api.GET(`${SERVICE}/api/product/most-viewed${queries}`)
+  return await api.GET(`${SERVICE}/api/product/most-viewed${queries}`)
 }
 
-export function getTopSale(req) {
+export async function getTopSale(req) {
   const queries = combineQueriesUrl({ ...req })
-  return api.GET(`${SERVICE}/api/product/top-sale${queries}`)
+  return await api.GET(`${SERVICE}/api/product/top-sale${queries}`)
 }
 
-export function getTopSold(req) {
+export async function getTopSold(req) {
   const queries = combineQueriesUrl({ ...req })
-  return api.GET(`${SERVICE}/api/product/most-sold${queries}`)
+  return await api.GET(`${SERVICE}/api/product/most-sold${queries}`)
 }
 
-export function getTopRating(req) {
+export async function getTopRating(req) {
   const queries = combineQueriesUrl({ ...req })
-  return api.GET(`${SERVICE}/api/product/high-rating${queries}`)
+  return await api.GET(`${SERVICE}/api/product/high-rating${queries}`)
 }
 
-export function getLastedProduct(req) {
+export async function getLastedProduct(req) {
   const queries = combineQueriesUrl({ ...req })
-  return api.GET(`${SERVICE}/api/product/lasted${queries}`)
+  return await api.GET(`${SERVICE}/api/product/lasted${queries}`)
 }
 
-export function getRecommendProduct(req) {
+export async function getRecommendProduct(req) {
   const queries = combineQueriesUrl({ ...req })
-  return api.GET(`${SERVICE}/api/product/recommend${queries}`)
+  return await api.GET(`${SERVICE}/api/product/recommend${queries}`)
 }
 
-export function getViewedProduct(req) {
+export async function getViewedProduct(req) {
   const queries = combineQueriesUrl({ ...req })
   if (queries) {
-    return api.GET(`${SERVICE}/api/view-history${queries}`)
+    return await api.GET(`${SERVICE}/api/view-history${queries}`)
   }
-  return api.GET(`${SERVICE}/api/view-history`)
+  return await api.GET(`${SERVICE}/api/view-history`)
 }
 
 export async function putImg(data) {

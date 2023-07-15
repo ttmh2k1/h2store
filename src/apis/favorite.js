@@ -1,13 +1,13 @@
 import { combineQueriesUrl } from '../utils/functionHelper'
 import api, { SERVICE } from './api'
 
-export function getFavoriteProduct(req) {
+export async function getFavoriteProduct(req) {
   const queries = combineQueriesUrl({ ...req })
-  return api.GET(`${SERVICE}/api/buyer/favourite-product${queries}`)
+  return await api.GET(`${SERVICE}/api/buyer/favourite-product${queries}`)
 }
 
-export function addFavoriteProduct(id) {
-  return api.POST(`${SERVICE}/api/buyer/favourite-product/${id}`)
+export async function addFavoriteProduct(id) {
+  return await api.POST(`${SERVICE}/api/buyer/favourite-product/${id}`)
 }
 
 export function deleteFavoriteProduct(id) {

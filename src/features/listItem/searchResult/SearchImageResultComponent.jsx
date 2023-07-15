@@ -49,6 +49,7 @@ const SearchImageResultComponent = (props) => {
         <div className="title">SEARCH RESULT</div>
         {listSearch?.length > 0 ? (
           <List
+            loading={!listSearch[0] && true}
             className="listSearchResult"
             grid={{
               gutter: 12,

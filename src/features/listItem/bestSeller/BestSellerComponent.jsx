@@ -24,6 +24,7 @@ const BestSellerComponent = () => {
       <div className="productBestSeller">
         <div className="title">BEST SELLER</div>
         <List
+          loading={bestSeller?.length === 0 && true}
           className="listBestSeller"
           grid={{
             gutter: 12,

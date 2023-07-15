@@ -86,6 +86,7 @@ const CategoryComponent = (props) => {
             </div>
           </div>
           <List
+            loading={!listProduct[0] && true}
             className="listCategory"
             grid={{
               gutter: 16,

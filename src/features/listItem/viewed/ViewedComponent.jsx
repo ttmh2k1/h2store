@@ -39,6 +39,7 @@ const ViewedComponent = () => {
       <div className="viewedProductList">
         <div className="title">VIEWED PRODUCTS</div>
         <List
+          loading={!viewed[0] && true}
           className="listViewed"
           grid={{
             gutter: 12,

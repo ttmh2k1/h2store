@@ -100,9 +100,9 @@ const ProfileComponent = () => {
       const obj = {
         fullname: fullname,
         username: username,
-        email: email !== user?.email ? email : null,
-        phone: phone !== user?.phone ? phone : null,
-        gender: gender,
+        email: email !== user?.email ? email : user?.email,
+        phone: phone !== user?.phone ? phone : user?.phone,
+        gender: gender !== user?.gender ? gender : null,
         dob: birthday,
         otp: otp,
       }
@@ -118,7 +118,6 @@ const ProfileComponent = () => {
       // transform?.append('avatar', avatar) // file avatar nếu có k thì k có dòng này
       try {
         const result = await updateProfileInfo(transform)
-
         if (result) {
           if (user?.username === username) {
             localStorage.removeItem('user')
@@ -142,7 +141,6 @@ const ProfileComponent = () => {
         toast.error(error?.response?.data?.message, style)
       }
     }
-
     update()
   }
 
@@ -290,6 +288,7 @@ const ProfileComponent = () => {
               </List.Item>
             </List>
           </div>
+
           <div
             className="voucher"
             onClick={() =>
@@ -300,6 +299,7 @@ const ProfileComponent = () => {
           >
             Voucher
           </div>
+
           <div
             className="order"
             onClick={() =>
@@ -373,11 +373,11 @@ const ProfileComponent = () => {
                   onClick={() =>
                     setEditEmail(() => {
                       if (!user?.phone) {
-                        toast.warning("Can't chang email! Please add phone number!", style)
+                        toast.warning("Can't change email! Please add phone number!", style)
                         return false
                       } else if (editPhone) {
                         toast.warning(
-                          "Can't chang email! Only change email or phone number!",
+                          "Can't change email! Only change email or phone number!",
                           style,
                         )
                         return false

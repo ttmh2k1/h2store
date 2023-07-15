@@ -222,6 +222,7 @@ const CartComponent = () => {
         <div className="title">CART</div>
         <div className="listCart">
           <Table
+            loading={!listCart && true}
             dataSource={listCart}
             columns={columns}
             scroll={{ y: 560 }}

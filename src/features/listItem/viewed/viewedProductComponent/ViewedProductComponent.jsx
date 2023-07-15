@@ -164,6 +164,7 @@ const ViewedProductComponent = () => {
       <div className="viewedContent">
         <div className="title">VIEWED PRODUCTS</div>
         <List
+          loading={!viewedProduct[0] && true}
           className="listViewed"
           grid={{
             gutter: 12,

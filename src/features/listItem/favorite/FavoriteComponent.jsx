@@ -1,5 +1,5 @@
 import './favoriteStyle.scss'
-import { Button, Image, List, Tooltip } from 'antd'
+import { Button, Image, Input, List, Select, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { formatMoney } from '../../../utils/functionHelper'
 import { useNavigate } from 'react-router-dom'
@@ -23,24 +23,29 @@ const FavoriteComponent = () => {
   }
   const user = useSelector((state) => state?.user?.user)
   const [favorite, setFavorite] = useState([])
+  const [searchProduct, setSearchProduct] = useState('')
+  const [sortBy, setSortBy] = useState('')
   const [state, setState] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
     const handleGetFavorite = async () => {
-      const resp = await getFavoriteProduct({ size: 100 })
+      const resp = await getFavoriteProduct({
+        searchProductName: searchProduct,
+        searchProductDescription: searchProduct,
+        sortBy: sortBy,
+        size: 100,
+        sortDescending: false,
+      })
       const data = resp?.data?.data
       setFavorite(data)
     }
     handleGetFavorite()
-  }, [])
+  }, [searchProduct, sortBy])
 
   const handleDeleteFavorite = async (id) => {
     await deleteFavoriteProduct(id)
     toast.success('Product removed from favorite products', style)
-    setTimeout(() => {
-      window.location.reload()
-    }, 500)
   }
 
   return (
@@ -167,7 +172,33 @@ const FavoriteComponent = () => {
       </div>
       <div className="favoriteContent">
         <div className="title">FAVORITE PRODUCTS</div>
+        <div className="favoriteSearch">
+          <div className="favoriteInput">
+            <Input
+              className="input"
+              onChange={(e) => {
+                setSearchProduct(e?.target?.value)
+              }}
+            />
+          </div>
+          <div className="sortBy">
+            Sort by:{' '}
+            <Select
+              className="input"
+              style={{ width: 120 }}
+              onChange={(e) => {
+                setSortBy(e)
+              }}
+              options={[
+                { value: '1', label: 'Name' },
+                { value: '2', label: 'ID' },
+                { value: '3', label: 'Time' },
+              ]}
+            />
+          </div>
+        </div>
         <List
+          loading={!favorite[0] && true}
           className="listFavorite"
           grid={{
             gutter: 12,
@@ -218,7 +249,7 @@ const FavoriteComponent = () => {
                       className="delete"
                       onClick={() => handleDeleteFavorite(item?.product?.id)}
                     >
-                      Delete product
+                      Remove
                     </Button>
                   </div>
                 </Tooltip>

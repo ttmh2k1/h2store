@@ -153,7 +153,7 @@ const RankingComponent = () => {
           </div>
           <div className="item">
             <div className="itemTitle">Customer discount:</div>
-            <div className="value">{user?.rank?.discountRate * 100}%</div>
+            <div className="value">{user?.rank?.discountRate}%</div>
           </div>
           {user?.rank?.nextRank && (
             <div className="item">
