@@ -16,6 +16,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Tooltip } from 'antd'
 import { Rating } from 'react-simple-star-rating'
 import { useSelector } from 'react-redux'
+import { getFavoriteProduct } from '../../apis/favorite'
 
 const HomeComponent = () => {
   const user = useSelector((state) => state?.user?.user)
@@ -23,6 +24,7 @@ const HomeComponent = () => {
   const [newArrival, setNewArrival] = useState([])
   const [topView, setTopView] = useState([])
   const [topSold, setTopSold] = useState([])
+  const [favorite, setFavorite] = useState([])
   const [recommend, setRecommend] = useState([])
   const navigate = useNavigate()
 
@@ -51,6 +53,17 @@ const HomeComponent = () => {
       setTopView(data)
     }
     handleGetTopView()
+  }, [])
+
+  useEffect(() => {
+    if (user) {
+      const handleGetFavorite = async () => {
+        const resp = await getFavoriteProduct()
+        const data = resp?.data?.data
+        setFavorite(data)
+      }
+      handleGetFavorite()
+    }
   }, [])
 
   useEffect(() => {
@@ -269,9 +282,76 @@ const HomeComponent = () => {
             ))}
           </Swiper>
         </div>
+        {favorite?.length > 0 && (
+          <div className="favoriteList">
+            <div className="title">FAVORITE PRODUCTS</div>
+            <Link className="seeAll" to="/favoriteProduct">
+              See more
+            </Link>
+            <Swiper
+              autoplay={{
+                delay: 2000,
+                disableOnInteraction: false,
+              }}
+              modules={[Autoplay, Pagination, Navigation]}
+              slidesPerView={1}
+              spaceBetween={10}
+              pagination={{
+                clickable: true,
+              }}
+              navigation={true}
+              breakpoints={{
+                '@0.00': {
+                  slidesPerView: 1,
+                  spaceBetween: 20,
+                },
+                '@0.75': {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                '@1.00': {
+                  slidesPerView: 3,
+                  spaceBetween: 40,
+                },
+                '@1.50': {
+                  slidesPerView: 4,
+                  spaceBetween: 50,
+                },
+              }}
+              className="swiper"
+            >
+              {favorite?.map((item) => (
+                <SwiperSlide>
+                  <div
+                    className="slideContent"
+                    onClick={() => navigate({ pathname: '/product/' + item?.product?.id })}
+                  >
+                    <Tooltip title={item?.product?.name} color="#decdbb">
+                      <img className="slideImage" src={item?.product?.avatar} alt="" />
+                      <div className="slideText">
+                        <div className="name">{item?.product?.name}</div>
+                        <div className="price">Price: {formatMoney(item?.product?.minPrice)}</div>
+                        <Rating
+                          className="ratingPoint"
+                          size={16}
+                          initialValue={parseFloat(item?.product?.averageRating).toFixed(0)}
+                          label
+                          transition
+                          readonly
+                          fillColor="orange"
+                          emptyColor="gray"
+                        />
+                      </div>
+                    </Tooltip>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        )}
         {recommend?.length > 0 && (
           <div className="recommend">
-            <div className="title">RECOMMEND</div>
+            <div className="title">RECOMMEND PRODUCTS</div>
             <Link className="seeAll" to="/recommend">
               See more
             </Link>

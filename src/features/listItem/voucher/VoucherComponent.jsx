@@ -159,6 +159,7 @@ const VoucherComponent = () => {
       <div className="voucherContent">
         <div className="title">VOUCHERS</div>
         <List
+          loading={!voucher[0] && true}
           className="listVoucher"
           grid={12}
           itemLayout="vertical"

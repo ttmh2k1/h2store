@@ -1,7 +1,7 @@
 import './checkoutStyle.scss'
 import { useNavigate } from 'react-router-dom'
 import React, { useEffect, useMemo, useState } from 'react'
-import { getCart, getListCart } from '../../../apis/cartApi'
+import { getListCart } from '../../../apis/cartApi'
 import { Button, Checkbox, Divider, Image, Input, List, Modal, Radio, Select } from 'antd'
 import { formatMoney } from '../../../utils/functionHelper'
 import Table from '../../../components/table/Table'
@@ -43,7 +43,7 @@ const CheckoutComponent = () => {
 
   const user = useSelector((state) => state?.user?.user)
   const listAddress = useSelector((state) => state?.user?.address)
-
+  const [loading, setLoading] = useState(false)
   const [listCart, setListCart] = useState('')
   const [modalAddress, setModalAddress] = useState(false)
   const [modalUpdate, setModalUpdate] = useState(false)
@@ -281,6 +281,7 @@ const CheckoutComponent = () => {
       listTotalPrice?.map((item) => (sum += item?.total))
       setTotalPrice(sum)
     }
+    setLoading(true)
     getTotalPrice()
   }, [listTotalPrice])
 
@@ -348,6 +349,7 @@ const CheckoutComponent = () => {
           totalPrice: item?.quantity * item?.productVariation?.priceAfterDiscount,
         })),
       )
+      setLoading(true)
     }
     handleGetListCart()
   }, [user])
@@ -363,6 +365,7 @@ const CheckoutComponent = () => {
         const data = resp?.data
         setFee(data?.fee)
       }
+      setLoading(true)
     }
     handleGetFeeShip()
   }, [address])
@@ -377,12 +380,12 @@ const CheckoutComponent = () => {
   }, [])
 
   useEffect(() => {
-    const handleGetFavorite = async () => {
+    const handleGetVoucher = async () => {
       const resp = await getListVoucher({ size: pageSize })
       const data = resp?.data?.data
       setVoucher(data)
     }
-    handleGetFavorite()
+    handleGetVoucher()
   }, [pageSize])
 
   const columns = useMemo(() => [
@@ -498,6 +501,7 @@ const CheckoutComponent = () => {
 
         <div className="listProduct">
           <Table
+            loading={!listCart && loading}
             columns={columns}
             dataSource={listCart}
             scroll={{ y: 480 }}
@@ -687,6 +691,7 @@ const CheckoutComponent = () => {
         open={modalAddress}
         onOk={() => {
           setModalAddress(false)
+          handleUpdate(listAddress?.filter((item) => item?.id === addressId)[0])
         }}
         onCancel={() => setModalAddress(false)}
         width={'36vw'}

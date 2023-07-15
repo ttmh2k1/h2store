@@ -1,7 +1,7 @@
 import { combineQueriesUrl } from '../utils/functionHelper'
 import api, { SERVICE } from './api'
 
-export function getListVoucher(req) {
+export async function getListVoucher(req) {
   const queries = combineQueriesUrl({ ...req })
-  return api.GET(`${SERVICE}/api/buyer/coupon-code${queries}`)
+  return await api.GET(`${SERVICE}/api/buyer/coupon-code${queries}`)
 }

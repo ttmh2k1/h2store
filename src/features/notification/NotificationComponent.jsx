@@ -108,6 +108,7 @@ const NotificationComponent = () => {
           >
             <TabPane className="notificaionTab" tab="All" key="ALL" onTabScroll="right">
               <List
+                loading={!notify[0] && true}
                 className="notification"
                 pagination={{
                   showSizeChanger: true,
@@ -130,6 +131,7 @@ const NotificationComponent = () => {
             </TabPane>
             <TabPane className="notificaionTab" tab="Unread" key="UNREAD" onTabScroll="right">
               <List
+                loading={!unread[0] && true}
                 className="notification"
                 pagination={{
                   showSizeChanger: true,
@@ -152,6 +154,7 @@ const NotificationComponent = () => {
             </TabPane>
             <TabPane className="notificaionTab" tab="Read" key="READ" onTabScroll="right">
               <List
+                loading={!seen[0] && true}
                 className="notification"
                 pagination={{
                   showSizeChanger: true,

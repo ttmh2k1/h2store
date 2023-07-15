@@ -100,13 +100,34 @@
       }
     }
 
+    .favoriteSearch {
+      display: flex;
+      margin: 0 2vw;
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: flex-end;
+
+      .favoriteInput {
+        width: 16vw;
+        height: 2vw;
+      }
+
+      .sortBy {
+        margin-left: 0.4vw;
+        font-size: 1vw;
+        height: 2vw;
+      }
+    }
+
     .listFavorite {
       display: flex;
-      justify-content: center;
       flex-direction: column;
       width: 100%;
       height: 100%;
-      padding: 0 0.8vw;
+      padding: 1.2vw 0.8vw;
+      @media (max-width: 980px) {
+        padding: 4vw 0.8vw;
+      }
 
       .itemFavorite {
         text-align: justify;

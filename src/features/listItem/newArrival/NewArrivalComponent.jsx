@@ -28,6 +28,7 @@ const NewArrivalComponent = () => {
       <div className="productNewArrival">
         <div className="title">NEW ARRIVAL</div>
         <List
+          loading={!newArrival[0] && true}
           className="listNewArrival"
           grid={{
             gutter: 12,

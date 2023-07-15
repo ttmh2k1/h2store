@@ -19,6 +19,7 @@ const RecommendComponent = () => {
         const resp = await getRecommendProduct({
           sessionId: user ? sessionId : localStorage?.getItem('sessionId'),
           isExplicit: localStorage?.getItem('token') ? true : false,
+          size: 100,
         })
         const data = resp?.data?.data
         setRecommend(data)
@@ -34,6 +35,7 @@ const RecommendComponent = () => {
       <div className="productRecommend">
         <div className="title">RECOMMEND PRODUCTS</div>
         <List
+          loading={!recommend[0] && true}
           className="listRecommend"
           grid={{
             gutter: 12,

@@ -36,7 +36,7 @@ const ProductComponent = (props) => {
   }
   const navigate = useNavigate()
   const [product, setProduct] = useState([])
-  const [isFavorite, setIsFavorite] = useState()
+  const [isFavorite, setIsFavorite] = useState(false)
   const [variations, setVariations] = useState([])
   const [choose, setChoose] = useState('')
   const [value, setValue] = useState('')
@@ -121,14 +121,14 @@ const ProductComponent = (props) => {
       const resp = await getFavoriteProduct({ size: 100 })
       const data = resp?.data?.data
       const tmp = data?.filter((item) => item?.product?.id === Number(props?.id))
-      if (tmp.length > 0) {
+      if (tmp?.length > 0) {
         setIsFavorite(true)
       } else setIsFavorite(false)
     }
     if (user) {
       handleGetFavorite()
     }
-  }, [isFavorite])
+  }, [props?.id])
 
   useEffect(() => {
     const handleGetPage = async () => {
@@ -271,6 +271,13 @@ const ProductComponent = (props) => {
     setIsFavorite(!isFavorite)
     await deleteFavoriteProduct(props?.id)
     toast.success('Product removed from favorite products', style)
+  }
+
+  const goToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
   }
 
   return (
@@ -450,6 +457,7 @@ const ProductComponent = (props) => {
           >
             <TabPane className="reviewTab" tab="All" key="ALL" onTabScroll="right">
               <List
+                loading={!review[0] && true}
                 className="review"
                 pagination={{
                   showSizeChanger: true,
@@ -883,7 +891,10 @@ const ProductComponent = (props) => {
               <SwiperSlide>
                 <div
                   className="slideContent"
-                  onClick={() => navigate({ pathname: '/product/' + item?.id })}
+                  onClick={() => {
+                    navigate({ pathname: '/product/' + item?.id })
+                    goToTop()
+                  }}
                 >
                   <img className="slideImage" src={item?.avatar} alt="" />
                   <div className="slideText">
@@ -948,7 +959,10 @@ const ProductComponent = (props) => {
                 <SwiperSlide>
                   <div
                     className="slideContent"
-                    onClick={() => navigate({ pathname: '/product/' + item?.id })}
+                    onClick={() => {
+                      navigate({ pathname: '/product/' + item?.id })
+                      goToTop()
+                    }}
                   >
                     <Tooltip title={item?.name} color="#decdbb">
                       <img className="slideImage" src={item?.avatar} alt="" />
@@ -1016,7 +1030,10 @@ const ProductComponent = (props) => {
                 <SwiperSlide>
                   <div
                     className="slideContent"
-                    onClick={() => navigate({ pathname: '/product/' + item?.id })}
+                    onClick={() => {
+                      navigate({ pathname: '/product/' + item?.id })
+                      goToTop()
+                    }}
                   >
                     <Tooltip title={item?.name} color="#decdbb">
                       <img className="slideImage" src={item?.avatar} alt="" />

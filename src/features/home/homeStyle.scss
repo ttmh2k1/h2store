@@ -6,6 +6,7 @@
 .newArrival,
 .topSold,
 .topView,
+.favoriteList,
 .recommend {
   margin: 1.6vw 8vw;
   padding: 0;
@@ -23,6 +24,7 @@
       font-size: 4vw;
     }
   }
+
   .seeAll {
     display: flex;
     flex-direction: row-reverse;

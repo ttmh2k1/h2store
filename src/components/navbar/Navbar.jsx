@@ -21,6 +21,7 @@ import { logout as logoutAction } from '../../actionCreators/UserCreator'
 import Avatar from 'react-avatar'
 import { putImg } from '../../apis/productControllerApi'
 import { toast } from 'react-toastify'
+import { Input } from 'antd'
 
 const Navbar = () => {
   const dispatch = useDispatch()
@@ -93,7 +94,7 @@ const Navbar = () => {
               <AiOutlineFileImage size={25} style={{ marginTop: '6px' }} />
             </label>
           </li>
-          <input
+          <Input
             size={25}
             className="inputSearch"
             type="text"

@@ -13,12 +13,14 @@ const ScrollToTop = () => {
       }
     })
   }, [])
+
   const goToTop = () => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     })
   }
+
   return (
     <div className="top-to-btm">
       {showTopBtn && <AiOutlineArrowUp className="icon-position icon-style" onClick={goToTop} />}

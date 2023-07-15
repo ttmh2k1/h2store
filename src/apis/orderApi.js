@@ -1,8 +1,8 @@
 import { combineQueriesUrl } from '../utils/functionHelper'
 import api, { SERVICE } from './api'
 
-export function getOrderByCart(params) {
-  const result = api.POST(`${SERVICE}/api/buyer/order/cart`, params, {
+export async function getOrderByCart(params) {
+  const result = await api.POST(`${SERVICE}/api/buyer/order/cart`, params, {
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
       accept: '*/*',
@@ -11,15 +11,15 @@ export function getOrderByCart(params) {
   return result
 }
 
-export function getOrderHistory(req) {
+export async function getOrderHistory(req) {
   const queries = combineQueriesUrl({ ...req })
-  return api.GET(`${SERVICE}/api/buyer/order${queries}`)
+  return await api.GET(`${SERVICE}/api/buyer/order${queries}`)
 }
 
-export function getOrderDetail(id) {
-  return api.GET(`${SERVICE}/api/buyer/order/${id}`)
+export async function getOrderDetail(id) {
+  return await api.GET(`${SERVICE}/api/buyer/order/${id}`)
 }
 
-export function cancelOrder(id) {
-  return api.PUT(`${SERVICE}/api/buyer/order/${id}/cancel`)
+export async function cancelOrder(id) {
+  return await api.PUT(`${SERVICE}/api/buyer/order/${id}/cancel`)
 }

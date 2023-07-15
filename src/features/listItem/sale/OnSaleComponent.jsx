@@ -24,6 +24,7 @@ const OnSaleComponent = () => {
       <div className="productOnSale">
         <div className="title">ON SALE</div>
         <List
+          loading={!onSale[0] && true}
           className="listOnSale"
           grid={{
             gutter: 12,

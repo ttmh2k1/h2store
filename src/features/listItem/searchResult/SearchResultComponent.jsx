@@ -92,6 +92,7 @@ const SearchResultComponent = (props) => {
         </div>
         {listSearch?.length > 0 ? (
           <List
+            loading={!listSearch[0] && true}
             className="listSearchResult"
             grid={{
               gutter: 12,

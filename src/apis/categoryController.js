@@ -1,5 +1,5 @@
 import api, { SERVICE } from './api'
 
-export function getCategory(id) {
-  return api.GET(`${SERVICE}/api/product-category/${id}`)
+export async function getCategory(id) {
+  return await api.GET(`${SERVICE}/api/product-category/${id}`)
 }

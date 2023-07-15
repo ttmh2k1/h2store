@@ -1,8 +1,8 @@
 import api, { SERVICE } from './api'
 
 // User API
-export function currentUser() {
-  const res = api.GET(`${SERVICE}/api/buyer/profile`, {
+export async function currentUser() {
+  const res = await api.GET(`${SERVICE}/api/buyer/profile`, {
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     },
@@ -10,8 +10,8 @@ export function currentUser() {
   return res
 }
 
-export function registerAccount(fullname, username, password, email, gender) {
-  return api.POST(`${SERVICE}/api/buyer/signup`, {
+export async function registerAccount(fullname, username, password, email, gender) {
+  return await api.POST(`${SERVICE}/api/buyer/signup`, {
     fullname: fullname,
     username: username,
     password: password,
@@ -22,7 +22,7 @@ export function registerAccount(fullname, username, password, email, gender) {
 
 export const changePassword = async (newPassword, oldPassword, otp) => {
   try {
-    let res = await api.PUT(
+    let res = await await api.PUT(
       `${SERVICE}/api/buyer/profile/password`,
       {
         newPassword: newPassword,
@@ -46,7 +46,7 @@ export const changePassword = async (newPassword, oldPassword, otp) => {
 
 export const confirmPhone = async (otp) => {
   try {
-    let res = await api.POST(
+    let res = await await api.POST(
       `${SERVICE}/api/buyer/profile/phone-confirm`,
       {
         otp: otp,
@@ -67,7 +67,7 @@ export const confirmPhone = async (otp) => {
 
 export const confirmEmail = async (otp) => {
   try {
-    let res = await api.POST(
+    let res = await await api.POST(
       `${SERVICE}/api/buyer/profile/email-confirm`,
       {
         otp: otp,
@@ -87,40 +87,40 @@ export const confirmEmail = async (otp) => {
 }
 
 // Address API
-export function getAddress() {
-  return api.GET(`${SERVICE}/api/buyer/delivery-address`, {
+export async function getAddress() {
+  return await api.GET(`${SERVICE}/api/buyer/delivery-address`, {
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     },
   })
 }
 
-export function getAddressById(id) {
-  return api.GET(`${SERVICE}/api/buyer/delivery-address/${id}`, {
+export async function getAddressById(id) {
+  return await api.GET(`${SERVICE}/api/buyer/delivery-address/${id}`, {
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     },
   })
 }
 
-export function addAddressInfo(params) {
-  return api.POST(`${SERVICE}/api/buyer/delivery-address`, params, {
+export async function addAddressInfo(params) {
+  return await api.POST(`${SERVICE}/api/buyer/delivery-address`, params, {
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     },
   })
 }
 
-export function updateAddressInfo(id, params) {
-  return api.PUT(`${SERVICE}/api/buyer/delivery-address/${id}`, params, {
+export async function updateAddressInfo(id, params) {
+  return await api.PUT(`${SERVICE}/api/buyer/delivery-address/${id}`, params, {
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     },
   })
 }
 
-export function deleteAddressInfo(id) {
-  return api.DELETE(`${SERVICE}/api/buyer/delivery-address/${id}`, {
+export async function deleteAddressInfo(id) {
+  return await api.DELETE(`${SERVICE}/api/buyer/delivery-address/${id}`, {
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
       accept: '*/*',
@@ -128,25 +128,25 @@ export function deleteAddressInfo(id) {
   })
 }
 
-export function getAllCity() {
-  return api.GET(`${SERVICE}/api/address`)
+export async function getAllCity() {
+  return await api.GET(`${SERVICE}/api/address`)
 }
 
-export function getDistrictOfCity(id) {
-  return api.GET(`${SERVICE}/api/address/province-city/${id}`)
+export async function getDistrictOfCity(id) {
+  return await api.GET(`${SERVICE}/api/address/province-city/${id}`)
 }
 
-export function getWardOfDistrict(id) {
-  return api.GET(`${SERVICE}/api/address/district/${id}`)
+export async function getWardOfDistrict(id) {
+  return await api.GET(`${SERVICE}/api/address/district/${id}`)
 }
 
-export function getFeeShip(id) {
-  return api.GET(`${SERVICE}/api/delivery-fee/${id}`)
+export async function getFeeShip(id) {
+  return await api.GET(`http://be.h2store.xyz/api/delivery-fee/${id}`)
 }
 
 // Profile API
-export function currentEmailOTP(email) {
-  return api.POST(
+export async function currentEmailOTP(email) {
+  return await api.POST(
     `${SERVICE}/api/otp/email`,
     { email: email },
     {
@@ -158,8 +158,8 @@ export function currentEmailOTP(email) {
   )
 }
 
-export function currentPhoneOTP(phone) {
-  return api.POST(
+export async function currentPhoneOTP(phone) {
+  return await api.POST(
     `${SERVICE}/api/otp/phone`,
     { phoneNumber: phone },
     {
