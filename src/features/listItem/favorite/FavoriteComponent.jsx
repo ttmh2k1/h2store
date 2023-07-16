@@ -221,12 +221,17 @@ const FavoriteComponent = () => {
             <div className="itemFavorite">
               <List.Item className="listItem" key={item.product?.name}>
                 <Tooltip title={item?.product?.name} color="#decdbb">
-                  <img
-                    className="imageFavorite"
-                    src={item?.product?.avatar}
-                    alt=""
-                    onClick={() => navigate({ pathname: '/product/' + item?.product?.id })}
-                  />
+                  <div className="slideAvt">
+                    <img
+                      className="imageFavorite"
+                      src={item?.product?.avatar}
+                      alt=""
+                      onClick={() => navigate({ pathname: '/product/' + item?.product?.id })}
+                    />
+                    {item?.product?.outOfStock === false && (
+                      <p className="outOfStock">Out of stock</p>
+                    )}
+                  </div>
                   <div
                     className="textFavorite"
                     onClick={() => navigate({ pathname: '/product/' + item?.product?.id })}

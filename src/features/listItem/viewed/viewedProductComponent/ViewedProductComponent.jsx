@@ -187,12 +187,15 @@ const ViewedProductComponent = () => {
             <div className="itemViewed">
               <List.Item className="listItem" key={item?.name}>
                 <Tooltip title={item?.name} color="#decdbb">
-                  <img
-                    className="imageViewed"
-                    src={item?.avatar}
-                    alt=""
-                    onClick={() => navigate({ pathname: '/product/' + item?.id })}
-                  />
+                  <div className="slideAvt">
+                    <img
+                      className="imageViewed"
+                      src={item?.avatar}
+                      alt=""
+                      onClick={() => navigate({ pathname: '/product/' + item?.id })}
+                    />
+                    {item?.outOfStock === true && <p className="outOfStock">Out of stock</p>}
+                  </div>
                   <div
                     className="textViewed"
                     onClick={() => navigate({ pathname: '/product/' + item?.id })}

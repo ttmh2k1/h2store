@@ -9,29 +9,15 @@ function SubNavbar({ state }) {
         {state.list?.map((category, index) => {
           return (
             <ul className="category" key={index}>
-              <div
-                className="categoryName"
-                onClick={() =>
-                  navigate({
-                    pathname: state.href + '/' + category.id,
-                  })
-                }
-              >
+              <a className="categoryName" href={state.href + '/' + category.id}>
                 {category.name}
-              </div>
+              </a>
               {category?.listCategory?.map((item, index) => {
                 return (
                   <li className="categoryItem" key={index}>
-                    <div
-                      className="categoryName"
-                      onClick={() =>
-                        navigate({
-                          pathname: state.href + '/' + item.id,
-                        })
-                      }
-                    >
+                    <a className="categoryName" href={state.href + '/' + item.id}>
                       {item.name}
-                    </div>
+                    </a>
                   </li>
                 )
               })}

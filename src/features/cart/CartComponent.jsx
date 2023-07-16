@@ -27,20 +27,6 @@ const CartComponent = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  // const getCartInfo = async () => {
-  //   const result = await getCart()
-  //   if (result) {
-  //     dispatch(updateCart(result?.data?.data))
-  //   }
-  // }
-
-  // const getCountCart = async () => {
-  //   const result = await countCart()
-  //   if (result) {
-  //     dispatch(updateCount(result?.data?.data))
-  //   }
-  // }
-
   const onChangeQuantity = async (id, quantity) => {
     try {
       await updateQuantity(id, quantity)
@@ -52,7 +38,7 @@ const CartComponent = () => {
           ),
         ),
       )
-      toast.success('Update cart success!', style)
+      // toast.success('Update cart success!', style)
     } catch (error) {
       toast.error(error?.response?.data?.message, style)
     }
@@ -95,11 +81,6 @@ const CartComponent = () => {
     dispatch(updateCart(cart?.filter((item, index) => item?.productVariation?.id !== id)))
     toast.success('Product removed from cart successfully', style)
   }
-
-  // useEffect(() => {
-  //   getCartInfo()
-  //   getCountCart()
-  // }, [listCart])
 
   const columns = useMemo(() => [
     {

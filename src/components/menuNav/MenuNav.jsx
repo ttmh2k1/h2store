@@ -141,7 +141,7 @@ const MenuNav = () => {
         {listItems?.map((item, index) => {
           return (
             <div className="menuItem" key={index}>
-              <Link to={item.href}>{item.name}</Link>
+              <a href={item.href}>{item.name}</a>
             </div>
           )
         })}
@@ -152,7 +152,7 @@ const MenuNav = () => {
             return (
               <div key={index} className="items" onMouseOver={() => handleHover(index)}>
                 <li key={index} className="item">
-                  <Link to={item.href}>{item.name}</Link>
+                  <a href={item.href}>{item.name}</a>
                   <div className="subnav">
                     {categoryItem && index === 1 && (
                       <SubNavbar

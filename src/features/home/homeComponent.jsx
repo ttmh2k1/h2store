@@ -131,7 +131,10 @@ const HomeComponent = () => {
                   onClick={() => navigate({ pathname: '/product/' + item?.id })}
                 >
                   <Tooltip title={item?.name} color="#decdbb">
-                    <img className="slideImage" src={item?.avatar} alt="" />
+                    <div className="slideAvt">
+                      <img className="slideImage" src={item?.avatar} alt="" />
+                      {item?.outOfStock === true && <p className="outOfStock">Out of stock</p>}
+                    </div>
                     <div className="slideText">
                       <div className="name">{item?.name}</div>
                       <div className="price">Price: {formatMoney(item?.minPrice)}</div>
@@ -154,7 +157,7 @@ const HomeComponent = () => {
         </div>
         <div className="topSold">
           <div className="title">BEST SELLER</div>
-          <Link className="seeAll" to="/newArrival">
+          <Link className="seeAll" to="/bestSeller">
             See more
           </Link>
           <Swiper
@@ -196,7 +199,10 @@ const HomeComponent = () => {
                   onClick={() => navigate({ pathname: '/product/' + item?.id })}
                 >
                   <Tooltip title={item?.name} color="#decdbb">
-                    <img className="slideImage" src={item?.avatar} alt="" />
+                    <div className="slideAvt">
+                      <img className="slideImage" src={item?.avatar} alt="" />
+                      {item?.outOfStock === true && <p className="outOfStock">Out of stock</p>}
+                    </div>
                     <div className="slideText">
                       <div className="name">{item?.name}</div>
                       <div className="price">Price: {formatMoney(item?.minPrice)}</div>
@@ -219,7 +225,7 @@ const HomeComponent = () => {
         </div>
         <div className="topView">
           <div className="title">TOP VIEW</div>
-          <Link className="seeAll" to="/newArrival">
+          <Link className="seeAll" to="/viewed">
             See more
           </Link>
           <Swiper
@@ -261,7 +267,10 @@ const HomeComponent = () => {
                   onClick={() => navigate({ pathname: '/product/' + item?.id })}
                 >
                   <Tooltip title={item?.name} color="#decdbb">
-                    <img className="slideImage" src={item?.avatar} alt="" />
+                    <div className="slideAvt">
+                      <img className="slideImage" src={item?.avatar} alt="" />
+                      {item?.outOfStock === true && <p className="outOfStock">Out of stock</p>}
+                    </div>
                     <div className="slideText">
                       <div className="name">{item?.name}</div>
                       <div className="price">Price: {formatMoney(item?.minPrice)}</div>
@@ -327,7 +336,10 @@ const HomeComponent = () => {
                     onClick={() => navigate({ pathname: '/product/' + item?.product?.id })}
                   >
                     <Tooltip title={item?.product?.name} color="#decdbb">
-                      <img className="slideImage" src={item?.product?.avatar} alt="" />
+                      <div className="slideAvt">
+                        <img className="slideImage" src={item?.avatar} alt="" />
+                        {item?.outOfStock === true && <p className="outOfStock">Out of stock</p>}
+                      </div>
                       <div className="slideText">
                         <div className="name">{item?.product?.name}</div>
                         <div className="price">Price: {formatMoney(item?.product?.minPrice)}</div>
@@ -394,7 +406,10 @@ const HomeComponent = () => {
                     onClick={() => navigate({ pathname: '/product/' + item?.id })}
                   >
                     <Tooltip title={item?.name} color="#decdbb">
-                      <img className="slideImage" src={item?.avatar} alt="" />
+                      <div className="slideAvt">
+                        <img className="slideImage" src={item?.avatar} alt="" />
+                        {item?.outOfStock === true && <p className="outOfStock">Out of stock</p>}
+                      </div>
                       <div className="slideText">
                         <div className="name">{item?.name}</div>
                         <div className="price">Price: {formatMoney(item?.minPrice)}</div>

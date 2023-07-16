@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { getListProduct } from '../../../apis/productControllerApi'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { Empty, List, Slider, Tooltip } from 'antd'
+import { Empty, Input, List, Select, Slider, Tooltip } from 'antd'
 import { formatMoney } from '../../../utils/functionHelper'
 import { Rating } from 'react-simple-star-rating'
 
@@ -23,6 +23,9 @@ const SearchResultComponent = (props) => {
   const [pageSize, setPageSize] = useState(100)
   const [rating, setRating] = useState(0)
   const [price, setPrice] = useState({ minPrice: '', maxPrice: '' })
+  const [searchName, setSearchName] = useState(props?.text)
+  const [sortBy, setSortBy] = useState('')
+  const [sortDescending, setSortDescending] = useState(true)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -36,8 +39,8 @@ const SearchResultComponent = (props) => {
 
   const searchProduct = async () => {
     const result = await getListProduct({
-      searchName: props?.text,
-      searchDescription: props?.text,
+      searchName: searchName,
+      searchDescription: searchName,
       size: pageSize,
       minAverageRating: rating,
       minPrice: price?.minPrice,
@@ -73,6 +76,13 @@ const SearchResultComponent = (props) => {
         <div className="title">SEARCH RESULT</div>
         <div className="search">
           <div className="searchGroup">
+            <div className="textSearch">
+              <Input
+                className="text"
+                defaultValue={props?.text}
+                onChange={(e) => setSearchName(e?.target?.value)}
+              />
+            </div>
             <div className="priceSearch">
               Price: <Slider {...sliderProps} />
             </div>
@@ -86,6 +96,36 @@ const SearchResultComponent = (props) => {
                 transition
                 fillColor="orange"
                 emptyColor="gray"
+              />
+            </div>
+            <div className="sortBy">
+              Sort by:
+              <Select
+                className="input"
+                style={{ width: 120 }}
+                onChange={(e) => {
+                  setSortBy(e)
+                }}
+                options={[
+                  { value: '1', label: 'Price' },
+                  { value: '2', label: 'View' },
+                  { value: '4', label: 'Sold' },
+                  { value: '24', label: 'Date' },
+                  { value: '32', label: 'Discount' },
+                ]}
+              />
+              <Select
+                className="input"
+                style={{ width: 120 }}
+                defaultValue={sortBy !== '' ? sortDescending : ''}
+                value={sortBy !== '' ? sortDescending : ''}
+                onChange={(e) => {
+                  setSortDescending(e)
+                }}
+                options={[
+                  { value: true, label: 'Descending' },
+                  { value: false, label: 'Ascending' },
+                ]}
               />
             </div>
           </div>
