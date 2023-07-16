@@ -23,3 +23,7 @@ export async function getOrderDetail(id) {
 export async function cancelOrder(id) {
   return await api.PUT(`${SERVICE}/api/buyer/order/${id}/cancel`)
 }
+
+export async function paymentOrder(id) {
+  return await api.GET(`${SERVICE}/api/buyer/order/${id}/create-payment`)
+}

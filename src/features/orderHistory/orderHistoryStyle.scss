@@ -212,6 +212,22 @@
               justify-content: flex-end;
               margin: 0.4vw;
 
+              .payButton {
+                background: #77675a;
+                width: 8vw;
+                height: fit-content;
+                color: #fff;
+                font-size: 1.2vw;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: none;
+
+                &:hover {
+                  background: #decdbb;
+                }
+              }
+
               .cancelButton,
               .commentButton {
                 background: #ab9b92;
@@ -223,14 +239,15 @@
                 align-items: center;
                 justify-content: center;
                 border: none;
+                margin-left: 0.4vw;
 
                 &:hover {
-                  background: #77675a;
+                  background: #2a2728;
                 }
               }
 
               .detailButton {
-                background: #decdbb;
+                background: #decdbbd5;
                 height: fit-content;
                 width: 8vw;
                 color: #fff;
@@ -242,7 +259,7 @@
                 margin-left: 0.4vw;
 
                 &:hover {
-                  background: #77675a;
+                  background: #77675a2f;
                 }
               }
             }
