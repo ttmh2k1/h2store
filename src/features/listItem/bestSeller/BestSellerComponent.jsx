@@ -51,7 +51,10 @@ const BestSellerComponent = () => {
                 onClick={() => navigate({ pathname: '/product/' + item?.id })}
               >
                 <Tooltip title={item?.name} color="#decdbb">
-                  <img className="imageBestSeller" src={item?.avatar} alt="" />
+                  <div className="slideAvt">
+                    <img className="imageBestSeller" src={item?.avatar} alt="" />
+                    {item?.outOfStock === true && <p className="outOfStock">Out of stock</p>}
+                  </div>
                   <div className="textBestSeller">
                     <div className="name">{item?.name}</div>
                     <div className="price">Price: {formatMoney(item?.minPrice)}</div>

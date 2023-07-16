@@ -62,7 +62,10 @@ const RecommendComponent = () => {
                 onClick={() => navigate({ pathname: '/product/' + item?.id })}
               >
                 <Tooltip title={item?.name} color="#decdbb">
-                  <img className="imageRecommend" src={item?.avatar} alt="" />
+                  <div className="slideAvt">
+                    <img className="imageRecommend" src={item?.avatar} alt="" />
+                    {item?.outOfStock === true && <p className="outOfStock">Out of stock</p>}
+                  </div>
                   <div className="textRecommend">
                     <div className="name">{item?.name}</div>
                     <div className="price">Price: {formatMoney(item?.minPrice)}</div>

@@ -284,7 +284,10 @@ const ProductComponent = (props) => {
     <div className="productPage">
       <div className="productDetail">
         <div className="productImage">
-          <img className="productAvatar" src={product?.avatar} alt="" />
+          <div className="avatar">
+            <img className="productAvatar" src={product?.avatar} alt="" />
+            {product?.totalStock === 0 && <p className="outOfStock">Out of stock</p>}
+          </div>
           <Swiper
             autoplay={{
               delay: 1000,
@@ -896,7 +899,10 @@ const ProductComponent = (props) => {
                     goToTop()
                   }}
                 >
-                  <img className="slideImage" src={item?.avatar} alt="" />
+                  <div className="imageGroup">
+                    <img className="slideImage" src={item?.avatar} alt="" />
+                    {item?.outOfStock === true && <p className="outOfStock">Out of stock</p>}
+                  </div>
                   <div className="slideText">
                     <div className="name">{item?.name}</div>
                     <div className="price">Price: {formatMoney(item?.minPrice)}</div>
@@ -965,7 +971,10 @@ const ProductComponent = (props) => {
                     }}
                   >
                     <Tooltip title={item?.name} color="#decdbb">
-                      <img className="slideImage" src={item?.avatar} alt="" />
+                      <div className="imageGroup">
+                        <img className="slideImage" src={item?.avatar} alt="" />
+                        {item?.outOfStock === true && <p className="outOfStock">Out of stock</p>}
+                      </div>
                       <div className="slideText">
                         <div className="name">{item?.name}</div>
                         <div className="price">Price: {formatMoney(item?.minPrice)}</div>
@@ -1036,7 +1045,10 @@ const ProductComponent = (props) => {
                     }}
                   >
                     <Tooltip title={item?.name} color="#decdbb">
-                      <img className="slideImage" src={item?.avatar} alt="" />
+                      <div className="imageGroup">
+                        <img className="slideImage" src={item?.avatar} alt="" />
+                        {item?.outOfStock === true && <p className="outOfStock">Out of stock</p>}
+                      </div>
                       <div className="slideText">
                         <div className="name">{item?.name}</div>
                         <div className="price">Price: {formatMoney(item?.minPrice)}</div>

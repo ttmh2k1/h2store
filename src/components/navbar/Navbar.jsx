@@ -95,7 +95,6 @@ const Navbar = () => {
             </label>
           </li>
           <Input
-            size={25}
             className="inputSearch"
             type="text"
             placeholder="Search"
@@ -104,11 +103,16 @@ const Navbar = () => {
           />
           <li>
             {search ? (
-              <AiOutlineSearch
-                size={25}
-                style={{ marginTop: '6px' }}
-                onClick={() => navigate({ pathname: `/searchResult/${search}` })}
-              />
+              <a href={'/searchResult/' + search}>
+                <AiOutlineSearch
+                  size={25}
+                  style={{ marginTop: '6px' }}
+                  onClick={() => {
+                    setSearch('')
+                    // navigate({ pathname: `/searchResult/${search}` })
+                  }}
+                />
+              </a>
             ) : null}
           </li>
           <li>

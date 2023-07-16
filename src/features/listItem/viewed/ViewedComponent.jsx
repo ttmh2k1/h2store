@@ -66,7 +66,10 @@ const ViewedComponent = () => {
                 onClick={() => navigate({ pathname: '/product/' + item?.id })}
               >
                 <Tooltip title={item?.name} color="#decdbb">
-                  <img className="imageViewed" src={item?.avatar} alt="" />
+                  <div className="slideAvt">
+                    <img className="imageViewed" src={item?.avatar} alt="" />
+                    {item?.outOfStock === true && <p className="outOfStock">Out of stock</p>}
+                  </div>
                   <div className="textViewed">
                     <div className="name">{item?.name}</div>
                     <div className="price">Price: {formatMoney(item?.minPrice)}</div>
