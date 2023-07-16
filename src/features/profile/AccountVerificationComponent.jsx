@@ -1,21 +1,13 @@
 import './accountVerificationStyle.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import Avatar from 'react-avatar'
-import { Button, Divider, Image, Input, List, Radio } from 'antd'
+import { Button, Divider, Image, Input, List, Radio, Space } from 'antd'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import Phone from '../../commons/assets/phone.png'
-import Mail from '../../commons/assets/mail.png'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
-import {
-  changePassword,
-  confirmEmail,
-  confirmPhone,
-  currentEmailOTP,
-  currentPhoneOTP,
-} from '../../apis/userApi'
-import { login, logout } from '../../actionCreators/UserCreator'
+import { confirmEmail, confirmPhone, currentEmailOTP, currentPhoneOTP } from '../../apis/userApi'
+import { login } from '../../actionCreators/UserCreator'
 
 const ChangePasswordComponent = () => {
   const style = {
@@ -33,23 +25,10 @@ const ChangePasswordComponent = () => {
   const email = user?.email
   const phone = user?.phone
   const [state, setState] = useState(true)
-  const [select, setSelect] = useState(0)
+  const [select, setSelect] = useState()
   const [otp, setOtp] = useState('')
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
-  const options = [
-    {
-      id: 1,
-      name: phone ? 'Confirm phone number ' + phone : '',
-      image: Phone,
-    },
-    {
-      id: 2,
-      name: email ? 'Confirm email ' + email : '',
-      image: Mail,
-    },
-  ]
 
   const sendOTP = async (e) => {
     e.preventDefault()
@@ -61,9 +40,9 @@ const ChangePasswordComponent = () => {
         toast.error(result?.data?.message, style)
       }
     }
+
     const phoneOTP = async () => {
       const result = await currentPhoneOTP(phone)
-
       if (result) {
         toast.success('OTP was sent successfully!', style)
       } else {
@@ -268,49 +247,49 @@ const ChangePasswordComponent = () => {
           </div>
 
           <div className="optionOTP">
-            {options?.map((item, index) => {
-              return (
-                <div className="option" key={index}>
-                  {item?.name !== '' && (
-                    <>
-                      <Radio
-                        obj={item}
-                        checked={select === index}
-                        onChange={() => setSelect(index)}
-                        className="radio"
-                      />
+            <Radio.Group onChange={(e) => setSelect(e?.target?.value)}>
+              <Space direction="vertical">
+                {phone && user?.phoneConfirmed === false && (
+                  <Radio className="radio" value={0}>
+                    {'Confirm phone number ' + phone}
+                  </Radio>
+                )}
+                {email && user?.emailConfirmed === true && (
+                  <Radio className="radio" value={1}>
+                    {'Confirm email ' + email}
+                  </Radio>
+                )}
+              </Space>
+            </Radio.Group>
+          </div>
+          {select && (
+            <>
+              <div className="itemOTP">
+                <Input
+                  type="text"
+                  placeholder="OTP code"
+                  className="input"
+                  value={otp}
+                  onChange={(e) => setOtp(e?.target?.value)}
+                />
+                <Button
+                  primary
+                  children={'SEND OTP'}
+                  className="otpButton"
+                  onClick={(e) => sendOTP(e)}
+                />
+              </div>
 
-                      {item?.image && <img src={item?.image} width={20} height={20} alt="" />}
-                      <span key={item?.id}>{item?.name}</span>
-                    </>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-          <div className="itemOTP">
-            <Input
-              type="text"
-              placeholder="OTP code"
-              className="input"
-              value={otp}
-              onChange={(e) => setOtp(e?.target?.value)}
-            />
-            <Button
-              primary
-              children={'SEND OTP'}
-              className="otpButton"
-              onClick={(e) => sendOTP(e)}
-            />
-          </div>
-          <div className="button">
-            <Button
-              primary
-              children={'SAVE'}
-              className="saveButton"
-              onClick={(e) => handleSave(e)}
-            />
-          </div>
+              <div className="button">
+                <Button
+                  primary
+                  children={'SAVE'}
+                  className="saveButton"
+                  onClick={(e) => handleSave(e)}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

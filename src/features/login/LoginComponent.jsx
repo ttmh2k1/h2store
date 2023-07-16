@@ -69,7 +69,7 @@ const LoginComponent = () => {
       navigate('/')
     }
     return () => {}
-  }, [])
+  }, [localStorage])
 
   return (
     <div className="loginPage">

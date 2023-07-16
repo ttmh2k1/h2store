@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import {
   getLastedProduct,
   getRecommendProduct,
+  getMayLikeProduct,
   getTopSold,
   getTopView,
 } from '../../apis/productControllerApi'
@@ -26,6 +27,7 @@ const HomeComponent = () => {
   const [topSold, setTopSold] = useState([])
   const [favorite, setFavorite] = useState([])
   const [recommend, setRecommend] = useState([])
+  const [mayLike, setMayLike] = useState([])
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -69,11 +71,7 @@ const HomeComponent = () => {
   useEffect(() => {
     const handleGetRecommend = async () => {
       try {
-        const sessionId = ''
-        const resp = await getRecommendProduct({
-          sessionId: user ? sessionId : localStorage?.getItem('sessionId'),
-          isExplicit: localStorage?.getItem('token') ? true : false,
-        })
+        const resp = await getRecommendProduct()
         const data = resp?.data?.data
         setRecommend(data)
       } catch (error) {
@@ -81,6 +79,23 @@ const HomeComponent = () => {
       }
     }
     handleGetRecommend()
+  }, [])
+
+  useEffect(() => {
+    const handleGetMayLike = async () => {
+      try {
+        const sessionId = ''
+        const resp = await getMayLikeProduct({
+          sessionId: user ? sessionId : localStorage?.getItem('sessionId'),
+          isExplicit: localStorage?.getItem('token') ? true : false,
+        })
+        const data = resp?.data?.data
+        setMayLike(data)
+      } catch (error) {
+        return error
+      }
+    }
+    handleGetMayLike()
   }, [])
 
   return (
@@ -381,6 +396,7 @@ const HomeComponent = () => {
             </Swiper>
           </div>
         )}
+
         {recommend?.length > 0 && (
           <div className="recommend">
             <div className="title">RECOMMEND PRODUCTS</div>
@@ -420,6 +436,82 @@ const HomeComponent = () => {
               className="swiper"
             >
               {recommend?.map((item) => (
+                <SwiperSlide>
+                  <div
+                    className="slideContent"
+                    onClick={() => navigate({ pathname: '/product/' + item?.id })}
+                  >
+                    <Tooltip title={item?.name} color="#decdbb">
+                      <div className="slideAvt">
+                        <img className="slideImage" src={item?.avatar} alt="" />
+                        {item?.outOfStock === true && <p className="outOfStock">Out of stock</p>}
+                      </div>
+                      <div className="slideText">
+                        <div className="name">{item?.name}</div>
+                        <div className="priceGroup">
+                          {item?.minOrgPrice !== item?.minPrice && (
+                            <div className="oldPrice">{formatMoney(item?.minOrgPrice)}</div>
+                          )}
+                          <div className="price">{formatMoney(item?.minPrice)}</div>
+                        </div>
+                        <Rating
+                          className="ratingPoint"
+                          size={16}
+                          initialValue={parseFloat(item?.averageRating).toFixed(0)}
+                          label
+                          transition
+                          readonly
+                          fillColor="orange"
+                          emptyColor="gray"
+                        />
+                      </div>
+                    </Tooltip>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        )}
+
+        {mayLike?.length > 0 && (
+          <div className="mayLike">
+            <div className="title">YOU MAY LIKE</div>
+            <Link className="seeAll" to="/youMayLike">
+              See more
+            </Link>
+            <Swiper
+              autoplay={{
+                delay: 2000,
+                disableOnInteraction: false,
+              }}
+              modules={[Autoplay, Pagination, Navigation]}
+              slidesPerView={1}
+              spaceBetween={10}
+              pagination={{
+                clickable: true,
+              }}
+              navigation={true}
+              breakpoints={{
+                '@0.00': {
+                  slidesPerView: 1,
+                  spaceBetween: 20,
+                },
+                '@0.75': {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                '@1.00': {
+                  slidesPerView: 3,
+                  spaceBetween: 40,
+                },
+                '@1.50': {
+                  slidesPerView: 4,
+                  spaceBetween: 50,
+                },
+              }}
+              className="swiper"
+            >
+              {mayLike?.map((item) => (
                 <SwiperSlide>
                   <div
                     className="slideContent"

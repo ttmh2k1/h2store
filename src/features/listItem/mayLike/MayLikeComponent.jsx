@@ -1,37 +1,42 @@
-import './recommendStyle.scss'
+import './mayLikeStyle.scss'
 import { List, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
-import { getRecommendProduct } from '../../../apis/productControllerApi'
+import { getMayLikeProduct } from '../../../apis/productControllerApi'
 import { formatMoney } from '../../../utils/functionHelper'
 import { useNavigate } from 'react-router-dom'
 import { Rating } from 'react-simple-star-rating'
+import { useSelector } from 'react-redux'
 
-const RecommendComponent = () => {
-  const [recommend, setRecommend] = useState([])
+const MayLikeComponent = () => {
+  const user = useSelector((state) => state?.user?.user)
+  const [mayLike, setMayLike] = useState([])
   const navigate = useNavigate()
 
   useEffect(() => {
-    const handleGetRecommend = async () => {
+    const handleGetMayLike = async () => {
       try {
-        const resp = await getRecommendProduct({
+        const sessionId = ''
+        const resp = await getMayLikeProduct({
+          sessionId: user ? sessionId : localStorage?.getItem('sessionId'),
+          isExplicit: localStorage?.getItem('token') ? true : false,
           size: 100,
         })
         const data = resp?.data?.data
-        setRecommend(data)
+        setMayLike(data)
       } catch (error) {
         return error
       }
     }
-    handleGetRecommend()
+    handleGetMayLike()
   }, [])
 
   return (
-    <div className="recommend">
-      <div className="productRecommend">
-        <div className="title">RECOMMEND PRODUCTS</div>
+    <div className="mayLike">
+      <div className="productMayLike">
+        <div className="title">YOU MAY LIKE</div>
         <List
-          loading={!recommend[0] && true}
-          className="listRecommend"
+          loading={!mayLike[0] && true}
+          className="listMayLike"
           grid={{
             gutter: 12,
             xs: 1,
@@ -48,9 +53,9 @@ const RecommendComponent = () => {
             pageSizeOptions: ['8', '20', '50', '100'],
             defaultPageSize: 8,
           }}
-          dataSource={recommend}
+          dataSource={mayLike}
           renderItem={(item) => (
-            <div className="itemRecommend">
+            <div className="itemMayLike">
               <List.Item
                 className="listItem"
                 key={item.name}
@@ -58,10 +63,10 @@ const RecommendComponent = () => {
               >
                 <Tooltip title={item?.name} color="#decdbb">
                   <div className="slideAvt">
-                    <img className="imageRecommend" src={item?.avatar} alt="" />
+                    <img className="imageMayLike" src={item?.avatar} alt="" />
                     {item?.outOfStock === true && <p className="outOfStock">Out of stock</p>}
                   </div>
-                  <div className="textRecommend">
+                  <div className="textMayLike">
                     <div className="name">{item?.name}</div>
                     <div className="priceGroup">
                       {item?.minOrgPrice !== item?.minPrice && (
@@ -90,4 +95,4 @@ const RecommendComponent = () => {
   )
 }
 
-export default RecommendComponent
+export default MayLikeComponent
