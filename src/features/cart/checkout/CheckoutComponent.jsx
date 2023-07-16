@@ -102,13 +102,6 @@ const CheckoutComponent = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  // const getCartInfo = async () => {
-  //   const result = await getCart()
-  //   if (result) {
-  //     dispatch(updateCart(result?.data?.data))
-  //   }
-  // }
-
   const getListAddress = async () => {
     const result = await getAddress()
     if (result) {
@@ -1134,118 +1127,120 @@ const CheckoutComponent = () => {
           onChange={(e) => changeVoucher(e?.target?.value)}
         >
           <List
-            className="listAddress"
+            className="listVoucher"
             dataSource={voucher}
-            renderItem={(item) => (
-              <List.Item>
-                <Radio
-                  value={item?.id}
-                  style={{
-                    display: 'flex',
-                    width: '100%',
-                  }}
-                >
-                  <div
-                    className="item"
+            renderItem={(item) =>
+              item?.minOrderAmount <= totalPrice && (
+                <List.Item>
+                  <Radio
+                    value={item?.id}
                     style={{
                       display: 'flex',
-                      flexDirection: 'column',
                       width: '100%',
-                      margin: '0 0.2vw',
                     }}
                   >
                     <div
-                      className="main"
+                      className="item"
                       style={{
                         display: 'flex',
-                        flexDirection: 'row',
-                        width: '30vw',
-                        justifyContent: 'space-between',
-                        alignItems: 'flex-end',
-                        backgroundColor: '#decdbb1f',
-                        borderRadius: '0.4vw',
-                        margin: '1.2vw',
+                        flexDirection: 'column',
+                        width: '100%',
+                        margin: '0 0.2vw',
                       }}
                     >
                       <div
-                        className="voucherInfo"
+                        className="main"
                         style={{
                           display: 'flex',
                           flexDirection: 'row',
+                          width: '30vw',
                           justifyContent: 'space-between',
-                          padding: '0.2vw 0',
+                          alignItems: 'flex-end',
+                          backgroundColor: '#decdbb1f',
+                          borderRadius: '0.4vw',
+                          margin: '1.2vw',
                         }}
                       >
                         <div
-                          className="code"
+                          className="voucherInfo"
                           style={{
                             display: 'flex',
                             flexDirection: 'row',
-                            width: '10vw',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            fontSize: '1vw',
-                            fontWeight: 'bold',
-                          }}
-                        >
-                          {item?.code}
-                        </div>
-                        <Divider type="vertical" style={{ height: '10vw' }} />
-                        <div
-                          className="info"
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
                             justifyContent: 'space-between',
-                            margin: '0.4vw 0',
-                            fontSize: '0.6vw',
+                            padding: '0.2vw 0',
                           }}
                         >
                           <div
-                            className="description"
-                            style={{
-                              color: '#77675a',
-                              fontSize: '0.8vw',
-                              fontWeight: 'bold',
-                            }}
-                          >
-                            {item?.description}
-                          </div>
-                          <div className="minOrderAmount">
-                            Minimum value: {formatMoney(item?.minOrderAmount)}
-                          </div>
-                          <div
-                            className="discount"
+                            className="code"
                             style={{
                               display: 'flex',
                               flexDirection: 'row',
+                              width: '10vw',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              fontSize: '1vw',
+                              fontWeight: 'bold',
                             }}
                           >
-                            Discount:&nbsp;
-                            {item?.discountType === 'AMOUNT' ? (
-                              <div className="discountAmount">
-                                {formatMoney(item?.discountAmount)}
-                              </div>
-                            ) : (
-                              <div className="discountAmount">{item?.discountAmount}%</div>
-                            )}
+                            {item?.code}
                           </div>
-                          <div className="maxDiscount">
-                            Max discount: {formatMoney(item?.maxDiscount)}
-                          </div>
-                          <div className="startDate">
-                            Start date: {moment(item?.validFrom).format('DD/MM/YY hh:mm')}
-                          </div>
-                          <div className="endDate">
-                            End date: {moment(item?.validTo).format('DD/MM/YY hh:mm')}
+                          <Divider type="vertical" style={{ height: '10vw' }} />
+                          <div
+                            className="info"
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              justifyContent: 'space-between',
+                              margin: '0.4vw 0',
+                              fontSize: '0.6vw',
+                            }}
+                          >
+                            <div
+                              className="description"
+                              style={{
+                                color: '#77675a',
+                                fontSize: '0.8vw',
+                                fontWeight: 'bold',
+                              }}
+                            >
+                              {item?.description}
+                            </div>
+                            <div className="minOrderAmount">
+                              Minimum value: {formatMoney(item?.minOrderAmount)}
+                            </div>
+                            <div
+                              className="discount"
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                              }}
+                            >
+                              Discount:&nbsp;
+                              {item?.discountType === 'AMOUNT' ? (
+                                <div className="discountAmount">
+                                  {formatMoney(item?.discountAmount)}
+                                </div>
+                              ) : (
+                                <div className="discountAmount">{item?.discountAmount}%</div>
+                              )}
+                            </div>
+                            <div className="maxDiscount">
+                              Max discount: {formatMoney(item?.maxDiscount)}
+                            </div>
+                            <div className="startDate">
+                              Start date: {moment(item?.validFrom).format('DD/MM/YY hh:mm')}
+                            </div>
+                            <div className="endDate">
+                              End date: {moment(item?.validTo).format('DD/MM/YY hh:mm')}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </Radio>
-              </List.Item>
-            )}
+                  </Radio>
+                </List.Item>
+              )
+            }
           />
         </Radio.Group>
       </Modal>
