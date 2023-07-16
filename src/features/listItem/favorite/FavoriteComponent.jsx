@@ -242,7 +242,7 @@ const FavoriteComponent = () => {
                       alt=""
                       onClick={() => navigate({ pathname: '/product/' + item?.product?.id })}
                     />
-                    {item?.product?.outOfStock === false && (
+                    {item?.product?.outOfStock === true && (
                       <p className="outOfStock">Out of stock</p>
                     )}
                   </div>

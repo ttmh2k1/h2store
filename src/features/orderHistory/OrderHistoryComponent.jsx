@@ -6,7 +6,7 @@ import Avatar from 'react-avatar'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { cancelOrder, getOrderHistory } from '../../apis/orderApi'
+import { cancelOrder, getOrderHistory, paymentOrder } from '../../apis/orderApi'
 import moment from 'moment'
 import { formatMoney } from '../../utils/functionHelper'
 import { toast } from 'react-toastify'
@@ -50,6 +50,18 @@ const OrderHistoryComponent = () => {
     }
     handleGetCategory()
   }, [pageSize])
+
+  const handlePayment = async (id) => {
+    try {
+      const result = await paymentOrder(id)
+      // console.log(result?.data)
+      if (result?.data?.payUrl) {
+        window.location.href = result?.data?.payUrl
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message, style)
+    }
+  }
 
   const handleCancelOrder = async (id) => {
     try {
@@ -248,6 +260,11 @@ const OrderHistoryComponent = () => {
                       </div>
                       <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
                       <div className="action">
+                        {item?.status === 'WAIT_FOR_PAYMENT' && (
+                          <Button className="payButton" onClick={() => handlePayment(item?.id)}>
+                            Payment
+                          </Button>
+                        )}
                         {(item?.status === 'WAIT_FOR_PAYMENT' ||
                           item?.status === 'WAIT_FOR_CONFIRM' ||
                           item?.status === 'WAIT_FOR_SEND') && (
@@ -332,6 +349,11 @@ const OrderHistoryComponent = () => {
                       </div>
                       <Divider type="horizontal" style={{ margin: '0.2vw 0' }} />
                       <div className="action">
+                        {item?.status === 'WAIT_FOR_PAYMENT' && (
+                          <Button className="payButton" onClick={() => handlePayment(item?.id)}>
+                            Payment
+                          </Button>
+                        )}
                         {item?.status === 'WAIT_FOR_PAYMENT' && (
                           <Button
                             className="cancelButton"
