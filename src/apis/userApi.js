@@ -22,7 +22,7 @@ export async function registerAccount(fullname, username, password, email, gende
 
 export const changePassword = async (newPassword, oldPassword, otp) => {
   try {
-    let res = await await api.PUT(
+    let res = await api.PUT(
       `${SERVICE}/api/buyer/profile/password`,
       {
         newPassword: newPassword,
@@ -46,7 +46,7 @@ export const changePassword = async (newPassword, oldPassword, otp) => {
 
 export const confirmPhone = async (otp) => {
   try {
-    let res = await await api.POST(
+    let res = await api.POST(
       `${SERVICE}/api/buyer/profile/phone-confirm`,
       {
         otp: otp,
@@ -67,7 +67,7 @@ export const confirmPhone = async (otp) => {
 
 export const confirmEmail = async (otp) => {
   try {
-    let res = await await api.POST(
+    let res = await api.POST(
       `${SERVICE}/api/buyer/profile/email-confirm`,
       {
         otp: otp,
@@ -141,7 +141,7 @@ export async function getWardOfDistrict(id) {
 }
 
 export async function getFeeShip(id) {
-  return await api.GET(`http://be.h2store.xyz/api/delivery-fee/${id}`)
+  return await api.GET(`${SERVICE}/api/delivery-fee/${id}`)
 }
 
 // Profile API

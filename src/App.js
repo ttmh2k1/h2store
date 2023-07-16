@@ -16,6 +16,7 @@ import FavoritePage from './pages/FavoritePage'
 import ViewedHistoryPage from './pages/ViewedHistoryPage'
 import OnSalePage from './pages/OnSalePage'
 import RecommendProductPage from './pages/RecommendProductPage'
+import MayLikeProductPage from './pages/MayLikeProductPage'
 import ViewedProductPage from './pages/ViewedProductPage'
 import ProfilePage from './pages/profile/ProfilePage'
 import RankingPage from './pages/profile/RankingPage'
@@ -68,6 +69,7 @@ function App() {
             <Route path="viewedProduct" element={<ViewedHistoryPage />} />
             <Route path="onSale" element={<OnSalePage />} />
             <Route path="recommend" element={<RecommendProductPage />} />
+            <Route path="youMayLike" element={<MayLikeProductPage />} />
             <Route path="viewed" element={<ViewedProductPage />} />
             <Route path="cart" element={<CartPage />} />
             <Route path="checkout" element={<CheckoutPage />} />

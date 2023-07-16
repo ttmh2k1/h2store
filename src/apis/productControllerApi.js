@@ -45,6 +45,11 @@ export async function getLastedProduct(req) {
 
 export async function getRecommendProduct(req) {
   const queries = combineQueriesUrl({ ...req })
+  return await api.GET(`${SERVICE}/api/product/individual-recommend${queries}`)
+}
+
+export async function getMayLikeProduct(req) {
+  const queries = combineQueriesUrl({ ...req })
   return await api.GET(`${SERVICE}/api/product/recommend${queries}`)
 }
 

@@ -1,0 +1,165 @@
+.mayLike {
+  margin: 1.6vw 8vw;
+  padding: 0;
+  border-radius: 0.4rem;
+
+  .productMayLike {
+    .title {
+      font-family: 'Paytone';
+      font-size: 2.8vw;
+      color: #2a2728;
+      display: flex;
+      justify-content: center;
+      margin: 0;
+      @media (max-width: 980px) {
+        font-size: 4vw;
+      }
+    }
+
+    .listMayLike {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      padding: 1vw 2vw;
+
+      .itemMayLike {
+        text-align: justify;
+        font-size: 0.8vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 1.6vw 0;
+        @media (max-width: 980px) {
+          font-size: 2.4vw;
+        }
+
+        .listItem {
+          width: 100%;
+          height: 100%;
+          padding: 1vw 0.4vw;
+          border-radius: 0.4vw;
+          background-color: #decdbb;
+          box-shadow: 0.2vw 0.2vw #ab9b92;
+          @media (max-width: 980px) {
+            padding: 2.4vw 0.4vw;
+            border-radius: 0.8vw;
+          }
+          &:hover {
+            background-color: #ab9b92;
+            color: #fff;
+            box-shadow: none;
+          }
+
+          .slideAvt {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .imageMayLike {
+              display: block;
+              width: 90%;
+              height: 90%;
+              object-fit: cover;
+              margin: 0 auto;
+              border-radius: 0.4vw;
+              @media (max-width: 980px) {
+                border-radius: 0.8vw;
+              }
+            }
+
+            .outOfStock {
+              cursor: pointer;
+              background-color: #2a2728dc;
+              color: #fff;
+              text-align: center;
+              font-size: 0.8vw;
+              height: 6vw;
+              width: 6vw;
+              border-radius: 50%;
+              position: absolute;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              @media (max-width: 980px) {
+                font-size: 1.2vw;
+                height: 10vw;
+                width: 10vw;
+              }
+            }
+          }
+
+          .textMayLike {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: justify;
+            margin: 0 1vw;
+            @media (max-width: 980px) {
+              margin: 0 2vw;
+            }
+
+            .name {
+              font-weight: bold;
+              font-size: 1vw;
+              max-width: 16vw;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              @media (max-width: 980px) {
+                max-width: 68vw;
+                font-size: 2vw;
+              }
+            }
+
+            .priceGroup {
+              display: flex;
+              flex-direction: row;
+              align-items: flex-end;
+
+              .oldPrice {
+                color: #eee;
+                text-decoration: line-through;
+                font-size: 0.8vw;
+                margin-right: 1.2vw;
+                @media (max-width: 980px) {
+                  font-size: 1.6vw;
+                }
+              }
+
+              .price {
+                font-size: 1vw;
+                color: #fff;
+                @media (max-width: 980px) {
+                  font-size: 2vw;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.ant-pagination .ant-pagination-item-active {
+  background-color: #decdbb;
+  border-color: #2a2728;
+  border-radius: 0.4vw;
+  &:hover {
+    border-color: #fff;
+  }
+}
+.ant-pagination .ant-pagination-item a {
+  color: #2a2728;
+  @media (max-width: 980px) {
+    font-size: 1.6vw;
+  }
+  &:hover {
+    color: #fff;
+    background-color: #decdbb;
+    border-color: #2a2728;
+    border-radius: 0.4vw;
+  }
+}

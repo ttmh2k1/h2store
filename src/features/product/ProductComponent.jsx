@@ -2,7 +2,12 @@ import './productStyle.scss'
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { importCart, countCart, getCart } from '../../apis/cartApi'
-import { getProduct, getRecommendProduct, getViewedProduct } from '../../apis/productControllerApi'
+import {
+  getMayLikeProduct,
+  getProduct,
+  getRecommendProduct,
+  getViewedProduct,
+} from '../../apis/productControllerApi'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -42,6 +47,7 @@ const ProductComponent = (props) => {
   const [value, setValue] = useState('')
   const [quantity, setQuantity] = useState(1)
   const [recommendProduct, setRecommendProduct] = useState([])
+  const [mayLikeProduct, setMayLikeProduct] = useState([])
   const [viewedProduct, setViewedProduct] = useState([])
   const [review, setReview] = useState([])
   const [pageSize, setPageSize] = useState(1)
@@ -91,11 +97,7 @@ const ProductComponent = (props) => {
   useEffect(() => {
     const handleGetRecommendProduct = async () => {
       try {
-        const sessionId = ''
-        const resp = await getRecommendProduct({
-          sessionId: user ? sessionId : localStorage?.getItem('sessionId'),
-          isExplicit: localStorage?.getItem('token') ? true : false,
-        })
+        const resp = await getRecommendProduct()
         const data = resp?.data?.data
         setRecommendProduct(data)
       } catch (error) {
@@ -103,6 +105,23 @@ const ProductComponent = (props) => {
       }
     }
     handleGetRecommendProduct()
+  }, [props?.id])
+
+  useEffect(() => {
+    const handleGetMayLikeProduct = async () => {
+      try {
+        const sessionId = ''
+        const resp = await getMayLikeProduct({
+          sessionId: user ? sessionId : localStorage?.getItem('sessionId'),
+          isExplicit: localStorage?.getItem('token') ? true : false,
+        })
+        const data = resp?.data?.data
+        setMayLikeProduct(data)
+      } catch (error) {
+        return error
+      }
+    }
+    handleGetMayLikeProduct()
   }, [props?.id])
 
   useEffect(() => {
@@ -855,7 +874,10 @@ const ProductComponent = (props) => {
 
       <div className="relativeProduct">
         <div className="title">
-          Relative products <Link to={'/category/' + product?.category?.id}>See more</Link>
+          Relative products
+          <Link className="seeAll" to={'/category/' + product?.category?.id}>
+            See more
+          </Link>
         </div>
         <div className="listProduct">
           <Swiper
@@ -928,10 +950,95 @@ const ProductComponent = (props) => {
           </Swiper>
         </div>
       </div>
+      {mayLikeProduct.length > 0 && (
+        <div className="mayLikeProduct">
+          <div className="title">
+            You may like
+            <Link className="seeAll" to={'/youMayLike'}>
+              See more
+            </Link>
+          </div>
+          <div className="listProduct">
+            <Swiper
+              autoplay={{
+                delay: 1000,
+                disableOnInteraction: false,
+              }}
+              modules={[Autoplay, Pagination, Navigation]}
+              slidesPerView={1}
+              spaceBetween={10}
+              pagination={{
+                clickable: true,
+              }}
+              navigation={true}
+              breakpoints={{
+                '@0.00': {
+                  slidesPerView: 1,
+                  spaceBetween: 20,
+                },
+                '@0.75': {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                '@1.00': {
+                  slidesPerView: 3,
+                  spaceBetween: 40,
+                },
+                '@1.50': {
+                  slidesPerView: 4,
+                  spaceBetween: 50,
+                },
+              }}
+              className="swiper"
+            >
+              {mayLikeProduct?.map((item) => (
+                <SwiperSlide>
+                  <div
+                    className="slideContent"
+                    onClick={() => {
+                      navigate({ pathname: '/product/' + item?.id })
+                      goToTop()
+                    }}
+                  >
+                    <Tooltip title={item?.name} color="#decdbb">
+                      <div className="imageGroup">
+                        <img className="slideImage" src={item?.avatar} alt="" />
+                        {item?.outOfStock === true && <p className="outOfStock">Out of stock</p>}
+                      </div>
+                      <div className="slideText">
+                        <div className="name">{item?.name}</div>
+                        <div className="priceGroup">
+                          {item?.minOrgPrice !== item?.minPrice && (
+                            <div className="oldPrice">{formatMoney(item?.minOrgPrice)}</div>
+                          )}
+                          <div className="price">{formatMoney(item?.minPrice)}</div>
+                        </div>
+                        <Rating
+                          className="ratingPoint"
+                          size={16}
+                          initialValue={parseFloat(item?.averageRating).toFixed(0)}
+                          label
+                          transition
+                          readonly
+                          fillColor="orange"
+                          emptyColor="gray"
+                        />
+                      </div>
+                    </Tooltip>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
+      )}
       {recommendProduct.length > 0 && (
         <div className="recommendProduct">
           <div className="title">
-            Recommend products <Link to={'/recommend'}>See more</Link>
+            Recommend products
+            <Link className="seeAll" to={'/recommend'}>
+              See more
+            </Link>
           </div>
           <div className="listProduct">
             <Swiper
@@ -1010,7 +1117,10 @@ const ProductComponent = (props) => {
       {viewedProduct?.length > 0 && (
         <div className="viewedProduct">
           <div className="title">
-            Viewed products <Link to={'/viewed'}>See more</Link>
+            Viewed products
+            <Link className="seeAll" to={'/viewed'}>
+              See more
+            </Link>
           </div>
           <div className="listProduct">
             <Swiper
