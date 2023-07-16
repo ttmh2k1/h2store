@@ -55,7 +55,7 @@ const SearchResultComponent = (props) => {
     } else {
       toast.warning('NO TEXT WAS SUBMITTED', style)
     }
-  }, [props, pageSize, rating, price])
+  }, [props, searchName, pageSize, rating, price])
 
   const sliderProps = {
     range: true,
@@ -162,7 +162,12 @@ const SearchResultComponent = (props) => {
                     <img className="imageSearchResult" src={item?.avatar} alt="" />
                     <div className="textSearchResult">
                       <div className="name">{item?.name}</div>
-                      <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                      <div className="priceGroup">
+                        {item?.minOrgPrice !== item?.minPrice && (
+                          <div className="oldPrice">{formatMoney(item?.minOrgPrice)}</div>
+                        )}
+                        <div className="price">{formatMoney(item?.minPrice)}</div>
+                      </div>
                       <Rating
                         className="ratingPoint"
                         size={16}

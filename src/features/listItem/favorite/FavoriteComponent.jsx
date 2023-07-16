@@ -25,6 +25,7 @@ const FavoriteComponent = () => {
   const [favorite, setFavorite] = useState([])
   const [searchProduct, setSearchProduct] = useState('')
   const [sortBy, setSortBy] = useState('')
+  const [sortDescending, setSortDescending] = useState(true)
   const [state, setState] = useState(false)
   const navigate = useNavigate()
 
@@ -34,14 +35,14 @@ const FavoriteComponent = () => {
         searchProductName: searchProduct,
         searchProductDescription: searchProduct,
         sortBy: sortBy,
+        sortDescending: sortDescending,
         size: 100,
-        sortDescending: false,
       })
       const data = resp?.data?.data
       setFavorite(data)
     }
     handleGetFavorite()
-  }, [searchProduct, sortBy])
+  }, [searchProduct, sortBy, sortDescending])
 
   const handleDeleteFavorite = async (id) => {
     await deleteFavoriteProduct(id)
@@ -195,6 +196,19 @@ const FavoriteComponent = () => {
                 { value: '3', label: 'Time' },
               ]}
             />
+            <Select
+              className="input"
+              style={{ width: 120 }}
+              defaultValue={sortBy !== '' ? sortDescending : ''}
+              value={sortBy !== '' ? sortDescending : ''}
+              onChange={(e) => {
+                setSortDescending(e)
+              }}
+              options={[
+                { value: true, label: 'Descending' },
+                { value: false, label: 'Ascending' },
+              ]}
+            />
           </div>
         </div>
         <List
@@ -237,7 +251,12 @@ const FavoriteComponent = () => {
                     onClick={() => navigate({ pathname: '/product/' + item?.product?.id })}
                   >
                     <div className="name">{item?.product?.name}</div>
-                    <div className="price">Price: {formatMoney(item?.product?.minPrice)}</div>
+                    <div className="priceGroup">
+                      {item?.product?.minOrgPrice !== item?.product?.minPrice && (
+                        <div className="oldPrice">{formatMoney(item?.product?.minOrgPrice)}</div>
+                      )}
+                      <div className="price">{formatMoney(item?.product?.minPrice)}</div>
+                    </div>
                     <Rating
                       className="ratingPoint"
                       size={16}

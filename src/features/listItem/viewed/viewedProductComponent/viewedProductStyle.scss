@@ -153,6 +153,7 @@
                 border-radius: 0.8vw;
               }
             }
+
             .outOfStock {
               cursor: pointer;
               background-color: #2a2728dc;
@@ -197,10 +198,27 @@
               }
             }
 
-            .price {
-              font-size: 1vw;
-              @media (max-width: 980px) {
-                font-size: 2vw;
+            .priceGroup {
+              display: flex;
+              flex-direction: row;
+              align-items: flex-end;
+
+              .oldPrice {
+                color: #eee;
+                text-decoration: line-through;
+                font-size: 0.8vw;
+                margin-right: 1.2vw;
+                @media (max-width: 980px) {
+                  font-size: 1.6vw;
+                }
+              }
+
+              .price {
+                font-size: 1vw;
+                color: #fff;
+                @media (max-width: 980px) {
+                  font-size: 2vw;
+                }
               }
             }
           }

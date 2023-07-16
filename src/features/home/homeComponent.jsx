@@ -137,7 +137,12 @@ const HomeComponent = () => {
                     </div>
                     <div className="slideText">
                       <div className="name">{item?.name}</div>
-                      <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                      <div className="priceGroup">
+                        {item?.minOrgPrice !== item?.minPrice && (
+                          <div className="oldPrice">{formatMoney(item?.minOrgPrice)}</div>
+                        )}
+                        <div className="price">{formatMoney(item?.minPrice)}</div>
+                      </div>
                       <Rating
                         className="ratingPoint"
                         size={16}
@@ -205,7 +210,12 @@ const HomeComponent = () => {
                     </div>
                     <div className="slideText">
                       <div className="name">{item?.name}</div>
-                      <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                      <div className="priceGroup">
+                        {item?.minOrgPrice !== item?.minPrice && (
+                          <div className="oldPrice">{formatMoney(item?.minOrgPrice)}</div>
+                        )}
+                        <div className="price">{formatMoney(item?.minPrice)}</div>
+                      </div>
                       <Rating
                         className="ratingPoint"
                         size={16}
@@ -273,7 +283,12 @@ const HomeComponent = () => {
                     </div>
                     <div className="slideText">
                       <div className="name">{item?.name}</div>
-                      <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                      <div className="priceGroup">
+                        {item?.minOrgPrice !== item?.minPrice && (
+                          <div className="oldPrice">{formatMoney(item?.minOrgPrice)}</div>
+                        )}
+                        <div className="price">{formatMoney(item?.minPrice)}</div>
+                      </div>
                       <Rating
                         className="ratingPoint"
                         size={16}
@@ -337,12 +352,17 @@ const HomeComponent = () => {
                   >
                     <Tooltip title={item?.product?.name} color="#decdbb">
                       <div className="slideAvt">
-                        <img className="slideImage" src={item?.avatar} alt="" />
+                        <img className="slideImage" src={item?.product?.avatar} alt="" />
                         {item?.outOfStock === true && <p className="outOfStock">Out of stock</p>}
                       </div>
                       <div className="slideText">
                         <div className="name">{item?.product?.name}</div>
-                        <div className="price">Price: {formatMoney(item?.product?.minPrice)}</div>
+                        <div className="priceGroup">
+                          {item?.minOrgPrice !== item?.minPrice && (
+                            <div className="oldPrice">{formatMoney(item?.minOrgPrice)}</div>
+                          )}
+                          <div className="price">{formatMoney(item?.minPrice)}</div>
+                        </div>
                         <Rating
                           className="ratingPoint"
                           size={16}
@@ -412,7 +432,12 @@ const HomeComponent = () => {
                       </div>
                       <div className="slideText">
                         <div className="name">{item?.name}</div>
-                        <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                        <div className="priceGroup">
+                          {item?.minOrgPrice !== item?.minPrice && (
+                            <div className="oldPrice">{formatMoney(item?.minOrgPrice)}</div>
+                          )}
+                          <div className="price">{formatMoney(item?.minPrice)}</div>
+                        </div>
                         <Rating
                           className="ratingPoint"
                           size={16}

@@ -57,7 +57,12 @@ const BestSellerComponent = () => {
                   </div>
                   <div className="textBestSeller">
                     <div className="name">{item?.name}</div>
-                    <div className="price">Price: {formatMoney(item?.minPrice)}</div>
+                    <div className="priceGroup">
+                      {item?.minOrgPrice !== item?.minPrice && (
+                        <div className="oldPrice">{formatMoney(item?.minOrgPrice)}</div>
+                      )}
+                      <div className="price">{formatMoney(item?.minPrice)}</div>
+                    </div>
                     <Rating
                       className="ratingPoint"
                       size={16}
