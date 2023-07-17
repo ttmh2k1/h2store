@@ -254,7 +254,7 @@ const AccountVerificationComponent = () => {
                     {'Confirm phone number ' + phone}
                   </Radio>
                 )}
-                {email && user?.emailConfirmed === true && (
+                {email && user?.emailConfirmed === false && (
                   <Radio className="radio" value={1}>
                     {'Confirm email ' + email}
                   </Radio>
