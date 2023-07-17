@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 import { confirmEmail, confirmPhone, currentEmailOTP, currentPhoneOTP } from '../../apis/userApi'
 import { login } from '../../actionCreators/UserCreator'
 
-const ChangePasswordComponent = () => {
+const AccountVerificationComponent = () => {
   const style = {
     position: 'top-right',
     autoClose: 1000,
@@ -296,4 +296,4 @@ const ChangePasswordComponent = () => {
   )
 }
 
-export default ChangePasswordComponent
+export default AccountVerificationComponent
