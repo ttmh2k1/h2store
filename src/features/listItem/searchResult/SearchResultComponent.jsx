@@ -45,6 +45,8 @@ const SearchResultComponent = (props) => {
       minAverageRating: rating,
       minPrice: price?.minPrice,
       maxPrice: price?.maxPrice,
+      sortBy: sortBy,
+      sortDescending: sortDescending,
     })
     setListSearch(result?.data?.data)
   }
@@ -55,7 +57,7 @@ const SearchResultComponent = (props) => {
     } else {
       toast.warning('NO TEXT WAS SUBMITTED', style)
     }
-  }, [props, searchName, pageSize, rating, price])
+  }, [props, searchName, pageSize, rating, price, sortBy, sortDescending])
 
   const sliderProps = {
     range: true,
