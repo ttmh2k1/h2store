@@ -281,15 +281,19 @@ const ProductComponent = (props) => {
   }
 
   const handleAddFavorite = async () => {
-    setIsFavorite(!isFavorite)
-    await addFavoriteProduct(props?.id)
-    toast.success('Product was added to favorite products!', style)
+    if (user) {
+      setIsFavorite(!isFavorite)
+      await addFavoriteProduct(props?.id)
+      toast.success('Product was added to favorite products!', style)
+    }
   }
 
   const handleRemoveFavorite = async () => {
-    setIsFavorite(!isFavorite)
-    await deleteFavoriteProduct(props?.id)
-    toast.success('Product removed from favorite products', style)
+    if (user) {
+      setIsFavorite(!isFavorite)
+      await deleteFavoriteProduct(props?.id)
+      toast.success('Product removed from favorite products', style)
+    }
   }
 
   const goToTop = () => {

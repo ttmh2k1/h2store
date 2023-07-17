@@ -47,6 +47,7 @@ const FavoriteComponent = () => {
   const handleDeleteFavorite = async (id) => {
     await deleteFavoriteProduct(id)
     toast.success('Product removed from favorite products', style)
+    navigate(0)
   }
 
   return (
@@ -212,7 +213,6 @@ const FavoriteComponent = () => {
           </div>
         </div>
         <List
-          loading={!favorite[0] && true}
           className="listFavorite"
           grid={{
             gutter: 12,
