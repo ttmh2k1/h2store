@@ -187,7 +187,11 @@ const VoucherComponent = () => {
                       <div className="discountAmount">{item?.discountAmount}%</div>
                     )}
                   </div>
-                  <div className="maxDiscount">Max discount: {formatMoney(item?.maxDiscount)}</div>
+                  {item?.discountType === 'PERCENT' && (
+                    <div className="maxDiscount">
+                      Max discount: {formatMoney(item?.maxDiscount)}
+                    </div>
+                  )}
                   <div className="startDate">
                     Start date: {moment(item?.validFrom).format('DD/MM/YY hh:mm')}
                   </div>
