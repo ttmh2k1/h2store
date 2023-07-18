@@ -588,9 +588,7 @@ const CheckoutComponent = () => {
               <div className="discountVoucherPrice">
                 -{' '}
                 {coupon?.discountType === 'AMOUNT'
-                  ? coupon?.discountAmount <= coupon?.maxDiscount
-                    ? formatMoney(coupon?.discountAmount)
-                    : formatMoney(coupon?.maxDiscount)
+                  ? formatMoney(coupon?.discountAmount)
                   : (coupon?.discountAmount *
                       (totalPrice -
                         parseFloat((totalPrice * user?.rank?.discountRate) / 100).toFixed(0) +
@@ -1224,9 +1222,11 @@ const CheckoutComponent = () => {
                                 <div className="discountAmount">{item?.discountAmount}%</div>
                               )}
                             </div>
-                            <div className="maxDiscount">
-                              Max discount: {formatMoney(item?.maxDiscount)}
-                            </div>
+                            {item?.discountType !== 'AMOUNT' && (
+                              <div className="maxDiscount">
+                                Max discount: {formatMoney(item?.maxDiscount)}
+                              </div>
+                            )}
                             <div className="startDate">
                               Start date: {moment(item?.validFrom).format('DD/MM/YY hh:mm')}
                             </div>
